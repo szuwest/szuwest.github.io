@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/all.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2014-10-14T00:00:00+08:00</updated><entry><title>Hello world</title><link href="http://szuwest.github.io/hello-world.html" rel="alternate"></link><updated>2014-10-14T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2014-10-14:hello-world.html</id><summary type="html">&lt;h1&gt;Hello World&lt;/h1&gt;
+&lt;p&gt;Hello, world. This is first test.&lt;/p&gt;</summary><category term="Test"></category></entry></feed>

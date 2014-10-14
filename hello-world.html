@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
         <meta charset="utf-8" />
-        <title>West's blog</title>
+        <title>Hello world</title>
         <link rel="stylesheet" href="./theme/css/main.css" />
 
         <!--[if IE]>
@@ -14,13 +14,18 @@
         <header id="banner" class="body">
                 <h1><a href="./">West's blog </a></h1>
                 <nav><ul>
-                    <li><a href="./category/test.html">Test</a></li>
+                    <li class="active"><a href="./category/test.html">Test</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="./hello-world.html" rel="bookmark"
+           title="Permalink to Hello world">Hello world</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="./hello-world.html">Hello world</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2014-10-14T00:00:00">
                 Published: 2014-10-14
@@ -31,12 +36,27 @@
         </address>
 <p>In <a href="./category/test.html">Test</a>. </p>
 <p>tags: <a href="./tag/test.html">Test</a> </p>
-</footer><!-- /.post-info --><h1>Hello World</h1>
-<p>Hello, world. This is first test.</p><p>There are <a href="./hello-world.html#disqus_thread">comments</a>.</p>                </article>
-<p class="paginator">
-    Page 1 / 1
-</p>
-            </aside><!-- /#featured -->
+</footer><!-- /.post-info -->      <h1>Hello World</h1>
+<p>Hello, world. This is first test.</p>
+    </div><!-- /.entry-content -->
+    <div class="comments">
+      <h2>Comments !</h2>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'szuwest';
+        var disqus_identifier = 'hello-world.html';
+        var disqus_url = './hello-world.html';
+        (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//szuwest.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>
