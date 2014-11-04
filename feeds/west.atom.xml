@@ -1,5 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2014-10-23T00:00:00+08:00</updated><entry><title>技术，社交，生活</title><link href="http://szuwest.github.io/ji-zhu-she-jiao-sheng-huo.html" rel="alternate"></link><updated>2014-10-23T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2014-10-23:ji-zhu-she-jiao-sheng-huo.html</id><summary type="html">&lt;h3&gt;技术不能停&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2014-11-03T00:00:00+08:00</updated><entry><title>Android Activity动画</title><link href="http://szuwest.github.io/android-activitydong-hua.html" rel="alternate"></link><updated>2014-11-03T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2014-11-03:android-activitydong-hua.html</id><summary type="html">&lt;h1&gt;Android 动画(一)&lt;/h1&gt;
+&lt;h2&gt;3.0之前的动画&lt;/h2&gt;
+&lt;p&gt;Android动画一直是Android的痛点。Android的动画系统跟iOS系统的动画系统比起来真心差很多，特别是2.3之前。在2.3之前，Android的动画分两种，帧动画和逐渐动画（Tween）.Tween动画包括alpha动画，translate动画，scale动画，rotate动画。这几种动画可以随意组合，产生更复杂的动画。但是我们想要做iOS的frame那样简单的动画，却是没有直接的方法。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;3.0之后的动画&lt;/h2&gt;
+&lt;p&gt;在Android3.0版本，终于加入了更多的动画支持，API也更加友好。加入我property动画和value动画，大大增加了动画的灵活性和可定制性。可以通过ObjectAnimator很方便的写出动画代码。像iOS的frame动画，可以通过value动画来实现。还有因为property特性，可以实现一些特别的动画，并且不局限与view，理论上任何object都可以实现property动画。&lt;/p&gt;
+&lt;h4&gt;nineOldAnimation&lt;/h4&gt;
+&lt;p&gt;这个是向下兼容的Android动画库，使得在3.0之前的系统也可以实现property和value动画。不过这个库早已不维护了，我之前使用发现了一些bug，不过这影响不大。如果要兼容2.3和一下系统，这个是很不错的库。&lt;/p&gt;
+&lt;h4&gt;Android4.4和5.0&lt;/h4&gt;
+&lt;p&gt;Android4.0之后陆陆续续加了一些动画支持，例如4.1加了对activity的动画支持，4.4加了一些过度动画支持，而最新的5.0加了一个vectorDrawable，可以实现一些高级的向量动画。由于这些API需要较高版本支持，我们开发还不能完全用到，这个我也在研究当中。&lt;/p&gt;
+&lt;p&gt;接下来我要讨论的时Activity动画，这个在我们开发中用得比较多，并且做得好的话，可以为应用增添不少分。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h1&gt;Activity动画&lt;/h1&gt;
+&lt;p&gt;在Android2.0之后，Activity中加入了一个重要的API  &lt;code&gt;overridePendingTransition&lt;/code&gt;。这个方法在&lt;code&gt;startActivity&lt;/code&gt;方法之后调用的话，可以定义新打开的activity进入动画。例如你想实现像iOS的navigationController的从右往左的push动画，或者ModelViewController的从下往上弹出页面的动画，就可以通过这种方法。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Intent&lt;/span&gt; &lt;span class="n"&gt;intent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Intent&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;                                   &lt;span class="n"&gt;intent&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setAction&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BuyDiamondsActivity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DIAMONDLISTACTION&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;intent&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setClass&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;PhotoAlbumActivity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;BuyDiamondsActivity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;startActivity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;intent&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;overridePendingTransition&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;anim&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;push_left_in&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;anim&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;push_left_out&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;push_left_in.xml    &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;set&lt;/span&gt; &lt;span class="na"&gt;xmlns:android=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;translate&lt;/span&gt; &lt;span class="na"&gt;android:fromXDelta=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;100%p&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:toXDelta=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;0&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:duration=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;300&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;alpha&lt;/span&gt; &lt;span class="na"&gt;android:fromAlpha=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;1.0&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:toAlpha=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;1.0&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:duration=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;300&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/set&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;push_left_out.xml&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;set&lt;/span&gt; &lt;span class="na"&gt;xmlns:android=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;translate&lt;/span&gt; &lt;span class="na"&gt;android:fromXDelta=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;0&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:toXDelta=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;-40%p&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:duration=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;300&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;alpha&lt;/span&gt; &lt;span class="na"&gt;android:fromAlpha=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;1.0&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:toAlpha=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;0.6&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;android:duration=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;300&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/set&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;同样，我们也可以在Activity的finish方法之后，调用&lt;code&gt;overridePendingTransition&lt;/code&gt;来自定义Activity退出动画。这里还有个小tips,如果你要实现A跳转到B，你又没办法改变或定制A如何跳转到B，你可以在B的onCreate方法里，调用父类的onCreate方法之前调用&lt;code&gt;overridePendingTransition&lt;/code&gt;也是有效的。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;overridePendingTransition&lt;/code&gt;方法有个缺陷，它只支持XML文件声明的动画，在Android4.1之前（API16）我暂时还没有发现有别的方法可以用代码定义Activity跳转动画。&lt;/p&gt;
+&lt;h2&gt;ActivityOptions&lt;/h2&gt;
+&lt;p&gt;估计为了弥补&lt;code&gt;overridePendingTransition&lt;/code&gt;方法的不足，Google在Android4.1中加入一个新类ActivityOptions和一个新startActivity(Intent intent, Bundle options)方法。新的startActivity方法可以传入一个Bundle参数，这个Bundle可以包含了一些Activity的动画。这个Bundle数据从何而来，怎么创建，需要包含那些信息，这个你可以不用太过关心，ActivityOptions就是为产生这个Bundle而生的。来看看几个例子：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// Custom animations allow us to do things like slide the next activity in as we&lt;/span&gt;
+&lt;span class="c1"&gt;// slide this activity out&lt;/span&gt;
+&lt;span class="n"&gt;translateButton&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setOnClickListener&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;View&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;OnClickListener&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;Override&lt;/span&gt;
+    &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="n"&gt;onClick&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;View&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// Using the AnimatedSubActivity also allows us to animate exiting that&lt;/span&gt;
+        &lt;span class="c1"&gt;// activity - see that activity for details&lt;/span&gt;
+        &lt;span class="n"&gt;Intent&lt;/span&gt; &lt;span class="n"&gt;subActivity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Intent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;WindowAnimations&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="n"&gt;AnimatedSubActivity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+         &lt;span class="c1"&gt;// The enter/exit animations for the two activities are specified by xml resources&lt;/span&gt;
+        &lt;span class="n"&gt;Bundle&lt;/span&gt; &lt;span class="n"&gt;translateBundle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;
+                &lt;span class="n"&gt;ActivityOptions&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;makeCustomAnimation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;WindowAnimations&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="no"&gt;R&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;anim&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;slide_in_left&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;R&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;anim&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;slide_out_left&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;toBundle&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="n"&gt;startActivity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;subActivity&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;translateBundle&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;通过ActivityOptions.makeCustomAnimation的静态方法可以产生ActivityOptions对象，ActivityOptions有个toBundle的实例方法方便的将你定义的XML动画转化为Bundle数据。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// Starting in Jellybean, you can also provide an animation that scales up the new&lt;/span&gt;
+&lt;span class="c1"&gt;// activity from a given bitmap, cross-fading between the starting and ending&lt;/span&gt;
+&lt;span class="c1"&gt;// representations. Here, we scale up from a thumbnail image of the final sub-activity&lt;/span&gt;
+&lt;span class="n"&gt;thumbnail&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setOnClickListener&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;View&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;OnClickListener&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;Override&lt;/span&gt;
+    &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="n"&gt;onClick&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;View&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;BitmapDrawable&lt;/span&gt; &lt;span class="n"&gt;drawable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BitmapDrawable&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;thumbnail&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getDrawable&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="n"&gt;Bitmap&lt;/span&gt; &lt;span class="n"&gt;bm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;drawable&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBitmap&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="n"&gt;Intent&lt;/span&gt; &lt;span class="n"&gt;subActivity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Intent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;WindowAnimations&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;AnimatedSubActivity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;Bundle&lt;/span&gt; &lt;span class="n"&gt;scaleBundle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ActivityOptions&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;makeThumbnailScaleUpAnimation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+                &lt;span class="n"&gt;thumbnail&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;bm&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;toBundle&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="n"&gt;startActivity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;subActivity&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;scaleBundle&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;ActivityOptions.makeThumbnailScaleUpAnimation提供了更高级的功能：将一个缩略图方法的Activity动画。这个有时候挺有用的。ActivityOptions还提供了其他的一些方法，感兴趣的话可以参考它的API。
+更多请参考&lt;a href="http://developer.android.com/reference/android/app/ActivityOptions.html"&gt;ActivityOptions API&lt;/a&gt; 和 &lt;a href="https://developer.android.com/training/material/animations.html"&gt;Google官方教程:Defining Custom Animations&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;下一节我会讲更高级更复杂的一些自定义Activity动画。&lt;/p&gt;</summary><category term="Android"></category></entry><entry><title>技术，社交，生活</title><link href="http://szuwest.github.io/ji-zhu-she-jiao-sheng-huo.html" rel="alternate"></link><updated>2014-10-23T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2014-10-23:ji-zhu-she-jiao-sheng-huo.html</id><summary type="html">&lt;h3&gt;技术不能停&lt;/h3&gt;
 &lt;hr /&gt;
 &lt;p&gt;最近看了很多其他技术人员的文章，然后我又从iOS转战Android，感觉自己弱爆了，自己的技术跟那些厉害的人根本没得比。有句话说，知道得越多，知道自己不知道越多。现在自己还有冲进，应该尽力学多一点。&lt;/p&gt;
 &lt;p&gt;从计算机行业来说，技术千变万化，但是有些东西是基础性的。这些基本功决定你能走多远。算法，数据结构，编译原理，操作系统，这些基本的课程非常重要，而这又恰恰是我的弱项，我吃过这个亏。我想弥补。最近看微博看到&lt;strong&gt;陈皓&lt;/strong&gt;这样的大牛把leetcode的题目刷完了，真是佩服不已。我之前我到上面刷过一下子，但是没有坚持下来。主要是有些还是挺难的，而且英语还是有点吃力。我决定先从基本功开始，进行一个系统的学习。虽然网络上又很多资料，但是网络上的资料都是不系统的，只能参考而已，不能作为学习材料。&lt;/p&gt;
