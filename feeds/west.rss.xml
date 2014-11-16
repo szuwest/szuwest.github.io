@@ -1,5 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Mon, 03 Nov 2014 00:00:00 +0800</lastBuildDate><item><title>Android Activity动画</title><link>http://szuwest.github.io/android-activitydong-hua.html</link><description>&lt;h1&gt;Android 动画(一)&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Wed, 12 Nov 2014 00:00:00 +0800</lastBuildDate><item><title>Activity动画（二）</title><link>http://szuwest.github.io/activitydong-hua-er.html</link><description>&lt;h1&gt;Activity动画（二）&lt;/h1&gt;
+&lt;p&gt;如果要统一所有的Activity的打开可关闭动画，可以有一个很简便的方法：就是设置Application的theme。在Application的theme里有一个Android:windowAnimationStyle的属性，可以定义了一个Activity的打开和关闭动画。例如下面的例子就自定义了一个theme。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;````
+&lt;style name="ThemeLightNoTitle" mce_bogus="1" parent="@android:style/Theme.Light.NoTitleBar"&gt;
+        &lt;item name="android:windowAnimationStyle"&gt;@style/AnimationActivity&lt;/item&gt;
+    &lt;/style&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;style&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;AnimationActivity&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;mce_bogus=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;1&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;parent=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;@android:style/Animation.Activity&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:activityOpenEnterAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_right_in&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:activityOpenExitAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_left_out&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:activityCloseEnterAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_left_in&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:activityCloseExitAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_right_out&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:taskOpenEnterAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_right_in&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:taskOpenExitAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_left_out&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:taskCloseEnterAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_left_in&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:taskCloseExitAnimation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@anim/translate_between_interface_right_out&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;````&lt;/p&gt;
+&lt;p&gt;将这个theme运用到Application的theme里，所以的Activity就会按照你定义的动画来交互了。&lt;/p&gt;
+&lt;p&gt;不过，现实的需求往往是更复杂的动画或者交互，不可能所有的界面的交互动画都一致的。有些页面需要特别定制，而且可能很复杂。例如我们要实现类似于iOS的NavigationViewController的页面右滑关闭页面的交互动画，或者要实现点击一张图片缩略图，然后它渐渐放大，点击关闭它又慢慢缩回原处的动画，按照之前介绍的方法，都无法实现。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;在iOS自带相册APP里，点击一个缩略图，缩略图渐渐放大进入大图查看。这个交互基本成了一个相册必备的标准交互。Android上的相册很多也用了这种动画交互。如果缩略图的查看和大图查看都是在同一个Activity中完成的话，还是可以比较容易实现的。但是如果缩略的查看和大图的查看分处在不同的Activity中的话，那这就不是很好实现了。这里我准备讲讲可以怎么实现这个功能。而且这个方法可以推广出去，很多类型的Activity切换动画都可以按照这种方式实现。&lt;/p&gt;
+&lt;p&gt;现在假设查看缩略图的Activity是A，查看大图的Activity是B。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;一 设置B的的theme为透明的transparent。&lt;/li&gt;
+&lt;li&gt;二 在A中，启动B前，把一些必要的信息打包成Bundle传给B，启动B后把默认的启动动画覆盖,overridePendingTransition(0, 0)。例如把被点击的ImageView的在屏幕中的坐标，还有该ImageView的width和height，还有该ImageView所显示的图片资源id，或者URL，都存入Bundle中，讲该Bundle放入Intent中，启动B时传给B。&lt;/li&gt;
+&lt;li&gt;三 在B的onCreate方法中，把Bundle中的信息取出来，并且对你想要做动画的ImageView中，获取ViewTreeObserver实例，加入一个OnPreDrawListener，在OnPreDrawListener的onPreDraw方法中，对ImageView做放大动画，初始位置就是从Bundle中获取，最终位置根据要显示的图片的大小来定。&lt;/li&gt;
+&lt;li&gt;四 关闭B Activity时，对ImageView做一个缩小的动画，初始位置就是它现在的位置，最终位置是最开始从Bundle中获取的那个位置。覆盖Activity的finish方法，同样要将Activity的默认动画覆盖掉overridePendingTransition(0, 0)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们看一下具体怎么实现，有什么要注意的。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一· 设置B的的theme为透明的transparent&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;style&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Transparent&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:windowNoTitle&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;true&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:windowIsTranslucent&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;true&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;item&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android:windowBackground&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;@android:color/transparent&lt;span class="nt"&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
+
+&lt;span class="nt"&gt;&amp;lt;activity&lt;/span&gt; &lt;span class="na"&gt;android:name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;com.example.android.activityanim.PictureDetailsActivity&amp;quot;&lt;/span&gt;
+            &lt;span class="na"&gt;android:label=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;@string/subactivity_name&amp;quot;&lt;/span&gt;
+            &lt;span class="na"&gt;android:theme=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;@style/Transparent&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这里主要是将B Activity的window和它的背景设置成透明的。所有的Activity都有一个默认的样式，默认样式不是透明的。设置成透明的话，在启动B Activity时它的背景是透明的，并且调用overridePendingTransition(0, 0)覆盖掉默认动画，你不会觉察到已经从A进入到B界面。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;二. 在A中，启动B前，把一些必要的信息打包成Bundle传给B，启动B后把默认的启动动画覆盖,overridePendingTransition(0, 0)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// Interesting data to pass across are the thumbnail size/location, the&lt;/span&gt;
+        &lt;span class="c1"&gt;// resourceId of the source bitmap, the picture description, and the&lt;/span&gt;
+        &lt;span class="c1"&gt;// orientation (to avoid returning back to an obsolete configuration if&lt;/span&gt;
+        &lt;span class="c1"&gt;// the device rotates again in the meantime)&lt;/span&gt;
+        &lt;span class="k"&gt;int&lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;screenLocation&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="k"&gt;int&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mh"&gt;2&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getLocationOnScreen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;screenLocation&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;PictureData&lt;/span&gt; &lt;span class="n"&gt;info&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;mPicturesData&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;Intent&lt;/span&gt; &lt;span class="n"&gt;subActivity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Intent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ActivityAnimations&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="n"&gt;PictureDetailsActivity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="k"&gt;int&lt;/span&gt; &lt;span class="n"&gt;orientation&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getResources&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;getConfiguration&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;orientation&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="n"&gt;subActivity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+                &lt;span class="n"&gt;putExtra&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.orientation&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;orientation&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+                &lt;span class="n"&gt;putExtra&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.resourceId&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;info&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;resourceId&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+                &lt;span class="n"&gt;putExtra&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.left&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;screenLocation&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]).&lt;/span&gt;
+                &lt;span class="n"&gt;putExtra&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.top&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;screenLocation&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mh"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]).&lt;/span&gt;
+                &lt;span class="n"&gt;putExtra&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.width&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getWidth&lt;/span&gt;&lt;span class="p"&gt;()).&lt;/span&gt;
+                &lt;span class="n"&gt;putExtra&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.height&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getHeight&lt;/span&gt;&lt;span class="p"&gt;()).&lt;/span&gt;
+
+        &lt;span class="n"&gt;startActivity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;subActivity&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+        &lt;span class="c1"&gt;// Override transitions: we don&amp;#39;t want the normal window animation in addition&lt;/span&gt;
+        &lt;span class="c1"&gt;// to our custom one&lt;/span&gt;
+        &lt;span class="n"&gt;overridePendingTransition&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这里有个关键点，获取被点击的View的在屏幕上的位置是通过getLocationOnScreen()方法。这个位置在B中很重要。另外还有宽高也是必须信息，被点击的图片resId或者URL等其他信息。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;二. 在B的onCreate方法中，把Bundle中的信息取出来，并且对你想要做动画的ImageView中，获取ViewTreeObserver实例，加入一个OnPreDrawListener，在OnPreDrawListener的onPreDraw方法中，对ImageView做放大动画，初始位置就是从Bundle中获取，最终位置根据要显示的图片的大小来定。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;因为第一步，在用户觉察不到的情况下已进入Activity B,接下来只要在B的视图出现的时候，以一个缩略图放大的动画效果出现就行了。用户看到的效果是点击了A的一个缩略图，缩略图逐渐放大的过程，用户很容易认为这是在A中完成的，实际上这所有的动画都是在B中完成的。看看B中相关的代码:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// Retrieve the data we need for the picture/description to display and&lt;/span&gt;
+    &lt;span class="c1"&gt;// the thumbnail to animate it from&lt;/span&gt;
+    &lt;span class="n"&gt;Bundle&lt;/span&gt; &lt;span class="n"&gt;bundle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getIntent&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;getExtras&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="n"&gt;Bitmap&lt;/span&gt; &lt;span class="n"&gt;bitmap&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BitmapUtils&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBitmap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;getResources&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt;
+            &lt;span class="n"&gt;bundle&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE_NAME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.resourceId&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+    &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bundle&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getString&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE_NAME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.description&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;final&lt;/span&gt; &lt;span class="k"&gt;int&lt;/span&gt; &lt;span class="n"&gt;thumbnailTop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bundle&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE_NAME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.top&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;final&lt;/span&gt; &lt;span class="k"&gt;int&lt;/span&gt; &lt;span class="n"&gt;thumbnailLeft&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bundle&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE_NAME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.left&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;final&lt;/span&gt; &lt;span class="k"&gt;int&lt;/span&gt; &lt;span class="n"&gt;thumbnailWidth&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bundle&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE_NAME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.width&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;final&lt;/span&gt; &lt;span class="k"&gt;int&lt;/span&gt; &lt;span class="n"&gt;thumbnailHeight&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bundle&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE_NAME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.height&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;mOriginalOrientation&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bundle&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;PACKAGE_NAME&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;.orientation&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+    &lt;span class="n"&gt;mBitmapDrawable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;BitmapDrawable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;getResources&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;bitmap&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setImageDrawable&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mBitmapDrawable&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+    &lt;span class="n"&gt;ViewTreeObserver&lt;/span&gt; &lt;span class="n"&gt;observer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getViewTreeObserver&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="n"&gt;observer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addOnPreDrawListener&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ViewTreeObserver&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;OnPreDrawListener&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+            &lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;Override&lt;/span&gt;
+            &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="n"&gt;boolean&lt;/span&gt; &lt;span class="n"&gt;onPreDraw&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getViewTreeObserver&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;removeOnPreDrawListener&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+                &lt;span class="c1"&gt;// Figure out where the thumbnail and full size versions are, relative&lt;/span&gt;
+                &lt;span class="c1"&gt;// to the screen and each other&lt;/span&gt;
+                &lt;span class="k"&gt;int&lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;screenLocation&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="k"&gt;int&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mh"&gt;2&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+                &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getLocationOnScreen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;screenLocation&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+                &lt;span class="n"&gt;mLeftDelta&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;thumbnailLeft&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;screenLocation&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+                &lt;span class="n"&gt;mTopDelta&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;thumbnailTop&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;screenLocation&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mh"&gt;1&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+                &lt;span class="c1"&gt;// Scale factors to make the large version the same size as the thumbnail&lt;/span&gt;
+                &lt;span class="n"&gt;mWidthScale&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;thumbnailWidth&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getWidth&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+                &lt;span class="n"&gt;mHeightScale&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;thumbnailHeight&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getHeight&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+                &lt;span class="n"&gt;runEnterAnimation&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+                &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;ViewTreeObserver是View树监听类，可以监听View的一些变化。其中ViewTreeObserver.OnPreDrawListener内部类，是当视图要被绘制时会被回调的类。我们只要在创建一个ViewTreeObserver.OnPreDrawListener实例，传给ViewTreeObserver，就可以在View被绘制时回调onPreDraw方法，我们所要做的就是在这个方法中开始动画。这里注意在动画开始前已经把要显示的图片设置上去了。
+runEnterAnimation方法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// Set starting values for properties we&amp;#39;re going to animate. These&lt;/span&gt;
+    &lt;span class="c1"&gt;// values scale and position the full size version down to the thumbnail&lt;/span&gt;
+    &lt;span class="c1"&gt;// size/location, from which we&amp;#39;ll animate it back up&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setPivotX&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setPivotY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setScaleX&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mWidthScale&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setScaleY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mHeightScale&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setTranslationX&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mLeftDelta&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setTranslationY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mTopDelta&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// Animate scale and translation to go from thumbnail to full size&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;animate&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;setDuration&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;duration&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+            &lt;span class="n"&gt;scaleX&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;1&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;scaleY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;1&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+            &lt;span class="n"&gt;translationX&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;translationY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+            &lt;span class="n"&gt;setInterpolator&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sDecelerator&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这段代码先将ImageView从大图缩小到我们点击的那个缩略图的大小和位置，然后开始放大动画到它大图显示的样子。这样就实现了我们想要的点击缩略图放大到大图的效果。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;关闭B Activity时，对ImageView做一个缩小的动画，初始位置就是它现在的位置，最终位置是最开始从Bundle中获取的那个位置。覆盖Activity的finish方法，同样要将Activity的默认动画覆盖掉overridePendingTransition(0, 0)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;Override&lt;/span&gt;
+&lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;finish&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;super&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;finish&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// override transitions to skip the standard window animations&lt;/span&gt;
+    &lt;span class="n"&gt;overridePendingTransition&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt; * Overriding this method allows us to run our exit animation first, then exiting&lt;/span&gt;
+&lt;span class="cm"&gt; * the activity when it is complete.&lt;/span&gt;
+&lt;span class="cm"&gt; */&lt;/span&gt;
+&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;Override&lt;/span&gt;
+&lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;onBackPressed&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;runExitAnimation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Runnable&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;// *Now* go ahead and exit the activity&lt;/span&gt;
+            &lt;span class="n"&gt;finish&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="n"&gt;private&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;runExitAnimation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Runnable&lt;/span&gt; &lt;span class="n"&gt;endAction&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// Animate image back to thumbnail size/location&lt;/span&gt;
+    &lt;span class="n"&gt;mImageView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;animate&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;setDuration&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;duration&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+               &lt;span class="n"&gt;scaleX&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mWidthScale&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;scaleY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mHeightScale&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+               &lt;span class="n"&gt;translationX&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mLeftDelta&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;translationY&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mTopDelta&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+                            &lt;span class="n"&gt;withEndAction&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;endAction&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;当用户关闭界面的时候，先执行ImageView的缩小动画，缩小到原来缩略图的位置。当动画结束后，finish掉Activity并覆盖掉默认的Activity动画。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;总结：第一步先要把Activity的theme变成透明。第覆盖掉Activity的启动或者关闭的默认动画效果。第三步如果要做进入动画，则可以实现ViewTreeObserver.OnPreDrawListener接口，在onPreDraw方法中做动画。如果是做退出动画，可以先对视图做动画，在动画结束的时候调用finish方法。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/szuwest/ActivityAnimations"&gt;demo代码&lt;/a&gt;.该demo是dev-bytes上的demo代码。&lt;/p&gt;
+&lt;h2&gt;扩展&lt;/h2&gt;
+&lt;p&gt;如果B要支持左右滑动查看大图，然后在查看某已图片时点击返回键，图片要缩小至该图缩略图的位置上，这该怎么做？
+这种需求改变对A变化不大，但是对B的改变还是很大的，首先B要支持滑屏，一般来说要用到ViewPage或类似的控件。另外还有滑动时B如何获取数据，返回时如何获取当前大图对应的缩略图在A中的位置。我想实现方法应该有多种，我能想到的一种比较丑陋但是又比较简单的做法是，定义一个接口，声明了一些获取数据和缩略图位置等方法。然后A实现这个接口，传给B作为一个静态变量保存起来，这样A与B就可以通信了。这样只要B左右滑动的时候，A也保持一致的上下滑动，在B要关闭的时候，先获取到相应缩略图的问题，就能做动画了。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Wed, 12 Nov 2014 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2014-11-12:activitydong-hua-er.html</guid><category>Android 技术 动画</category></item><item><title>Android Activity动画</title><link>http://szuwest.github.io/android-activitydong-hua.html</link><description>&lt;h1&gt;Android 动画(一)&lt;/h1&gt;
 &lt;h2&gt;3.0之前的动画&lt;/h2&gt;
 &lt;p&gt;Android动画一直是Android的痛点。Android的动画系统跟iOS系统的动画系统比起来真心差很多，特别是2.3之前。在2.3之前，Android的动画分两种，帧动画和逐渐动画（Tween）.Tween动画包括alpha动画，translate动画，scale动画，rotate动画。这几种动画可以随意组合，产生更复杂的动画。但是我们想要做iOS的frame那样简单的动画，却是没有直接的方法。&lt;/p&gt;
 &lt;hr /&gt;
