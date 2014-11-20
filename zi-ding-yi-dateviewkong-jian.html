@@ -4,13 +4,13 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog - West</title>
+    <title>自定义DateView控件</title>
 
-    <link rel="stylesheet" href="../theme/css/normalize.css" />
-    <link rel="stylesheet" href="../theme/css/foundation.min.css" />
-    <link rel="stylesheet" href="../theme/css/style.css" />
-    <link rel="stylesheet" href="../theme/css/pygments.css" />	
-    <script src="../theme/js/custom.modernizr.js"></script>
+    <link rel="stylesheet" href="./theme/css/normalize.css" />
+    <link rel="stylesheet" href="./theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="./theme/css/style.css" />
+    <link rel="stylesheet" href="./theme/css/pygments.css" />	
+    <script src="./theme/js/custom.modernizr.js"></script>
 
     <!-- So Firefox can bookmark->"abo this site" -->
 
@@ -23,7 +23,7 @@
 <div class="top-bar">
 <div class="row">
     <div class="large-9 large-centered columns">
-	    <h1><a href="..">West's blog</a></h1>
+	    <h1><a href=".">West's blog</a></h1>
     </div>
 </div>
 </div>
@@ -45,16 +45,17 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
-        
-        
+<article>
+    <header>
+        <h3 class="article-title"><a href="./zi-ding-yi-dateviewkong-jian.html" rel="bookmark"
+        title="Permalink to 自定义DateView控件">自定义DateView控件</a></h3>
+    </header>
 
-            <article>
-                <a href="../zi-ding-yi-dateviewkong-jian.html"><h3 class="article-title">自定义DateView控件</h3></a>
 <h6 class="subheader" title="2014-11-21T00:00:00">2014-11-21
 </h6>
 
 
-<p>最近因为项目需要自定义一个日期控件，我花了一个多小时写了这个控件。虽然跟设计效果图还有点细微差别，但是这个可以慢慢修改。</p>
+    <p>最近因为项目需要自定义一个日期控件，我花了一个多小时写了这个控件。虽然跟设计效果图还有点细微差别，但是这个可以慢慢修改。</p>
 <div class="highlight"><pre>    <span class="n">public</span> <span class="n">class</span> <span class="n">DateView</span> <span class="n">extends</span> <span class="n">View</span> <span class="p">{</span>
 
     <span class="n">private</span> <span class="k">static</span> <span class="n">final</span> <span class="kt">int</span> <span class="n">DAY_TEXT_SIZE</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>
@@ -170,211 +171,31 @@
 </pre></div>
 
 
-<p>这最不好做的就是算字的位置，文字的渲染是基于baseline的，我的理解是Rect的左下角。关于canvas的draw还有很多不懂，好好学习</p><p class="subheader">Category: <a href="../category/misc.html">misc</a>
+<p>这最不好做的就是算字的位置，文字的渲染是基于baseline的，我的理解是Rect的左下角。关于canvas的draw还有很多不懂，好好学习</p>
+<p class="subheader">Category: <a href="./category/misc.html">misc</a>
 
     Tagged: 
-    <a href="../tag/android-zi-ding-yi-kong-jian-ri-qi-kong-jian.html">Android 自定义控件 日期控件 </a>
+    <a href="./tag/android-zi-ding-yi-kong-jian-ri-qi-kong-jian.html">Android 自定义控件 日期控件 </a>
 </p>
 
 
 
-<p><a href="../zi-ding-yi-dateviewkong-jian.html#disqus_thread">comments</a></p>            </article>
 
-
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
-                <a href="../activitydong-hua-er.html"><h3 class="article-title">Activity动画（二）</h3></a>
-<h6 class="subheader" title="2014-11-12T00:00:00">2014-11-12
-</h6>
-
-
-<h1>Activity动画（二）</h1>
-<p>如果要统一所有的Activity的打开可关闭动画，可以有一个很简便的方法：就是设置Application的theme。在Application的theme里有一个Android:windowAnimationStyle的属性，可以定义了一个Activity的打开和关闭动画。例如下面的例子就自定义了一个theme。</p>
-<hr />
-<p>````
-<style name="ThemeLightNoTitle" mce_bogus="1" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
-    </style></p>
-<div class="highlight"><pre><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&quot;AnimationActivity&quot;</span> <span class="na">mce_bogus=</span><span class="s">&quot;1&quot;</span> <span class="na">parent=</span><span class="s">&quot;@android:style/Animation.Activity&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityOpenEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_in<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityOpenExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_out<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_in<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_out<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item ...</span></pre></div><p class="subheader">Category: <a href="../category/misc.html">misc</a>
-
-    Tagged: 
-    <a href="../tag/android-ji-zhu-dong-hua.html">Android 技术 动画 </a>
-</p>
-
-
-
-<p><a href="../activitydong-hua-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../activitydong-hua-er.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="../android-activitydong-hua.html"><h3 class="article-title">Android Activity动画</h3></a>
-<h6 class="subheader" title="2014-11-03T00:00:00">2014-11-03
-</h6>
-
-
-<h1>Android 动画(一)</h1>
-<h2>3.0之前的动画</h2>
-<p>Android动画一直是Android的痛点。Android的动画系统跟iOS系统的动画系统比起来真心差很多，特别是2.3之前。在2.3之前，Android的动画分两种，帧动画和逐渐动画（Tween）.Tween动画包括alpha动画，translate动画，scale动画，rotate动画。这几种动画可以随意组合，产生更复杂的动画。但是我们想要做iOS的frame那样简单的动画，却是没有直接的方法。</p>
-<hr />
-<h2>3.0之后的动画</h2>
-<p>在Android3.0版本，终于加入了更多的动画支持，API也更加友好。加入我property动画和value动画，大大增加了动画的灵活性和可定制性。可以通过ObjectAnimator很方便的写出动画代码。像iOS的frame动画，可以通过value动画来实现。还有因为property特性，可以实现一些特别的动画，并且不局限与view，理论上任何object都可以实现property动画。</p>
-<h4>nineOldAnimation</h4>
-<p>这个是向下兼容的Android动画库，使得在3.0之前的系统也可以实现property和value动画。不过这个库早已不维护了，我之前使用发现了一些bug，不过这影响不大。如果要兼容2.3和一下系统，这个是很不错的库。</p>
-<h4>Android4.4和5.0 ...</h4><p class="subheader">Category: <a href="../category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="../tag/android.html">Android </a>
-</p>
-
-
-
-<p><a href="../android-activitydong-hua.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../android-activitydong-hua.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="../ji-zhu-she-jiao-sheng-huo.html"><h3 class="article-title">技术，社交，生活</h3></a>
-<h6 class="subheader" title="2014-10-23T00:00:00">2014-10-23
-</h6>
-
-
-<h3>技术不能停</h3>
-<hr />
-<p>最近看了很多其他技术人员的文章，然后我又从iOS转战Android，感觉自己弱爆了，自己的技术跟那些厉害的人根本没得比。有句话说，知道得越多，知道自己不知道越多。现在自己还有冲进，应该尽力学多一点。</p>
-<p>从计算机行业来说，技术千变万化，但是有些东西是基础性的。这些基本功决定你能走多远。算法，数据结构，编译原理，操作系统，这些基本的课程非常重要，而这又恰恰是我的弱项，我吃过这个亏。我想弥补。最近看微博看到<strong>陈皓</strong>这样的大牛把leetcode的题目刷完了，真是佩服不已。我之前我到上面刷过一下子，但是没有坚持下来。主要是有些还是挺难的，而且英语还是有点吃力。我决定先从基本功开始，进行一个系统的学习。虽然网络上又很多资料，但是网络上的资料都是不系统的，只能参考而已，不能作为学习材料。</p>
-<p>所以我想从纸质书开始，我决定今后尽量少看任何社交软件，还有娱乐视频之类的，多一点时间看书。尽量调好作息时间，利用碎片化时间来学习。</p>
-<h3>关于工作</h3>
-<hr />
-<p>我从开始做C++的SDK，后来加入iOS项目组做iOS开发，再到最近的支持Android开发，大半年时间就变化这么多。项目也都是做到了一半就被停掉。XL公司的基因就是这样 ...</p><p class="subheader">Category: <a href="../category/za-tan.html">杂谈</a>
-
-    Tagged: 
-    <a href="../tag/za-tan.html">杂谈 </a>
-</p>
-
-
-
-<p><a href="../ji-zhu-she-jiao-sheng-huo.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../ji-zhu-she-jiao-sheng-huo.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="../good-morning.html"><h3 class="article-title">Good Morning</h3></a>
-<h6 class="subheader" title="2014-10-15T00:00:00">2014-10-15
-</h6>
-
-
-<p>Hi, good morning. This is from West.</p><p class="subheader">Category: <a href="../category/test.html">Test</a>
-
-    Tagged: 
-    <a href="../tag/test.html">Test </a>
-</p>
-
-
-
-<p><a href="../good-morning.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../good-morning.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="../guan-yu-cheng-xu-jia-gou-she-ji.html"><h3 class="article-title">关于程序架构设计</h3></a>
-<h6 class="subheader" title="2014-06-22T00:00:00">2014-06-22
-</h6>
-
-
-<h1>关于程序架构设计</h1>
-<p>最近编程当中，越来越在意程序架构问题，经常纠结怎样才是好的设计，怎样才能将程序解耦，怎样才能写出易扩展，层次分明好维护的程序。可是想来想去也是不能决定怎样做才是最佳。不过最近自己是肯定了一样东西：要想真的做出好的架构，划分好模块是第一次。只要模块划分的清晰，独立和少耦合，后面的事情就好做了。</p>
-<p>这种想法也不单单只有我才有，我现在所在项目负责人在一个程序架构设计的技术讲座上说过这个观点。而我从我们项目的架构也看出他是这样实行的。一般在我们建立项目之初，就先建立好目录结构，而这个目录结构也很讲究，它就直接体现了我们是怎么划分模块和划分层次的。现在我们项目主要分两大块，UI模块和module模块。然后UI目录下就按照功能划分出一个个子目录，对应的再module目录下也是按照功能划分出一个个子目录。这里UI目录下的子目录结构和module目录下的子目录结构基本是一致的。然后在资源文件目录下，也是按照UI子模块那样划分，建立不同的子资源文件。只要划分好了模块，每个模块足够独立的花，每个模块里面是怎么分层，怎么做设计的，对别的模块影响不大。即使这个某个模块做得很烂，到时要重构的也只是那一个模块而已。</p>
-<p>现在我们公司的项目很多模块划分都不是特别好，能够做到像上面那样划分模块和架构的项目估计都是很多。互联网公司人员流动大，三两下就换一拨人，每拨人里面各个技术参差不齐，根本没办法做到很好的架构设计。但是上面这种基础的架构还是可以做的，而且是可以做好的。</p>
-<p>可是光是靠划分模块是做不到一个好的程序架构，而且一个项目有些模块是划分不出来或者跟其他模块联系很多。所以还有其他东西要做。分层就是一个。项目整体可以分层，还有模块里面也可以分层 ...</p><p class="subheader">Category: <a href="../category/bian-cheng-jia-gou.html">编程 架构</a>
-
-    Tagged: 
-    <a href="../tag/bian-cheng-gan-wu.html">编程感悟 </a>
-</p>
-
-
-
-<p><a href="../guan-yu-cheng-xu-jia-gou-she-ji.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../guan-yu-cheng-xu-jia-gou-she-ji.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="../swiftchu-tan.html"><h3 class="article-title">swift初探</h3></a>
-<h6 class="subheader" title="2014-06-22T00:00:00">2014-06-22
-</h6>
-
-
-<h1>swift初探</h1>
-<p>自从swift公布以来，火得不得了。如果你是开发者，还没有看过swift，那还真是out了（不过话说回来，并不是没有看过swift就不是好开发者。好的程序员跟看没看过某种语言没有什么关系）。我从公布以来就断断续续的看，一直在看官方的英文文档。偶尔也看看别人写的或者翻译的文章。现在虽然没有把官方文档看完，但是也看了大部分，可以写写感想心得。</p>
-<p>简单来说，swift是集合了许多脚本语言的特性而又不像其他一般的脚本语言的苹果新生代开发语言。swift集合了很多语言的特性，如ruby，object-c，c++，c#等，其中长得最像的应该是ruby。咋看之下swift就想ruby一样的脚本语言。完全面向对象，类型定义，closure特性，函数式编程等等。不过据官方文档介绍，swift语言不是解释型语言，它最终会编译成二进制代码，并且它的运行效率比object-c要快。说比object-C要快我是比较怀疑的，而外国开发者进行了测试，得出结论是如果不强加一些编译优化的话，是快不过objC的。</p>
-<p>如果对ruby，Object-C，c++语言熟悉的话，学起swift来应该没有什么难度。但是它还有很多语法特性是别的语言没有的，并且有些在我看来有点奇怪的特性。不过这是都没有什么，说明自己见识少，熟悉了就好了。首先一个比较特别的是，你不在需要在每行代码结束时加上分号，直接回车换行就行 ...</p><p class="subheader">Category: <a href="../category/bian-cheng-yu-yan.html">编程语言</a>
-
-    Tagged: 
-    <a href="../tag/swift.html">swift </a>
-</p>
-
-
-
-<p><a href="../swiftchu-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../swiftchu-tan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="../hello-world.html"><h3 class="article-title">Hello world</h3></a>
-<h6 class="subheader" title="2014-06-10T00:00:00">2014-06-10
-</h6>
-
-
-<h1>Hello World</h1>
-<p>Hello, world. This is first test.</p><p class="subheader">Category: <a href="../category/test.html">Test</a>
-
-    Tagged: 
-    <a href="../tag/test.html">Test </a>
-</p>
-
-
-
-<p><a href="../hello-world.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../hello-world.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-            <!-- /#posts-list -->
-<div class="pagination-centered">
-<h6 class="subheader">Page 1 of 1</h6>
-
-<p>
-
-</p>
-</div>
-
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'szuwest'
+        var disqus_identifier = "zi-ding-yi-dateviewkong-jian.html";
+        var disqus_url = "./zi-ding-yi-dateviewkong-jian.html";
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
     </div>
     <!-- End Main Content -->
 
@@ -382,8 +203,8 @@
     <aside class="large-3 columns">
         <h5 class="sidebar-title">Site</h5>
         <ul class="side-nav">
-            <li><a href="../archives.html">Archives</a>
-            <li><a href="../tags.html">Tags</a>
+            <li><a href="./archives.html">Archives</a>
+            <li><a href="./tags.html">Tags</a>
 
 
         </ul>
@@ -391,12 +212,12 @@
 		
         <h5 class="sidebar-title">Categories</h5>
         <ul class="side-nav">
-            <li><a href="../category/bian-cheng-jia-gou.html">编程 架构</a></li>
-            <li><a href="../category/bian-cheng-yu-yan.html">编程语言</a></li>
-            <li><a href="../category/ji-zhu.html">技术</a></li>
-            <li><a href="../category/misc.html">misc</a></li>
-            <li><a href="../category/test.html">Test</a></li>
-            <li><a href="../category/za-tan.html">杂谈</a></li>
+            <li><a href="./category/bian-cheng-jia-gou.html">编程 架构</a></li>
+            <li><a href="./category/bian-cheng-yu-yan.html">编程语言</a></li>
+            <li><a href="./category/ji-zhu.html">技术</a></li>
+            <li><a href="./category/misc.html">misc</a></li>
+            <li><a href="./category/test.html">Test</a></li>
+            <li><a href="./category/za-tan.html">杂谈</a></li>
    
         </ul>
 
