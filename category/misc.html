@@ -49,145 +49,6 @@
         
 
             <article>
-                <a href="../zi-ding-yi-dateviewkong-jian.html"><h3 class="article-title">自定义DateView控件</h3></a>
-<h6 class="subheader" title="2014-11-21T00:00:00">2014-11-21
-</h6>
-
-
-<p>最近因为项目需要自定义一个日期控件，我花了一个多小时写了这个控件。虽然跟设计效果图还有点细微差别，但是这个可以慢慢修改。</p>
-<div class="highlight"><pre>    <span class="n">public</span> <span class="n">class</span> <span class="n">DateView</span> <span class="n">extends</span> <span class="n">View</span> <span class="p">{</span>
-
-    <span class="n">private</span> <span class="k">static</span> <span class="n">final</span> <span class="kt">int</span> <span class="n">DAY_TEXT_SIZE</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>
-    <span class="n">private</span> <span class="k">static</span> <span class="n">final</span> <span class="kt">int</span> <span class="n">MONTH_TEXT_SIZE</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-
-    <span class="n">private</span> <span class="kt">int</span> <span class="n">mDay</span><span class="p">;</span>
-    <span class="n">private</span> <span class="kt">int</span> <span class="n">mMonth</span><span class="p">;</span>
-    <span class="n">private</span> <span class="kt">int</span> <span class="n">mYear</span><span class="p">;</span>
-
-    <span class="n">private</span> <span class="n">TextPaint</span> <span class="n">mDayPaint</span><span class="p">;</span>
-    <span class="n">private</span> <span class="n">TextPaint</span> <span class="n">mMonthPaint</span><span class="p">;</span>
-
-    <span class="n">public</span> <span class="nf">DateView</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">super</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
-        <span class="n">initView</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="n">public</span> <span class="nf">DateView</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">super</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">attrs</span><span class="p">);</span>
-        <span class="n">initView</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="n">public</span> <span class="nf">DateView</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="p">,</span> <span class="kt">int</span> <span class="n">defStyleAttr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">super</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">defStyleAttr</span><span class="p">);</span>
-        <span class="n">initView</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="n">private</span> <span class="kt">void</span> <span class="nf">initView</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">mDayPaint</span> <span class="o">=</span> <span class="n">new</span> <span class="n">TextPaint</span><span class="p">(</span><span class="n">TextPaint</span><span class="p">.</span><span class="n">ANTI_ALIAS_FLAG</span><span class="p">);</span>
-        <span class="n">mDayPaint</span><span class="p">.</span><span class="n">setColor</span><span class="p">(</span><span class="mh">0xff333333</span><span class="p">);</span>
-        <span class="n">mMonthPaint</span> <span class="o">=</span> <span class="n">new</span> <span class="n">TextPaint</span><span class="p">(</span><span class="n">mDayPaint</span><span class="p">);</span>
-        <span class="n">mDayPaint</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="n">dip2px</span><span class="p">(</span><span class="n">getContext</span><span class="p">(),</span> <span class="n">DAY_TEXT_SIZE</span><span class="p">));</span>
-<span class="c1">//        setBackgroundColor(Color.TRANSPARENT);</span>
-        <span class="n">setDate</span><span class="p">(</span><span class="n">Calendar</span><span class="p">.</span><span class="n">getInstance</span><span class="p">().</span><span class="n">getTimeInMillis</span><span class="p">()</span><span class="o">/</span><span class="mi">1000</span><span class="p">);</span>
-        <span class="n">setMinimumWidth</span><span class="p">(</span><span class="n">dip2px</span><span class="p">(</span><span class="n">getContext</span><span class="p">(),</span><span class="mi">80</span><span class="p">));</span>
-        <span class="n">setMinimumHeight</span><span class="p">(</span><span class="n">dip2px</span><span class="p">(</span><span class="n">getContext</span><span class="p">(),</span> <span class="mi">80</span><span class="p">));</span>
-    <span class="p">}</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * 显示年月日</span>
-<span class="cm">     * @param timeInSeconds 以秒为单位</span>
-<span class="cm">     */</span>
-    <span class="n">public</span> <span class="kt">void</span> <span class="nf">setDate</span><span class="p">(</span><span class="kt">long</span> <span class="n">timeInSeconds</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Calendar</span> <span class="n">ca</span> <span class="o">=</span> <span class="n">Calendar</span><span class="p">.</span><span class="n">getInstance</span><span class="p">();</span>
-        <span class="n">ca</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-        <span class="n">ca</span><span class="p">.</span><span class="n">setTimeInMillis</span><span class="p">(</span><span class="n">timeInSeconds</span> <span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
-        <span class="n">mMonth</span> <span class="o">=</span> <span class="n">ca</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">Calendar</span><span class="p">.</span><span class="n">MONTH</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">mYear</span> <span class="o">=</span> <span class="n">ca</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">Calendar</span><span class="p">.</span><span class="n">YEAR</span><span class="p">);</span>
-        <span class="n">mDay</span> <span class="o">=</span> <span class="n">ca</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">Calendar</span><span class="p">.</span><span class="n">DAY_OF_MONTH</span><span class="p">);</span>
-        <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="n">dip2px</span><span class="p">(</span><span class="n">getContext</span><span class="p">(),</span> <span class="n">MONTH_TEXT_SIZE</span><span class="p">));</span>
-        <span class="n">invalidate</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * 设置时间，当year为0时，表示不需要显示年，只显示月日</span>
-<span class="cm">     * @param day 1-31</span>
-<span class="cm">     * @param month 1-12</span>
-<span class="cm">     * @param year &gt;= 0，0表示不显示年</span>
-<span class="cm">     */</span>
-    <span class="n">public</span> <span class="kt">void</span> <span class="nf">setDate</span><span class="p">(</span><span class="kt">int</span> <span class="n">day</span><span class="p">,</span> <span class="kt">int</span> <span class="n">month</span><span class="p">,</span> <span class="kt">int</span> <span class="n">year</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">mDay</span> <span class="o">=</span> <span class="n">day</span><span class="p">;</span>
-        <span class="n">mMonth</span> <span class="o">=</span> <span class="n">month</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mMonth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">mMonth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">mYear</span> <span class="o">=</span> <span class="n">year</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mYear</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="n">dip2px</span><span class="p">(</span><span class="n">getContext</span><span class="p">(),</span> <span class="n">MONTH_TEXT_SIZE</span><span class="o">+</span><span class="mi">2</span><span class="p">));</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="n">dip2px</span><span class="p">(</span><span class="n">getContext</span><span class="p">(),</span> <span class="n">MONTH_TEXT_SIZE</span><span class="p">));</span>
-        <span class="p">}</span>
-        <span class="n">invalidate</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="n">public</span> <span class="k">static</span> <span class="kt">int</span> <span class="nf">dip2px</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="kt">float</span> <span class="n">dpValue</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">final</span> <span class="kt">float</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">getResources</span><span class="p">().</span><span class="n">getDisplayMetrics</span><span class="p">().</span><span class="n">density</span><span class="p">;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="n">dpValue</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">+</span> <span class="mf">0.5f</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="n">public</span> <span class="kt">void</span> <span class="nf">setTextColor</span><span class="p">(</span><span class="kt">int</span> <span class="n">color</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">mDayPaint</span><span class="p">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">color</span><span class="p">);</span>
-        <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">color</span><span class="p">);</span>
-        <span class="n">invalidate</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="err">@</span><span class="n">Override</span>
-    <span class="n">protected</span> <span class="kt">void</span> <span class="n">onDraw</span><span class="p">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">super</span><span class="p">.</span><span class="n">onDraw</span><span class="p">(</span><span class="n">canvas</span><span class="p">);</span>
-        <span class="n">String</span> <span class="n">dayText</span> <span class="o">=</span> <span class="n">String</span><span class="p">.</span><span class="n">valueOf</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;%02d&quot;</span><span class="p">,</span> <span class="n">mDay</span><span class="p">));</span>
-        <span class="kt">int</span> <span class="n">dayTextLen</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">mDayPaint</span><span class="p">.</span><span class="n">measureText</span><span class="p">(</span><span class="n">dayText</span><span class="p">);</span>
-
-        <span class="kt">int</span> <span class="n">canvasWith</span> <span class="o">=</span> <span class="n">canvas</span><span class="p">.</span><span class="n">getWidth</span><span class="p">();</span>
-        <span class="kt">int</span> <span class="n">canvasHeight</span> <span class="o">=</span> <span class="n">canvas</span><span class="p">.</span><span class="n">getHeight</span><span class="p">();</span>
-
-        <span class="n">canvas</span><span class="p">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">canvasWith</span><span class="o">*</span><span class="mf">0.75f</span><span class="p">,</span> <span class="n">canvasHeight</span><span class="o">*</span><span class="mf">0.25f</span><span class="p">,</span> <span class="n">canvasWith</span><span class="o">*</span><span class="mf">0.25f</span><span class="p">,</span> <span class="n">canvasHeight</span><span class="o">*</span><span class="mf">0.75f</span><span class="p">,</span> <span class="n">mDayPaint</span><span class="p">);</span>
-
-        <span class="n">canvas</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">dayText</span><span class="p">,</span> <span class="n">canvasWith</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">dayTextLen</span><span class="p">,</span> <span class="n">canvasHeight</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">mDayPaint</span><span class="p">.</span><span class="n">getFontMetrics</span><span class="p">().</span><span class="n">descent</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">mDayPaint</span><span class="p">);</span>
-
-
-        <span class="n">Paint</span><span class="p">.</span><span class="n">FontMetrics</span> <span class="n">fontMetrics</span> <span class="o">=</span> <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">getFontMetrics</span><span class="p">();</span>
-
-
-        <span class="n">String</span> <span class="n">monthText</span> <span class="o">=</span> <span class="n">String</span><span class="p">.</span><span class="n">valueOf</span><span class="p">(</span><span class="n">mMonth</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;月&quot;</span><span class="p">;</span>
-<span class="c1">//        int monthTextLen = (int)mMonthPaint.measureText(monthText);</span>
-        <span class="kt">float</span> <span class="n">textHeight</span> <span class="o">=</span> <span class="n">Math</span><span class="p">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fontMetrics</span><span class="p">.</span><span class="n">ascent</span><span class="p">)</span> <span class="o">+</span> <span class="n">Math</span><span class="p">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fontMetrics</span><span class="p">.</span><span class="n">descent</span><span class="p">)</span> <span class="o">+</span> <span class="n">fontMetrics</span><span class="p">.</span><span class="n">leading</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mYear</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">String</span> <span class="n">yearText</span> <span class="o">=</span> <span class="n">String</span><span class="p">.</span><span class="n">valueOf</span><span class="p">(</span><span class="n">mYear</span><span class="p">);</span>
-            <span class="n">canvas</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">yearText</span><span class="p">,</span> <span class="n">canvasWith</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">getTextSize</span><span class="p">()</span><span class="o">*</span><span class="mf">0.5f</span><span class="p">,</span> <span class="n">canvasHeight</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">getTextSize</span><span class="p">()</span><span class="o">*</span><span class="mf">1.5f</span><span class="p">,</span> <span class="n">mMonthPaint</span><span class="p">);</span>
-            <span class="n">canvas</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">monthText</span><span class="p">,</span> <span class="n">canvasWith</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">mMonthPaint</span><span class="p">.</span><span class="n">getTextSize</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">canvasHeight</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">mMonthPaint</span><span class="p">.</span><span class="n">getTextSize</span><span class="p">()</span><span class="o">*</span><span class="mf">0.5f</span><span class="p">,</span> <span class="n">mMonthPaint</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">canvas</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">monthText</span><span class="p">,</span> <span class="n">canvasWith</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">canvasHeight</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">mMonthPaint</span><span class="p">.</span><span class="n">getTextSize</span><span class="p">(),</span> <span class="n">mMonthPaint</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>这最不好做的就是算字的位置，文字的渲染是基于baseline的，我的理解是Rect的左下角。关于canvas的draw还有很多不懂，好好学习</p><p class="subheader">Category: <a href="../category/misc.html">misc</a>
-
-    Tagged: 
-    <a href="../tag/android-zi-ding-yi-kong-jian-ri-qi-kong-jian.html">Android 自定义控件 日期控件 </a>
-</p>
-
-
-
-<p><a href="../zi-ding-yi-dateviewkong-jian.html#disqus_thread">comments</a></p>            </article>
-
-
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
                 <a href="../activitydong-hua-er.html"><h3 class="article-title">Activity动画（二）</h3></a>
 <h6 class="subheader" title="2014-11-12T00:00:00">2014-11-12
 </h6>
@@ -205,7 +66,187 @@
     <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityOpenExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_out<span class="nt">&lt;/item&gt;</span>
     <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_in<span class="nt">&lt;/item&gt;</span>
     <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_out<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item ...</span></pre></div><p class="subheader">Category: <a href="../category/misc.html">misc</a>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:taskOpenEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_in<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:taskOpenExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_out<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:taskCloseEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_in<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:taskCloseExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_out<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/style&gt;</span>
+</pre></div>
+
+
+<p>````</p>
+<p>将这个theme运用到Application的theme里，所以的Activity就会按照你定义的动画来交互了。</p>
+<p>不过，现实的需求往往是更复杂的动画或者交互，不可能所有的界面的交互动画都一致的。有些页面需要特别定制，而且可能很复杂。例如我们要实现类似于iOS的NavigationViewController的页面右滑关闭页面的交互动画，或者要实现点击一张图片缩略图，然后它渐渐放大，点击关闭它又慢慢缩回原处的动画，按照之前介绍的方法，都无法实现。</p>
+<hr />
+<p>在iOS自带相册APP里，点击一个缩略图，缩略图渐渐放大进入大图查看。这个交互基本成了一个相册必备的标准交互。Android上的相册很多也用了这种动画交互。如果缩略图的查看和大图查看都是在同一个Activity中完成的话，还是可以比较容易实现的。但是如果缩略的查看和大图的查看分处在不同的Activity中的话，那这就不是很好实现了。这里我准备讲讲可以怎么实现这个功能。而且这个方法可以推广出去，很多类型的Activity切换动画都可以按照这种方式实现。</p>
+<p>现在假设查看缩略图的Activity是A，查看大图的Activity是B。</p>
+<blockquote>
+<ul>
+<li>一 设置B的的theme为透明的transparent。</li>
+<li>二 在A中，启动B前，把一些必要的信息打包成Bundle传给B，启动B后把默认的启动动画覆盖,overridePendingTransition(0, 0)。例如把被点击的ImageView的在屏幕中的坐标，还有该ImageView的width和height，还有该ImageView所显示的图片资源id，或者URL，都存入Bundle中，讲该Bundle放入Intent中，启动B时传给B。</li>
+<li>三 在B的onCreate方法中，把Bundle中的信息取出来，并且对你想要做动画的ImageView中，获取ViewTreeObserver实例，加入一个OnPreDrawListener，在OnPreDrawListener的onPreDraw方法中，对ImageView做放大动画，初始位置就是从Bundle中获取，最终位置根据要显示的图片的大小来定。</li>
+<li>四 关闭B Activity时，对ImageView做一个缩小的动画，初始位置就是它现在的位置，最终位置是最开始从Bundle中获取的那个位置。覆盖Activity的finish方法，同样要将Activity的默认动画覆盖掉overridePendingTransition(0, 0)。</li>
+</ul>
+</blockquote>
+<p>我们看一下具体怎么实现，有什么要注意的。</p>
+<blockquote>
+<p>一· 设置B的的theme为透明的transparent</p>
+</blockquote>
+<div class="highlight"><pre><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&quot;Transparent&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:windowNoTitle&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:windowIsTranslucent&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:windowBackground&quot;</span><span class="nt">&gt;</span>@android:color/transparent<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;com.example.android.activityanim.PictureDetailsActivity&quot;</span>
+            <span class="na">android:label=</span><span class="s">&quot;@string/subactivity_name&quot;</span>
+            <span class="na">android:theme=</span><span class="s">&quot;@style/Transparent&quot;</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;/activity&gt;</span>
+</pre></div>
+
+
+<p>这里主要是将B Activity的window和它的背景设置成透明的。所有的Activity都有一个默认的样式，默认样式不是透明的。设置成透明的话，在启动B Activity时它的背景是透明的，并且调用overridePendingTransition(0, 0)覆盖掉默认动画，你不会觉察到已经从A进入到B界面。</p>
+<blockquote>
+<ul>
+<li>二. 在A中，启动B前，把一些必要的信息打包成Bundle传给B，启动B后把默认的启动动画覆盖,overridePendingTransition(0, 0)。</li>
+</ul>
+</blockquote>
+<div class="highlight"><pre><span class="c1">// Interesting data to pass across are the thumbnail size/location, the</span>
+        <span class="c1">// resourceId of the source bitmap, the picture description, and the</span>
+        <span class="c1">// orientation (to avoid returning back to an obsolete configuration if</span>
+        <span class="c1">// the device rotates again in the meantime)</span>
+        <span class="k">int</span><span class="p">[]</span> <span class="n">screenLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="k">int</span><span class="p">[</span><span class="mh">2</span><span class="p">];</span>
+        <span class="n">v</span><span class="p">.</span><span class="n">getLocationOnScreen</span><span class="p">(</span><span class="n">screenLocation</span><span class="p">);</span>
+        <span class="n">PictureData</span> <span class="n">info</span> <span class="o">=</span> <span class="n">mPicturesData</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+        <span class="n">Intent</span> <span class="n">subActivity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="p">(</span><span class="n">ActivityAnimations</span><span class="p">.</span><span class="k">this</span><span class="p">,</span>
+                <span class="n">PictureDetailsActivity</span><span class="p">.</span><span class="k">class</span><span class="p">);</span>
+        <span class="k">int</span> <span class="n">orientation</span> <span class="o">=</span> <span class="n">getResources</span><span class="p">().</span><span class="n">getConfiguration</span><span class="p">().</span><span class="n">orientation</span><span class="p">;</span>
+        <span class="n">subActivity</span><span class="p">.</span>
+                <span class="n">putExtra</span><span class="p">(</span><span class="no">PACKAGE</span> <span class="o">+</span> <span class="s">&quot;.orientation&quot;</span><span class="p">,</span> <span class="n">orientation</span><span class="p">).</span>
+                <span class="n">putExtra</span><span class="p">(</span><span class="no">PACKAGE</span> <span class="o">+</span> <span class="s">&quot;.resourceId&quot;</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">resourceId</span><span class="p">).</span>
+                <span class="n">putExtra</span><span class="p">(</span><span class="no">PACKAGE</span> <span class="o">+</span> <span class="s">&quot;.left&quot;</span><span class="p">,</span> <span class="n">screenLocation</span><span class="p">[</span><span class="mh">0</span><span class="p">]).</span>
+                <span class="n">putExtra</span><span class="p">(</span><span class="no">PACKAGE</span> <span class="o">+</span> <span class="s">&quot;.top&quot;</span><span class="p">,</span> <span class="n">screenLocation</span><span class="p">[</span><span class="mh">1</span><span class="p">]).</span>
+                <span class="n">putExtra</span><span class="p">(</span><span class="no">PACKAGE</span> <span class="o">+</span> <span class="s">&quot;.width&quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">getWidth</span><span class="p">()).</span>
+                <span class="n">putExtra</span><span class="p">(</span><span class="no">PACKAGE</span> <span class="o">+</span> <span class="s">&quot;.height&quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">getHeight</span><span class="p">()).</span>
+
+        <span class="n">startActivity</span><span class="p">(</span><span class="n">subActivity</span><span class="p">);</span>
+
+        <span class="c1">// Override transitions: we don&#39;t want the normal window animation in addition</span>
+        <span class="c1">// to our custom one</span>
+        <span class="n">overridePendingTransition</span><span class="p">(</span><span class="mh">0</span><span class="p">,</span> <span class="mh">0</span><span class="p">);</span>
+</pre></div>
+
+
+<p>这里有个关键点，获取被点击的View的在屏幕上的位置是通过getLocationOnScreen()方法。这个位置在B中很重要。另外还有宽高也是必须信息，被点击的图片resId或者URL等其他信息。</p>
+<blockquote>
+<p>二. 在B的onCreate方法中，把Bundle中的信息取出来，并且对你想要做动画的ImageView中，获取ViewTreeObserver实例，加入一个OnPreDrawListener，在OnPreDrawListener的onPreDraw方法中，对ImageView做放大动画，初始位置就是从Bundle中获取，最终位置根据要显示的图片的大小来定。</p>
+</blockquote>
+<p>因为第一步，在用户觉察不到的情况下已进入Activity B,接下来只要在B的视图出现的时候，以一个缩略图放大的动画效果出现就行了。用户看到的效果是点击了A的一个缩略图，缩略图逐渐放大的过程，用户很容易认为这是在A中完成的，实际上这所有的动画都是在B中完成的。看看B中相关的代码:</p>
+<div class="highlight"><pre><span class="c1">// Retrieve the data we need for the picture/description to display and</span>
+    <span class="c1">// the thumbnail to animate it from</span>
+    <span class="n">Bundle</span> <span class="n">bundle</span> <span class="o">=</span> <span class="n">getIntent</span><span class="p">().</span><span class="n">getExtras</span><span class="p">();</span>
+    <span class="n">Bitmap</span> <span class="n">bitmap</span> <span class="o">=</span> <span class="n">BitmapUtils</span><span class="p">.</span><span class="n">getBitmap</span><span class="p">(</span><span class="n">getResources</span><span class="p">(),</span>
+            <span class="n">bundle</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="no">PACKAGE_NAME</span> <span class="o">+</span> <span class="s">&quot;.resourceId&quot;</span><span class="p">));</span>
+    <span class="n">String</span> <span class="n">description</span> <span class="o">=</span> <span class="n">bundle</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="no">PACKAGE_NAME</span> <span class="o">+</span> <span class="s">&quot;.description&quot;</span><span class="p">);</span>
+    <span class="k">final</span> <span class="k">int</span> <span class="n">thumbnailTop</span> <span class="o">=</span> <span class="n">bundle</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="no">PACKAGE_NAME</span> <span class="o">+</span> <span class="s">&quot;.top&quot;</span><span class="p">);</span>
+    <span class="k">final</span> <span class="k">int</span> <span class="n">thumbnailLeft</span> <span class="o">=</span> <span class="n">bundle</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="no">PACKAGE_NAME</span> <span class="o">+</span> <span class="s">&quot;.left&quot;</span><span class="p">);</span>
+    <span class="k">final</span> <span class="k">int</span> <span class="n">thumbnailWidth</span> <span class="o">=</span> <span class="n">bundle</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="no">PACKAGE_NAME</span> <span class="o">+</span> <span class="s">&quot;.width&quot;</span><span class="p">);</span>
+    <span class="k">final</span> <span class="k">int</span> <span class="n">thumbnailHeight</span> <span class="o">=</span> <span class="n">bundle</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="no">PACKAGE_NAME</span> <span class="o">+</span> <span class="s">&quot;.height&quot;</span><span class="p">);</span>
+    <span class="n">mOriginalOrientation</span> <span class="o">=</span> <span class="n">bundle</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="no">PACKAGE_NAME</span> <span class="o">+</span> <span class="s">&quot;.orientation&quot;</span><span class="p">);</span>
+
+    <span class="n">mBitmapDrawable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BitmapDrawable</span><span class="p">(</span><span class="n">getResources</span><span class="p">(),</span> <span class="n">bitmap</span><span class="p">);</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">setImageDrawable</span><span class="p">(</span><span class="n">mBitmapDrawable</span><span class="p">);</span>
+
+    <span class="n">ViewTreeObserver</span> <span class="n">observer</span> <span class="o">=</span> <span class="n">mImageView</span><span class="p">.</span><span class="n">getViewTreeObserver</span><span class="p">();</span>
+        <span class="n">observer</span><span class="p">.</span><span class="n">addOnPreDrawListener</span><span class="p">(</span><span class="k">new</span> <span class="n">ViewTreeObserver</span><span class="p">.</span><span class="n">OnPreDrawListener</span><span class="p">()</span> <span class="p">{</span>
+
+            <span class="p">@</span><span class="n">Override</span>
+            <span class="n">public</span> <span class="n">boolean</span> <span class="n">onPreDraw</span><span class="p">()</span> <span class="p">{</span>
+                <span class="n">mImageView</span><span class="p">.</span><span class="n">getViewTreeObserver</span><span class="p">().</span><span class="n">removeOnPreDrawListener</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+
+                <span class="c1">// Figure out where the thumbnail and full size versions are, relative</span>
+                <span class="c1">// to the screen and each other</span>
+                <span class="k">int</span><span class="p">[]</span> <span class="n">screenLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="k">int</span><span class="p">[</span><span class="mh">2</span><span class="p">];</span>
+                <span class="n">mImageView</span><span class="p">.</span><span class="n">getLocationOnScreen</span><span class="p">(</span><span class="n">screenLocation</span><span class="p">);</span>
+                <span class="n">mLeftDelta</span> <span class="o">=</span> <span class="n">thumbnailLeft</span> <span class="o">-</span> <span class="n">screenLocation</span><span class="p">[</span><span class="mh">0</span><span class="p">];</span>
+                <span class="n">mTopDelta</span> <span class="o">=</span> <span class="n">thumbnailTop</span> <span class="o">-</span> <span class="n">screenLocation</span><span class="p">[</span><span class="mh">1</span><span class="p">];</span>
+
+                <span class="c1">// Scale factors to make the large version the same size as the thumbnail</span>
+                <span class="n">mWidthScale</span> <span class="o">=</span> <span class="p">(</span><span class="n">float</span><span class="p">)</span> <span class="n">thumbnailWidth</span> <span class="o">/</span> <span class="n">mImageView</span><span class="p">.</span><span class="n">getWidth</span><span class="p">();</span>
+                <span class="n">mHeightScale</span> <span class="o">=</span> <span class="p">(</span><span class="n">float</span><span class="p">)</span> <span class="n">thumbnailHeight</span> <span class="o">/</span> <span class="n">mImageView</span><span class="p">.</span><span class="n">getHeight</span><span class="p">();</span>
+
+                <span class="n">runEnterAnimation</span><span class="p">();</span>
+
+                <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+</pre></div>
+
+
+<p>ViewTreeObserver是View树监听类，可以监听View的一些变化。其中ViewTreeObserver.OnPreDrawListener内部类，是当视图要被绘制时会被回调的类。我们只要在创建一个ViewTreeObserver.OnPreDrawListener实例，传给ViewTreeObserver，就可以在View被绘制时回调onPreDraw方法，我们所要做的就是在这个方法中开始动画。这里注意在动画开始前已经把要显示的图片设置上去了。
+runEnterAnimation方法：</p>
+<div class="highlight"><pre><span class="c1">// Set starting values for properties we&#39;re going to animate. These</span>
+    <span class="c1">// values scale and position the full size version down to the thumbnail</span>
+    <span class="c1">// size/location, from which we&#39;ll animate it back up</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">setPivotX</span><span class="p">(</span><span class="mh">0</span><span class="p">);</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">setPivotY</span><span class="p">(</span><span class="mh">0</span><span class="p">);</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">setScaleX</span><span class="p">(</span><span class="n">mWidthScale</span><span class="p">);</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">setScaleY</span><span class="p">(</span><span class="n">mHeightScale</span><span class="p">);</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">setTranslationX</span><span class="p">(</span><span class="n">mLeftDelta</span><span class="p">);</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">setTranslationY</span><span class="p">(</span><span class="n">mTopDelta</span><span class="p">);</span>
+
+    <span class="c1">// Animate scale and translation to go from thumbnail to full size</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">animate</span><span class="p">().</span><span class="n">setDuration</span><span class="p">(</span><span class="n">duration</span><span class="p">).</span>
+            <span class="n">scaleX</span><span class="p">(</span><span class="mh">1</span><span class="p">).</span><span class="n">scaleY</span><span class="p">(</span><span class="mh">1</span><span class="p">).</span>
+            <span class="n">translationX</span><span class="p">(</span><span class="mh">0</span><span class="p">).</span><span class="n">translationY</span><span class="p">(</span><span class="mh">0</span><span class="p">).</span>
+            <span class="n">setInterpolator</span><span class="p">(</span><span class="n">sDecelerator</span><span class="p">));</span>
+</pre></div>
+
+
+<p>这段代码先将ImageView从大图缩小到我们点击的那个缩略图的大小和位置，然后开始放大动画到它大图显示的样子。这样就实现了我们想要的点击缩略图放大到大图的效果。</p>
+<blockquote>
+<ul>
+<li>关闭B Activity时，对ImageView做一个缩小的动画，初始位置就是它现在的位置，最终位置是最开始从Bundle中获取的那个位置。覆盖Activity的finish方法，同样要将Activity的默认动画覆盖掉overridePendingTransition(0, 0)</li>
+</ul>
+</blockquote>
+<div class="highlight"><pre><span class="err">@</span><span class="n">Override</span>
+<span class="n">public</span> <span class="kt">void</span> <span class="n">finish</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">super</span><span class="p">.</span><span class="n">finish</span><span class="p">();</span>
+
+    <span class="c1">// override transitions to skip the standard window animations</span>
+    <span class="n">overridePendingTransition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Overriding this method allows us to run our exit animation first, then exiting</span>
+<span class="cm"> * the activity when it is complete.</span>
+<span class="cm"> */</span>
+<span class="err">@</span><span class="n">Override</span>
+<span class="n">public</span> <span class="kt">void</span> <span class="n">onBackPressed</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">runExitAnimation</span><span class="p">(</span><span class="n">new</span> <span class="n">Runnable</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">public</span> <span class="kt">void</span> <span class="n">run</span><span class="p">()</span> <span class="p">{</span>
+            <span class="c1">// *Now* go ahead and exit the activity</span>
+            <span class="n">finish</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="n">private</span> <span class="kt">void</span> <span class="n">runExitAnimation</span><span class="p">(</span><span class="n">Runnable</span> <span class="n">endAction</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Animate image back to thumbnail size/location</span>
+    <span class="n">mImageView</span><span class="p">.</span><span class="n">animate</span><span class="p">().</span><span class="n">setDuration</span><span class="p">(</span><span class="n">duration</span><span class="p">).</span>
+               <span class="n">scaleX</span><span class="p">(</span><span class="n">mWidthScale</span><span class="p">).</span><span class="n">scaleY</span><span class="p">(</span><span class="n">mHeightScale</span><span class="p">).</span>
+               <span class="n">translationX</span><span class="p">(</span><span class="n">mLeftDelta</span><span class="p">).</span><span class="n">translationY</span><span class="p">(</span><span class="n">mTopDelta</span><span class="p">).</span>
+                            <span class="n">withEndAction</span><span class="p">(</span><span class="n">endAction</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>当用户关闭界面的时候，先执行ImageView的缩小动画，缩小到原来缩略图的位置。当动画结束后，finish掉Activity并覆盖掉默认的Activity动画。</p>
+<p><strong>总结：第一步先要把Activity的theme变成透明。第覆盖掉Activity的启动或者关闭的默认动画效果。第三步如果要做进入动画，则可以实现ViewTreeObserver.OnPreDrawListener接口，在onPreDraw方法中做动画。如果是做退出动画，可以先对视图做动画，在动画结束的时候调用finish方法。</strong></p>
+<p><a href="https://github.com/szuwest/ActivityAnimations">demo代码</a>.该demo是dev-bytes上的demo代码。</p>
+<h2>扩展</h2>
+<p>如果B要支持左右滑动查看大图，然后在查看某已图片时点击返回键，图片要缩小至该图缩略图的位置上，这该怎么做？
+这种需求改变对A变化不大，但是对B的改变还是很大的，首先B要支持滑屏，一般来说要用到ViewPage或类似的控件。另外还有滑动时B如何获取数据，返回时如何获取当前大图对应的缩略图在A中的位置。我想实现方法应该有多种，我能想到的一种比较丑陋但是又比较简单的做法是，定义一个接口，声明了一些获取数据和缩略图位置等方法。然后A实现这个接口，传给B作为一个静态变量保存起来，这样A与B就可以通信了。这样只要B左右滑动的时候，A也保持一致的上下滑动，在B要关闭的时候，先获取到相应缩略图的问题，就能做动画了。</p><p class="subheader">Category: <a href="../category/misc.html">misc</a>
 
     Tagged: 
     <a href="../tag/android-ji-zhu-dong-hua.html">Android 技术 动画 </a>
@@ -213,11 +254,8 @@
 
 
 
-<p><a href="../activitydong-hua-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="../activitydong-hua-er.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
+<p><a href="../activitydong-hua-er.html#disqus_thread">comments</a></p>            </article>
 
-            <!-- /#posts-list -->
 <div class="pagination-centered">
 <h6 class="subheader">Page 1 of 1</h6>
 
@@ -225,6 +263,10 @@
 
 </p>
 </div>
+
+
+
+            <!-- /#posts-list -->
 
     </div>
     <!-- End Main Content -->
@@ -242,6 +284,7 @@
 		
         <h5 class="sidebar-title">Categories</h5>
         <ul class="side-nav">
+            <li><a href="../category/android.html">Android</a></li>
             <li><a href="../category/bian-cheng-jia-gou.html">编程 架构</a></li>
             <li><a href="../category/bian-cheng-yu-yan.html">编程语言</a></li>
             <li><a href="../category/ji-zhu.html">技术</a></li>
