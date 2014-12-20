@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Android源码学习之View</title>
+
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+
+    <!-- So Firefox can bookmark->"abo this site" -->
+
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html" rel="bookmark"
+        title="Permalink to Android源码学习之View">Android源码学习之View</a></h3>
+    </header>
+
+<h6 class="subheader" title="2014-12-20T00:00:00">2014-12-20
+</h6>
+
+
+    <h1>Android源码学习之View</h1>
+<p>在Android中，View是所有视图控件的基类。Android的视图控件的设计采用了经典的设计模式--组合模式。View是基础控件，而ViewGroup是可以包含子View和管理子View的空间，ViewGroup同时也是一个View。这跟iOS的视图空间设计有很大不同。在iOS的视图框架中，所有视图都是继承UIView,而UIView本身是可以包含和管理子UIView的。我不知道这两种设计有什么优劣，感觉iOS的设计更简单直接。</p>
+<p>View的源代码超过2万行，当然包括了很多注释。这里面定义了很多基本的方法，主要是视图渲染的相关方法和事件的相关方法，不过有一点我不是很明白的就是里面有不少是根scrollbar相关的方法。我们实际应用中貌似有scrollbar的控件貌似只有AdapterView的子控件，ScrollView和TextView，scrollbar的特性为什么不直接放到这些类中，或者专门为这些类专门建立一个父类来处理scrollbar。View中的scrollbar特性应该大部分视图控件都不需要吧。当然这些只是我的疑问罢了，Google这样设计也许有他的道理。</p>
+<h2>重要方法</h2>
+<p>一个View要渲染到屏幕上，有几个重要的方法：</p>
+<blockquote>
+<ul>
+<li>onMeasure系方法</li>
+<li>onLayout系方法</li>
+<li>onDraw系方法</li>
+</ul>
+</blockquote>
+<h3>onMeasure系方法</h3>
+<p>每一个onXXX方法又有若干个相关XXX方法。例如onMeasure方法，相关的方法是measure(int widthMeasureSpec, int heightMeasureSpec)方法，setMeasuredDimension(int measuredWidth, int measuredHeight)方法，MeasureSpec内部类。其中measure(int widthMeasureSpec, int heightMeasureSpec)是final方法，由系统调用，这个方法会调用onMeasure方法，这个方法需要子类覆盖实现来计算本身的大小，而且覆盖这个方法的时候必须调用setMeasuredDimension方法。这里跟计算大小相关密切的是MeasureSpec内部类，这里要结合ViewGroup类讲解才比较清楚。View中这个相关方法的实现是比较简单的，更多定义一个框架，需要子类自己定制实现。我之前总是搞不太清这些方法的关系，看这篇 <a href="http://blog.csdn.net/a396901990/article/details/36475213">ANDROID自定义视图——onMeasure，MeasureSpec源码 流程 思路详解</a>才比较清楚。这个我在ViewGroup学习中再讲。简单来讲View通过onMeasure来确定自己的大小。</p>
+<h3>onLayout系方法</h3>
+<p>onLayout(boolean changed, int left, int top, int right, int bottom)方法在View中是一个空实现，子类需要自己覆盖。跟这个类密切相关的方法是layout(int l, int t, int r, int b)方法，这个给外部调用的，一般是父控件来给它设定位置。还有setFrame(int left, int top, int right, int bottom) 和 onSizeChanged(int w, int h, int oldw, int oldh)方法。onSizeChanged(int w, int h, int oldw, int oldh）方法也是一个空方法。onLayout方法我用的比较少，一般貌似在需要动态滚动视图时用这个方法比较多。以后加深学习这个方法。</p>
+<h3>onDraw系方法</h3>
+<p>onDraw方法也是一个空实现。一般来说这个方法用得比较多，大家都知道要自定义View就需要重载这个方法。一开始我很奇怪，既然View的onDraw方法是空实现，而我经常用View来做一些线控件，即给View设置一个背景颜色，宽或者高设置为1像素。那它的背景是怎么画上去的？答案是在draw(Canvas canvas)方法中画的。onDraw系方法还有draw(Canvas canvas, ViewGroup parent, long drawingTime)方法，dispatchDraw(Canvas canvas)方法。dispatchDraw(Canvas canvas)方式是空实现，而draw(Canvas canvas, ViewGroup parent, long drawingTime)的实现相当复杂，这两个方法都是由ViewGroup来调用的。真正的重头戏在draw(Canvas canvas)方法中。</p>
+<div class="highlight"><pre> <span class="cm">/**</span>
+<span class="cm"> * Manually render this view (and all of its children) to the   given Canvas.</span>
+<span class="cm"> * The view must have already done a full layout before this function is</span>
+<span class="cm"> * called.  When implementing a view, implement</span>
+<span class="cm"> * {@link #onDraw(android.graphics.Canvas)} instead of overriding this method.</span>
+<span class="cm"> * If you do need to override this method, call the superclass version.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param canvas The Canvas to which the View is rendered.</span>
+<span class="cm"> */</span>
+
+<span class="kr">public</span> <span class="k">void</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">Canvas</span> <span class="nx">canvas</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">final</span> <span class="kr">int</span> <span class="nx">privateFlags</span> <span class="o">=</span> <span class="nx">mPrivateFlags</span><span class="p">;</span>
+    <span class="kr">final</span> <span class="kr">boolean</span> <span class="nx">dirtyOpaque</span> <span class="o">=</span> <span class="p">(</span><span class="nx">privateFlags</span> <span class="o">&amp;</span> <span class="nx">PFLAG_DIRTY_MASK</span><span class="p">)</span> <span class="o">==</span> <span class="nx">PFLAG_DIRTY_OPAQUE</span> <span class="o">&amp;&amp;</span>
+            <span class="p">(</span><span class="nx">mAttachInfo</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="o">!</span><span class="nx">mAttachInfo</span><span class="p">.</span><span class="nx">mIgnoreDirtyState</span><span class="p">);</span>
+    <span class="nx">mPrivateFlags</span> <span class="o">=</span> <span class="p">(</span><span class="nx">privateFlags</span> <span class="o">&amp;</span> <span class="o">~</span><span class="nx">PFLAG_DIRTY_MASK</span><span class="p">)</span> <span class="o">|</span> <span class="nx">PFLAG_DRAWN</span><span class="p">;</span>
+
+    <span class="cm">/*</span>
+<span class="cm">     * Draw traversal performs several drawing steps which must be executed</span>
+<span class="cm">     * in the appropriate order:</span>
+<span class="cm">     *</span>
+<span class="cm">     *      1. Draw the background</span>
+<span class="cm">     *      2. If necessary, save the canvas&#39; layers to prepare for fading</span>
+<span class="cm">     *      3. Draw view&#39;s content</span>
+<span class="cm">     *      4. Draw children</span>
+<span class="cm">     *      5. If necessary, draw the fading edges and restore layers</span>
+<span class="cm">     *      6. Draw decorations (scrollbars for instance)</span>
+<span class="cm">     */</span>
+
+    <span class="c1">// Step 1, draw the background, if needed</span>
+    <span class="kr">int</span> <span class="nx">saveCount</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">dirtyOpaque</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">drawBackground</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// skip step 2 &amp; 5 if possible (common case)</span>
+    <span class="kr">final</span> <span class="kr">int</span> <span class="nx">viewFlags</span> <span class="o">=</span> <span class="nx">mViewFlags</span><span class="p">;</span>
+    <span class="kr">boolean</span> <span class="nx">horizontalEdges</span> <span class="o">=</span> <span class="p">(</span><span class="nx">viewFlags</span> <span class="o">&amp;</span> <span class="nx">FADING_EDGE_HORIZONTAL</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kr">boolean</span> <span class="nx">verticalEdges</span> <span class="o">=</span> <span class="p">(</span><span class="nx">viewFlags</span> <span class="o">&amp;</span> <span class="nx">FADING_EDGE_VERTICAL</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">verticalEdges</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">horizontalEdges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Step 3, draw the content</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">dirtyOpaque</span><span class="p">)</span> <span class="nx">onDraw</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+        <span class="c1">// Step 4, draw the children</span>
+        <span class="nx">dispatchDraw</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+        <span class="c1">// Step 6, draw decorations (scrollbars)</span>
+        <span class="nx">onDrawScrollBars</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">mOverlay</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">mOverlay</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="nx">mOverlay</span><span class="p">.</span><span class="nx">getOverlayView</span><span class="p">().</span><span class="nx">dispatchDraw</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// we&#39;re done...</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/*</span>
+<span class="cm">     * Here we do the full fledged routine...</span>
+<span class="cm">     * (this is an uncommon case where speed matters less,</span>
+<span class="cm">     * this is why we repeat some of the tests that have been</span>
+<span class="cm">     * done above)</span>
+<span class="cm">     */</span>
+
+    <span class="kr">boolean</span> <span class="nx">drawTop</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="kr">boolean</span> <span class="nx">drawBottom</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="kr">boolean</span> <span class="nx">drawLeft</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="kr">boolean</span> <span class="nx">drawRight</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="kr">float</span> <span class="nx">topFadeStrength</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+    <span class="kr">float</span> <span class="nx">bottomFadeStrength</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+    <span class="kr">float</span> <span class="nx">leftFadeStrength</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+    <span class="kr">float</span> <span class="nx">rightFadeStrength</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+
+    <span class="c1">// Step 2, save the canvas&#39; layers</span>
+    <span class="kr">int</span> <span class="nx">paddingLeft</span> <span class="o">=</span> <span class="nx">mPaddingLeft</span><span class="p">;</span>
+
+    <span class="kr">final</span> <span class="kr">boolean</span> <span class="nx">offsetRequired</span> <span class="o">=</span> <span class="nx">isPaddingOffsetRequired</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">offsetRequired</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">paddingLeft</span> <span class="o">+=</span> <span class="nx">getLeftPaddingOffset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kr">int</span> <span class="nx">left</span> <span class="o">=</span> <span class="nx">mScrollX</span> <span class="o">+</span> <span class="nx">paddingLeft</span><span class="p">;</span>
+    <span class="kr">int</span> <span class="nx">right</span> <span class="o">=</span> <span class="nx">left</span> <span class="o">+</span> <span class="nx">mRight</span> <span class="o">-</span> <span class="nx">mLeft</span> <span class="o">-</span> <span class="nx">mPaddingRight</span> <span class="o">-</span> <span class="nx">paddingLeft</span><span class="p">;</span>
+    <span class="kr">int</span> <span class="nx">top</span> <span class="o">=</span> <span class="nx">mScrollY</span> <span class="o">+</span> <span class="nx">getFadeTop</span><span class="p">(</span><span class="nx">offsetRequired</span><span class="p">);</span>
+    <span class="kr">int</span> <span class="nx">bottom</span> <span class="o">=</span> <span class="nx">top</span> <span class="o">+</span> <span class="nx">getFadeHeight</span><span class="p">(</span><span class="nx">offsetRequired</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">offsetRequired</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">right</span> <span class="o">+=</span> <span class="nx">getRightPaddingOffset</span><span class="p">();</span>
+        <span class="nx">bottom</span> <span class="o">+=</span> <span class="nx">getBottomPaddingOffset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kr">final</span> <span class="nx">ScrollabilityCache</span> <span class="nx">scrollabilityCache</span> <span class="o">=</span> <span class="nx">mScrollCache</span><span class="p">;</span>
+    <span class="kr">final</span> <span class="kr">float</span> <span class="nx">fadeHeight</span> <span class="o">=</span> <span class="nx">scrollabilityCache</span><span class="p">.</span><span class="nx">fadingEdgeLength</span><span class="p">;</span>
+    <span class="kr">int</span> <span class="nx">length</span> <span class="o">=</span> <span class="p">(</span><span class="kr">int</span><span class="p">)</span> <span class="nx">fadeHeight</span><span class="p">;</span>
+
+    <span class="c1">// clip the fade length if top and bottom fades overlap</span>
+    <span class="c1">// overlapping fades produce odd-looking artifacts</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">verticalEdges</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">bottom</span> <span class="o">-</span> <span class="nx">length</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">length</span> <span class="o">=</span> <span class="p">(</span><span class="nx">bottom</span> <span class="o">-</span> <span class="nx">top</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// also clip horizontal fades if necessary</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">horizontalEdges</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">right</span> <span class="o">-</span> <span class="nx">length</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">length</span> <span class="o">=</span> <span class="p">(</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">verticalEdges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">topFadeStrength</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="nx">getTopFadingEdgeStrength</span><span class="p">()));</span>
+        <span class="nx">drawTop</span> <span class="o">=</span> <span class="nx">topFadeStrength</span> <span class="o">*</span> <span class="nx">fadeHeight</span> <span class="o">&gt;</span> <span class="mf">1.0f</span><span class="p">;</span>
+        <span class="nx">bottomFadeStrength</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="nx">getBottomFadingEdgeStrength</span><span class="p">()));</span>
+        <span class="nx">drawBottom</span> <span class="o">=</span> <span class="nx">bottomFadeStrength</span> <span class="o">*</span> <span class="nx">fadeHeight</span> <span class="o">&gt;</span> <span class="mf">1.0f</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">horizontalEdges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">leftFadeStrength</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="nx">getLeftFadingEdgeStrength</span><span class="p">()));</span>
+        <span class="nx">drawLeft</span> <span class="o">=</span> <span class="nx">leftFadeStrength</span> <span class="o">*</span> <span class="nx">fadeHeight</span> <span class="o">&gt;</span> <span class="mf">1.0f</span><span class="p">;</span>
+        <span class="nx">rightFadeStrength</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="nx">getRightFadingEdgeStrength</span><span class="p">()));</span>
+        <span class="nx">drawRight</span> <span class="o">=</span> <span class="nx">rightFadeStrength</span> <span class="o">*</span> <span class="nx">fadeHeight</span> <span class="o">&gt;</span> <span class="mf">1.0f</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">saveCount</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getSaveCount</span><span class="p">();</span>
+
+    <span class="kr">int</span> <span class="nx">solidColor</span> <span class="o">=</span> <span class="nx">getSolidColor</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">solidColor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kr">final</span> <span class="kr">int</span> <span class="nx">flags</span> <span class="o">=</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">HAS_ALPHA_LAYER_SAVE_FLAG</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">drawTop</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">canvas</span><span class="p">.</span><span class="nx">saveLayer</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">top</span><span class="p">,</span> <span class="nx">right</span><span class="p">,</span> <span class="nx">top</span> <span class="o">+</span> <span class="nx">length</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">flags</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">drawBottom</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">canvas</span><span class="p">.</span><span class="nx">saveLayer</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">bottom</span> <span class="o">-</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">right</span><span class="p">,</span> <span class="nx">bottom</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">flags</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">drawLeft</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">canvas</span><span class="p">.</span><span class="nx">saveLayer</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">top</span><span class="p">,</span> <span class="nx">left</span> <span class="o">+</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">bottom</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">flags</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">drawRight</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">canvas</span><span class="p">.</span><span class="nx">saveLayer</span><span class="p">(</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">top</span><span class="p">,</span> <span class="nx">right</span><span class="p">,</span> <span class="nx">bottom</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">flags</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">scrollabilityCache</span><span class="p">.</span><span class="nx">setFadeColor</span><span class="p">(</span><span class="nx">solidColor</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Step 3, draw the content</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">dirtyOpaque</span><span class="p">)</span> <span class="nx">onDraw</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+    <span class="c1">// Step 4, draw the children</span>
+    <span class="nx">dispatchDraw</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+    <span class="c1">// Step 5, draw the fade effect and restore layers</span>
+    <span class="kr">final</span> <span class="nx">Paint</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">scrollabilityCache</span><span class="p">.</span><span class="nx">paint</span><span class="p">;</span>
+    <span class="kr">final</span> <span class="nx">Matrix</span> <span class="nx">matrix</span> <span class="o">=</span> <span class="nx">scrollabilityCache</span><span class="p">.</span><span class="nx">matrix</span><span class="p">;</span>
+    <span class="kr">final</span> <span class="nx">Shader</span> <span class="nx">fade</span> <span class="o">=</span> <span class="nx">scrollabilityCache</span><span class="p">.</span><span class="nx">shader</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">drawTop</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">setScale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">fadeHeight</span> <span class="o">*</span> <span class="nx">topFadeStrength</span><span class="p">);</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">postTranslate</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">top</span><span class="p">);</span>
+        <span class="nx">fade</span><span class="p">.</span><span class="nx">setLocalMatrix</span><span class="p">(</span><span class="nx">matrix</span><span class="p">);</span>
+        <span class="nx">p</span><span class="p">.</span><span class="nx">setShader</span><span class="p">(</span><span class="nx">fade</span><span class="p">);</span>
+        <span class="nx">canvas</span><span class="p">.</span><span class="nx">drawRect</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">top</span><span class="p">,</span> <span class="nx">right</span><span class="p">,</span> <span class="nx">top</span> <span class="o">+</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">p</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">drawBottom</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">setScale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">fadeHeight</span> <span class="o">*</span> <span class="nx">bottomFadeStrength</span><span class="p">);</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">postRotate</span><span class="p">(</span><span class="mi">180</span><span class="p">);</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">postTranslate</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">bottom</span><span class="p">);</span>
+        <span class="nx">fade</span><span class="p">.</span><span class="nx">setLocalMatrix</span><span class="p">(</span><span class="nx">matrix</span><span class="p">);</span>
+        <span class="nx">p</span><span class="p">.</span><span class="nx">setShader</span><span class="p">(</span><span class="nx">fade</span><span class="p">);</span>
+        <span class="nx">canvas</span><span class="p">.</span><span class="nx">drawRect</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">bottom</span> <span class="o">-</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">right</span><span class="p">,</span> <span class="nx">bottom</span><span class="p">,</span> <span class="nx">p</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">drawLeft</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">setScale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">fadeHeight</span> <span class="o">*</span> <span class="nx">leftFadeStrength</span><span class="p">);</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">postRotate</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">);</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">postTranslate</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">top</span><span class="p">);</span>
+        <span class="nx">fade</span><span class="p">.</span><span class="nx">setLocalMatrix</span><span class="p">(</span><span class="nx">matrix</span><span class="p">);</span>
+        <span class="nx">p</span><span class="p">.</span><span class="nx">setShader</span><span class="p">(</span><span class="nx">fade</span><span class="p">);</span>
+        <span class="nx">canvas</span><span class="p">.</span><span class="nx">drawRect</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">top</span><span class="p">,</span> <span class="nx">left</span> <span class="o">+</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">bottom</span><span class="p">,</span> <span class="nx">p</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">drawRight</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">setScale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">fadeHeight</span> <span class="o">*</span> <span class="nx">rightFadeStrength</span><span class="p">);</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">postRotate</span><span class="p">(</span><span class="mi">90</span><span class="p">);</span>
+        <span class="nx">matrix</span><span class="p">.</span><span class="nx">postTranslate</span><span class="p">(</span><span class="nx">right</span><span class="p">,</span> <span class="nx">top</span><span class="p">);</span>
+        <span class="nx">fade</span><span class="p">.</span><span class="nx">setLocalMatrix</span><span class="p">(</span><span class="nx">matrix</span><span class="p">);</span>
+        <span class="nx">p</span><span class="p">.</span><span class="nx">setShader</span><span class="p">(</span><span class="nx">fade</span><span class="p">);</span>
+        <span class="nx">canvas</span><span class="p">.</span><span class="nx">drawRect</span><span class="p">(</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">top</span><span class="p">,</span> <span class="nx">right</span><span class="p">,</span> <span class="nx">bottom</span><span class="p">,</span> <span class="nx">p</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">canvas</span><span class="p">.</span><span class="nx">restoreToCount</span><span class="p">(</span><span class="nx">saveCount</span><span class="p">);</span>
+
+    <span class="c1">// Step 6, draw decorations (scrollbars)</span>
+    <span class="nx">onDrawScrollBars</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">mOverlay</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">mOverlay</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="nx">mOverlay</span><span class="p">.</span><span class="nx">getOverlayView</span><span class="p">().</span><span class="nx">dispatchDraw</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这个方法中说得很清楚，View的渲染分6步，也可以省略第2和第5步。</p>
+<div class="highlight"><pre><span class="err">第一步，画背景</span>
+<span class="err">第二步，可能的话（一般是要做动画），把</span><span class="n">canvas</span><span class="err">保存起来</span>
+<span class="err">第三步，画内容</span>
+<span class="err">第四步，画子控件</span>
+<span class="err">第五步，还原第二部保存的</span><span class="n">canvas</span>
+<span class="err">第六步，画装饰（</span><span class="n">scrollbar</span><span class="err">）</span>
+</pre></div>
+
+
+<p>这样就把整个视图画出来了。</p>
+<h2>Touch事件</h2>
+<p>在View中有很大部分是处理事件，包括按键事件，滚动球事件，触摸事件。这里主要讲触摸事件，因为这个用得最多。
+这里主要有onTouch方法，dispatchTouch方法。dispatchTouch是个重要的方法，我们的触摸事件都是经过dispatchTouch分发下去的，但是View是子控件它的分发其实就是发送给自己。我看到源码里有这么一段：</p>
+<div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span><span class="n">onFilterTouchEventForSecurity</span><span class="p">(</span><span class="n">event</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">//noinspection SimplifiableIfStatement</span>
+        <span class="n">ListenerInfo</span> <span class="n">li</span> <span class="o">=</span> <span class="n">mListenerInfo</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">li</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">&amp;&amp;</span> <span class="n">li</span><span class="p">.</span><span class="n">mOnTouchListener</span> <span class="o">!=</span> <span class="n">null</span>
+                <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">mViewFlags</span> <span class="o">&amp;</span> <span class="n">ENABLED_MASK</span><span class="p">)</span> <span class="o">==</span> <span class="n">ENABLED</span>
+                <span class="o">&amp;&amp;</span> <span class="n">li</span><span class="p">.</span><span class="n">mOnTouchListener</span><span class="p">.</span><span class="n">onTouch</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="n">event</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">result</span> <span class="o">&amp;&amp;</span> <span class="n">onTouchEvent</span><span class="p">(</span><span class="n">event</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
+
+<p>这里说明如果你重载了一个View的onTouch方法，并且设置了它的OnTouchListener，那么它将调用OnTouchListener的方法，而不会调用本身的onTouch方法。
+而onTouch的实现，主要是焦点处理，点击和安装事件的处理，并没有太多特别的东西。我一般考面试者View的touch事件哪些，从屏幕中点击一个按钮，事件是怎么传递的，相关的方法有哪些。这里ViewGroup有一个拦截事件方法（忘了单词怎么打），是View里没有的，又是怎么工作。这里很考面试者对触摸事件的理解，后续我会说。</p>
+<p>View还有一些重要的方法，这里就不一一列举，而且View的方法要结合ViewGroup的实现理解，下次写ViewGroup.</p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/androidji-zhu.html">Android技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-view.html">Android源码学习 View </a>
+</p>
+
+
+
+
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "androidyuan-ma-xue-xi-zhi-view.html";
+        var disqus_url = "http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html";
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+
+
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="http://szuwest.github.io/category/androidji-zhu.html">Android技术</a></li>
+            <li><a href="http://szuwest.github.io/category/androidyuan-ma-xue-xi.html">Android源码学习</a></li>
+            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程 架构</a></li>
+            <li><a href="http://szuwest.github.io/category/bian-cheng-yu-yan.html">编程语言</a></li>
+            <li><a href="http://szuwest.github.io/category/ji-zhu.html">技术</a></li>
+            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="http://szuwest.github.io/category/test.html">Test</a></li>
+            <li><a href="http://szuwest.github.io/category/za-tan.html">杂谈</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
+            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+        </ul>
+		
+        <h5 class="sidebar-title">Social</h5>
+        <ul class="side-nav">
+            <li><a href="https://github.com/szuwest">Github</a></li>
+            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
+            <li><a href="http://weibo.com/szuwest">微博</a></li>
+        </ul>
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+                <p>West's blog by West</p>
+            </div>
+            </div>
+    </div>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55687145-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</footer>
