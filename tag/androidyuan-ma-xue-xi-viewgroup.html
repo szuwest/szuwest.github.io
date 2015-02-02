@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog</title>
+    <title>West's blog - Android源码学习 ViewGroup</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -45,62 +45,41 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
+        
+        
 
-<ul class="circle">
-	<li><a href="http://szuwest.github.io/tag/android.html">Android</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/android-activitydong-hua.html"><small>Android Activity动画</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/android-ji-zhu-dong-hua.html">Android 技术 动画</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/activitydong-hua-er.html"><small>Activity动画（二）</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/android-view-scroll.html">Android View Scroll</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html"><small>快速滚动条(FastScroll)的定制</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/android-zi-ding-yi-kong-jian-ri-qi-kong-jian.html">Android 自定义控件 日期控件</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html"><small>自定义DateView控件</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi.html">Android源码学习</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html"><small>Android源码学习系列开篇</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-view.html">Android源码学习 View</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html"><small>Android源码学习之View</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-viewgroup.html">Android源码学习 ViewGroup</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html"><small>Android源码学习之ViewGroup</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/bian-cheng-gan-wu.html">编程感悟</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/guan-yu-cheng-xu-jia-gou-she-ji.html"><small>关于程序架构设计</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/kun-huo-android.html">困惑，Android</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html"><small>当做了一段时间的Android的困惑</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/sheng-huo-tou-zi.html">生活 投资</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/gu-piao-tou-zi-zong-jie.html"><small>股票投资总结</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/swift.html">swift</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/swiftchu-tan.html"><small>swift初探</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/test.html">Test</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/good-morning.html"><small>Good Morning</small></li>
-	<li><a href="http://szuwest.github.io/hello-world.html"><small>Hello world</small></li>
-	</ul>
-	<li><a href="http://szuwest.github.io/tag/za-tan.html">杂谈</a></li>
-	<ul class="square">
-	<li><a href="http://szuwest.github.io/ji-zhu-she-jiao-sheng-huo.html"><small>技术，社交，生活</small></li>
-	</ul>
-</ul>
+            <article>
+                <a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html"><h3 class="article-title">Android源码学习之ViewGroup</h3></a>
+<h6 class="subheader" title="2015-02-02T00:00:00">2015-02-02
+</h6>
+
+
+<h1>Android源码学习之ViewGroup</h1>
+<p>android继承于View，同时它包含了一个View数组存储它的子View，也就是说它是一个容器。这就是经典的设计模式中的组合模式。在Android的视图结构中，容器一定是ViewGroup，只有ViewGroup才能包含其他视图，像TextView，ImageView这些View是不能包含子视图的，它们是单一控件。这一点跟iOS的视图结构很不一样的。在iOS中所有的视图都是继承于UIView，同时UIView也是一个容器，能包含其他UIView。从这一点来说iOS的视图结构更简单。</p>
+<p>是什么使得ViewGroup具有了容易功能呢？ViewGroup除了继承View外，还是实现了两个接口：<code>ViewManager</code>和<code>ViewParent</code>。ViewManager主要定义了addView和removeView的方法，ViewParent主要定义了刷新容器的接口requestLayout和其他一些焦点事件的处理等接口。除此之外，还有非常重要的一点，ViewGroup是一个抽象类。我们知道View并不是抽象类，为什么ViewGroup继承了View反而成了抽象类呢，是增加了什么新的抽象方法吗？不是，ViewGroup中的抽象方法是继承于View的onLayout方法。onLayout方法在View中并不是抽象方法，只是一个空方法，但是在ViewGroup中它被定义为了抽象方法。我第一次发现原来还可以这样做。onLayout的主要作用是放置子View的位置，而不同的布局方式算法不一样，所有留给子类实现比较合理。</p>
+<p>ViewGroup中并没有覆盖onMeasure方法，但是增加了一些计算子View大小的方法：measureChildren方法就是将所有的子View都遍历一遍，并调用他们的measure方法。ViewGroup中同样没有覆盖onDraw方法，但是覆盖了dispatchDraw方法。dispatchDraw方法主要作用是调用每个子View的draw方法。看来onXXX方法在ViewGroup中并不重要，它更多的在调用子View的方法。</p>
+<h2>LayoutParam</h2>
+<p>未完待续。。。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/androidji-zhu.html">Android技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-viewgroup.html">Android源码学习 ViewGroup </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html#disqus_thread">comments</a></p>            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
 
     </div>
     <!-- End Main Content -->
