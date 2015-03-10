@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>关于Pelican上Disqus无法加载的问题</title>
+    <title>Android开发中何时使用多进程？</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -47,19 +47,30 @@
     <div class="large-9 columns">
 <article>
     <header>
-        <h3 class="article-title"><a href="http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html" rel="bookmark"
-        title="Permalink to 关于Pelican上Disqus无法加载的问题">关于Pelican上Disqus无法加载的问题</a></h3>
+        <h3 class="article-title"><a href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html" rel="bookmark"
+        title="Permalink to Android开发中何时使用多进程？">Android开发中何时使用多进程？</a></h3>
     </header>
 
-<h6 class="subheader" title="2014-12-01T00:00:00">2014-12-01
+<h6 class="subheader" title="2015-03-10T00:00:00">2015-03-10
 </h6>
 
 
-    <p>最近发现我的博客Disqus加载不出来，以前是好好的。后来根据它的提示去找问题，找了半天也找不出问题所在。然后网上search，发现了一篇跟我类似的问题文章<a href="http://whilgeek.github.io/posts/2014/07/we-were-unable-to-load-disqus/">这里</a>。我的配置文件里确实有 <code>RELATIVE_URLS = True</code>,把它设置为False也没用。检查了N遍shortname，到Disqus设置里各种试各种检查，都还是没有解决。</p>
-<p>没有办法，我只好在Disqus上重新创建一个新的site，然后回来配置相应的改了。run起来了，可以了。神了。</p>
-<p>不过经过这一次的折腾，我还学到不少别的东西。前段不太懂的人，真是悲剧。以后在这方面好好补补</p>
-<p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
+    <h1>问答-Android开发中何时使用多进程？</h1>
+<p>我在github上回答了一个问题：
+<code>Android开发中何时使用多进程？</code></p>
+<div class="highlight"><pre><span class="mf">1.</span><span class="err">要想知道如何使用多进程，先要知道</span><span class="n">Android</span><span class="err">里的多进程概念。一般情况下，一个应用程序就是一个进程，这个进程名称就是应用程序包名。我们知道进程是系统分配资源和调度的基本单位，所以每个进程都有自己独立的资源和内存空间，别的进程是不能任意访问其他进程的内存和资源的。那如何让自己的应用拥有多个进程？很简单，我们的四大组件在</span><span class="n">AndroidManifest</span><span class="err">文件中注册的时候，有个属性是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">，这里可以指定组件的所处的进程。默认就是应用的主进程。指定为别的进程之后，系统在启动这个组件的时候，就先创建（如果还没创建的话）这个进程，然后再创建该组件。你可以重载</span><span class="n">Application</span><span class="err">类的</span><span class="n">onCreate</span><span class="err">方法，打印出它的进程名称，就可以清楚的看见了。再设置</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">属性时候，有个地方需要注意：如果是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="o">=</span><span class="s">&quot;:deamon&quot;</span><span class="err">，以</span><span class="o">:</span><span class="err">开头的名字，则表示这是一个应用程序的私有进程，否则它是一个全局进程。私有进程的进程名称是会在冒号前自动加上包名，而全局进程则不会。一般我们都是有私有进程，很少使用全局进程。他们的具体区别不知道有没有谁能补充一下。</span>
 
+<span class="mf">2.</span><span class="err">使用多进程显而易见的好处就是分担主进程的内存压力。我们的应用越做越大，内存越来越多，将一些独立的组件放到不同的进程，它就不占用主进程的内存空间了。当然还有其他好处，有心人会发现</span><span class="n">Android</span><span class="err">后台进程里有很多应用是多个进程的，因为它们要常驻后台，特别是即时通讯或者社交应用，不过现在多进程已经被用烂了。典型用法是在启动一个不可见的轻量级私有进程，在后台收发消息，或者做一些耗时的事情，或者开机启动这个进程，然后做监听等。还有就是防止主进程被杀守护进程，守护进程和主进程之间相互监视，有一方被杀就重新启动它。应该还有还有其他好处，这里就不多说了。</span>
+
+<span class="mf">3.</span><span class="err">坏处的话，多占用了系统的空间，大家都这么用的话系统内存很容易占满而导致卡顿。消耗用户的电量。应用程序架构会变复杂，应为要处理多进程之间的通信。这里又是另外一个问题了。</span>
+</pre></div>
+
+
+<p>详见：<a href="https://github.com/android-cn/interview-questions/issues/7">问答-Android开发中何时使用多进程？</a></p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-wen-da.html">技术问答</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ji-zhu-wen-da-github-jin-cheng.html">技术问答 github 进程 </a>
 </p>
 
 
@@ -69,8 +80,8 @@
     <div id="disqus_thread"></div>
     <script type="text/javascript">
         var disqus_shortname = 'westblog'
-        var disqus_identifier = "guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html";
-        var disqus_url = "http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html";
+        var disqus_identifier = "androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html";
+        var disqus_url = "http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html";
 
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
