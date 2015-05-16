@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog - Android技术</title>
+    <title>Android图片缓存和相关开源项目</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -45,16 +45,17 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
-        
-        
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html" rel="bookmark"
+        title="Permalink to Android图片缓存和相关开源项目">Android图片缓存和相关开源项目</a></h3>
+    </header>
 
-            <article>
-                <a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html"><h3 class="article-title">Android图片缓存和相关开源项目</h3></a>
 <h6 class="subheader" title="2015-05-16T00:00:00">2015-05-16
 </h6>
 
 
-<h1>Android图片缓存和相关开源项目</h1>
+    <h1>Android图片缓存和相关开源项目</h1>
 <p>现在几乎所有大一点的Android项目都会用到图片缓存。而Android应用的内存占用大户就是图片，几乎所有内存问题都会涉及到图片问题，而已图片为主的应用也会涉及到性能问题。我觉得每一个资深的Android工程师都要对图片缓存技术有所了解，并且有自己想法。图片缓存是在面试别人时必问的问题。</p>
 <p>图片缓存可以分为两点：内存缓存和磁盘缓存，当然还有必然要涉及的图片解码，图片下载，这里主要讲讲内存缓存和磁盘缓存，附带说一下图片解码和下载。</p>
 <h2>内存缓存</h2>
@@ -81,7 +82,8 @@
 <p>第一个算不上太大问题，但是对于追求高效率的应用来说，特别是GridView中，用UIL会有性能影响。因为UIL的每次调用都创建很多对象，有些对象因为最求框架灵活引入的，实际是可以减少的。第二个是硬伤，不过现在支持框很少。貌似只有Facebook新开源的Fresco。</p>
 <h2>Fresco</h2>
 <p>Fresco是Facebook刚开源不就的项目，我看了它的介绍非常兴奋。首先它解决UIL不支持gif图片解码的问题。然后它对图片进行重用，还有它的解码是在native中的，内存效率非常高。我最近非常想试试这个新框架。不过实在太忙没有时间。我打算找个时间研究一下它，并用它替换掉UIL。</p>
-<p>先说到这吧，我也翻译这个项目官方介绍的那篇博客，再说。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/androidji-zhu.html">Android技术</a>
+<p>先说到这吧，我也翻译这个项目官方介绍的那篇博客，再说。</p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/androidji-zhu.html">Android技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-tu-pian-huan-cun-imageloader-fresco.html">Android源码学习 图片缓存 ImageLoader Fresco </a>
@@ -89,81 +91,22 @@
 
 
 
-<p><a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html#disqus_thread">comments</a></p>            </article>
 
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html";
+        var disqus_url = "http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html";
 
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html"><h3 class="article-title">Android源码学习之ViewGroup</h3></a>
-<h6 class="subheader" title="2015-02-02T00:00:00">2015-02-02
-</h6>
-
-
-<h1>Android源码学习之ViewGroup</h1>
-<p>android继承于View，同时它包含了一个View数组存储它的子View，也就是说它是一个容器。这就是经典的设计模式中的组合模式。在Android的视图结构中，容器一定是ViewGroup，只有ViewGroup才能包含其他视图，像TextView，ImageView这些View是不能包含子视图的，它们是单一控件。这一点跟iOS的视图结构很不一样的。在iOS中所有的视图都是继承于UIView，同时UIView也是一个容器，能包含其他UIView。从这一点来说iOS的视图结构更简单。</p>
-<p>是什么使得ViewGroup具有了容易功能呢？ViewGroup除了继承View外，还是实现了两个接口：<code>ViewManager</code>和<code>ViewParent</code>。ViewManager主要定义了addView和removeView的方法，ViewParent主要定义了刷新容器的接口requestLayout和其他一些焦点事件的处理等接口。除此之外，还有非常重要的一点，ViewGroup是一个抽象类。我们知道View并不是抽象类，为什么ViewGroup继承了View反而成了抽象类呢，是增加了什么新的抽象方法吗？不是，ViewGroup中的抽象方法是继承于View的onLayout方法。onLayout方法在View中并不是抽象方法，只是一个空方法，但是在ViewGroup中它被定义为了抽象方法。我第一次发现原来还可以这样做。onLayout的主要作用是放置子View的位置，而不同的布局方式算法不一样，所有留给子类实现比较合理。</p>
-<p>ViewGroup中并没有覆盖onMeasure方法，但是增加了一些计算子View大小的方法：measureChildren方法就是将所有的子View都遍历一遍，并调用他们的measure方法。ViewGroup中同样没有覆盖onDraw方法，但是覆盖了dispatchDraw方法。dispatchDraw方法主要作用是调用每个子View的draw方法。看来onXXX方法在ViewGroup中并不重要，它更多的在调用子View的方法。</p>
-<h2>LayoutParams</h2>
-<p>布局参数LayoutParams是ViewGroup的一个重要内部类 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/androidji-zhu.html">Android技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-viewgroup.html">Android源码学习 ViewGroup </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html"><h3 class="article-title">Android源码学习之View</h3></a>
-<h6 class="subheader" title="2014-12-20T00:00:00">2014-12-20
-</h6>
-
-
-<h1>Android源码学习之View</h1>
-<p>在Android中，View是所有视图控件的基类。Android的视图控件的设计采用了经典的设计模式--组合模式。View是基础控件，而ViewGroup是可以包含子View和管理子View的空间，ViewGroup同时也是一个View。这跟iOS的视图空间设计有很大不同。在iOS的视图框架中，所有视图都是继承UIView,而UIView本身是可以包含和管理子UIView的。我不知道这两种设计有什么优劣，感觉iOS的设计更简单直接。</p>
-<p>View的源代码超过2万行，当然包括了很多注释。这里面定义了很多基本的方法，主要是视图渲染的相关方法和事件的相关方法，不过有一点我不是很明白的就是里面有不少是根scrollbar相关的方法。我们实际应用中貌似有scrollbar的控件貌似只有AdapterView的子控件，ScrollView和TextView，scrollbar的特性为什么不直接放到这些类中，或者专门为这些类专门建立一个父类来处理scrollbar。View中的scrollbar特性应该大部分视图控件都不需要吧。当然这些只是我的疑问罢了，Google这样设计也许有他的道理。</p>
-<h2>重要方法</h2>
-<p>一个View要渲染到屏幕上，有几个重要的方法：</p>
-<blockquote>
-<ul>
-<li>onMeasure系方法</li>
-<li>onLayout系方法</li>
-<li>onDraw系方法</li>
-</ul>
-</blockquote>
-<h3>onMeasure系方法</h3>
-<p>每一个onXXX方法又有若干个相关XXX方法。例如onMeasure方法，相关的方法是measure(int widthMeasureSpec, int heightMeasureSpec)方法，setMeasuredDimension(int measuredWidth, int measuredHeight)方法，MeasureSpec内部类。其中measure(int widthMeasureSpec ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/androidji-zhu.html">Android技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-view.html">Android源码学习 View </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-            <!-- /#posts-list -->
-<div class="pagination-centered">
-<h6 class="subheader">Page 1 of 1</h6>
-
-<p>
-
-</p>
-</div>
-
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
     </div>
     <!-- End Main Content -->
 
