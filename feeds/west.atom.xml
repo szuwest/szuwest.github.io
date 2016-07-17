@@ -16,72 +16,72 @@
          &lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;9&lt;/span&gt;   &lt;span class="mi"&gt;36&lt;/span&gt;  &lt;span class="mi"&gt;84&lt;/span&gt;  &lt;span class="mi"&gt;126&lt;/span&gt; &lt;span class="mi"&gt;126&lt;/span&gt; &lt;span class="mi"&gt;84&lt;/span&gt;  &lt;span class="mi"&gt;36&lt;/span&gt;  &lt;span class="mi"&gt;9&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
        &lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;10&lt;/span&gt;  &lt;span class="mi"&gt;45&lt;/span&gt;  &lt;span class="mi"&gt;120&lt;/span&gt; &lt;span class="mi"&gt;210&lt;/span&gt; &lt;span class="mi"&gt;252&lt;/span&gt; &lt;span class="mi"&gt;210&lt;/span&gt; &lt;span class="mi"&gt;120&lt;/span&gt; &lt;span class="mi"&gt;45&lt;/span&gt;  &lt;span class="mi"&gt;10&lt;/span&gt;  &lt;span class="mi"&gt;1&lt;/span&gt;   
      &lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;11&lt;/span&gt;  &lt;span class="mi"&gt;55&lt;/span&gt;  &lt;span class="mi"&gt;165&lt;/span&gt; &lt;span class="mi"&gt;330&lt;/span&gt; &lt;span class="mi"&gt;462&lt;/span&gt; &lt;span class="mi"&gt;462&lt;/span&gt; &lt;span class="mi"&gt;330&lt;/span&gt; &lt;span class="mi"&gt;165&lt;/span&gt; &lt;span class="mi"&gt;55&lt;/span&gt;  &lt;span class="mi"&gt;11&lt;/span&gt;  &lt;span class="mi"&gt;1&lt;/span&gt;    
-   &lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;12&lt;/span&gt;  &lt;span class="mi"&gt;66&lt;/span&gt;  &lt;span class="mi"&gt;220&lt;/span&gt; &lt;span class="mi"&gt;495&lt;/span&gt; &lt;span class="mi"&gt;792&lt;/span&gt; &lt;span class="mi"&gt;924&lt;/span&gt; &lt;span class="mi"&gt;792&lt;/span&gt; &lt;span class="mi"&gt;495&lt;/span&gt; &lt;span class="mi"&gt;220&lt;/span&gt; &lt;span class="mi"&gt;66&lt;/span&gt;  &lt;span class="mi"&gt;12&lt;/span&gt;  &lt;span class="mi"&gt;1&lt;/span&gt;
-
- &lt;span class="err"&gt;````&lt;/span&gt;
-
-&lt;span class="err"&gt;面试时我很容易紧张，人在紧张情况下貌似是很难转起来的，这是我的一大弊端。&lt;/span&gt;
-&lt;span class="err"&gt;当时面试官只在纸上画了前&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="err"&gt;行，只告诉了我杨辉三角的特点就是每个数字都是它左上角的那个数字和右上角的那个数字相加得来，第一个数字是&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;。我当时只得出运用递归算法来解这道题会比较容易理解。但是该怎么写我写不出来。后来很长一段时间我并没有忘记这道题，但是我没有去查怎么解决，我偶尔会想一下该怎么做。最近这一两周我对解决这个到题的欲望越来越强烈，所以我开始在记事本上动手写代码解决。后来我发现了杨辉三角的一些规律，这些规律帮助我将代码写了出来。&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;br&lt;/span&gt;&lt;span class="o"&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class="o"&gt;&amp;gt;*&lt;/span&gt;  &lt;span class="mf"&gt;1.&lt;/span&gt;&lt;span class="err"&gt;杨辉三角第&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="err"&gt;行有&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="err"&gt;个数字&lt;/span&gt;
-&lt;span class="o"&gt;*&lt;/span&gt;  &lt;span class="mf"&gt;2.&lt;/span&gt;&lt;span class="err"&gt;每个数字都是它左上角的那个数字和右上角的那个数字相加得来，更具体一点这个数字是&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="err"&gt;那么它是&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="err"&gt;和&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="err"&gt;相加得来的&lt;/span&gt;
-&lt;span class="o"&gt;*&lt;/span&gt;  &lt;span class="mf"&gt;3.&lt;/span&gt;&lt;span class="err"&gt;第&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;个数字是&lt;/span&gt;&lt;span class="mf"&gt;1.&lt;/span&gt;&lt;span class="err"&gt;如果这个数字的左上角或右上角的那个数字不存在，那么就当做&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
-
-&lt;span class="cp"&gt;###我的分析过程&lt;/span&gt;
-&lt;span class="err"&gt;说实话，现在看起来这些规律显而易见，但是我还是在编写代码的过程中带才找到的。&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;br&lt;/span&gt;&lt;span class="o"&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class="err"&gt;我这个人在面试中真的无法做到像平时那样思考，这让我在面试中感觉自己是个无思考能力的人。还有我发现自己一定要先进入编程状态才能进行思考。所以我决定要解决这个问题时，我就打开一文本，开始写一些我已经想到的代码，直到现在，这个文本也还没有关闭过。&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;br&lt;/span&gt;&lt;span class="o"&gt;/&amp;gt;&lt;/span&gt;
-
-&lt;span class="err"&gt;第&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="err"&gt;点很浅显，它是基础，如果用递归实现的话这是递归的出口。第&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;点让我写出了两个&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="err"&gt;循环，但是循环体内是怎么实现，我纠结了很久。最开始我想用最简单的方法，把已计算出的数字放入一个数组，然后就把数组中的数字相加得出所需数字。但是我发现这个数组也不太用，我不想用二维数组。后来我才想清楚，直接在循环体内用一个递归函数就这个数字的值，然后把它打印出来，这个是行得通的。然后关键是这个递归函数怎么实现。&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;br&lt;/span&gt;&lt;span class="o"&gt;/&amp;gt;&lt;/span&gt;
-
-&lt;span class="err"&gt;一开始我把递归函数的参数设为&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="err"&gt;，发现怎么实现都不太对，后来发现其实应该是把参数设置为&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="err"&gt;，这样就跟循环体的下标对应起来，就很好解决了。最终要解决的就是递归的出口问题，这个也不是我一开始想的那么简单。我把下标设置成是以&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;开始的，&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;的话，它的值就是&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="err"&gt;，&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;的话就是&lt;/span&gt;&lt;span class="mf"&gt;1.&lt;/span&gt; &lt;span class="err"&gt;而对应&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="err"&gt;为&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;的话，它是&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="err"&gt;，而且&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="err"&gt;是不能大于&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="err"&gt;的，大于&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="err"&gt;它的值也为&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="err"&gt;。&lt;/span&gt;
-&lt;span class="err"&gt;所以程序的最终实现是：&lt;/span&gt;
-
-&lt;span class="cp"&gt;###代码实现&lt;/span&gt;
+   &lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;12&lt;/span&gt;  &lt;span class="mi"&gt;66&lt;/span&gt;  &lt;span class="mi"&gt;220&lt;/span&gt; &lt;span class="mi"&gt;495&lt;/span&gt; &lt;span class="mi"&gt;792&lt;/span&gt; &lt;span class="mi"&gt;924&lt;/span&gt; &lt;span class="mi"&gt;792&lt;/span&gt; &lt;span class="mi"&gt;495&lt;/span&gt; &lt;span class="mi"&gt;220&lt;/span&gt; &lt;span class="mi"&gt;66&lt;/span&gt;  &lt;span class="mi"&gt;12&lt;/span&gt;  &lt;span class="mi"&gt;1&lt;/span&gt;   
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;h1&gt;include &lt;stdio.h&gt;&lt;/h1&gt;
-&lt;p&gt;int yangHuiTriangle(int i, int j) {
-    int a, b;
-    if (i&amp;lt;1) a = 0;
-    else if (i == 1) a = 1;
-    else {
-        a = yangHuiTriangle(i-1, j-1);
-    }
-    if ( j&amp;lt;=1) b = 0;
-    else if (j&amp;gt;i) a = 0;
-    else b = yangHuiTriangle(i-1, j);
-    return a+b;
-}&lt;/p&gt;
-&lt;p&gt;void pringYangHuiTriangle(int n) {
-    for (int i=1; i&amp;lt;=n; i++) {
-        for(int j=1; j&amp;lt;=i; j++) {
-            int r = yangHuiTriangle(i,j);
-            printf("%d   ", r);
-        }
-        printf("\n");
-    }
-}&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;当我第一次写完代码时，并没有完全写对，&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="err"&gt;的情况没有处理好。我自己对照着杨辉三角的数字来检验的时候，发现了问题，然后改了过来，然后我就把代码拷贝到一个工程里运行，结果出来了，是对的！&lt;/span&gt;
+&lt;p&gt;面试时我很容易紧张，人在紧张情况下貌似是很难转起来的，这是我的一大弊端。
+当时面试官只在纸上画了前5行，只告诉了我杨辉三角的特点就是每个数字都是它左上角的那个数字和右上角的那个数字相加得来，第一个数字是1。我当时只得出运用递归算法来解这道题会比较容易理解。但是该怎么写我写不出来。后来很长一段时间我并没有忘记这道题，但是我没有去查怎么解决，我偶尔会想一下该怎么做。最近这一两周我对解决这个到题的欲望越来越强烈，所以我开始在记事本上动手写代码解决。后来我发现了杨辉三角的一些规律，这些规律帮助我将代码写了出来。&lt;br/&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;1.杨辉三角第n行有n个数字&lt;/li&gt;
+&lt;li&gt;2.每个数字都是它左上角的那个数字和右上角的那个数字相加得来，更具体一点这个数字是a(i,j),那么它是a(i-1,j-1)和a(i-1, j)相加得来的&lt;/li&gt;
+&lt;li&gt;3.第1个数字是1.如果这个数字的左上角或右上角的那个数字不存在，那么就当做0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;我的分析过程&lt;/h3&gt;
+&lt;p&gt;说实话，现在看起来这些规律显而易见，但是我还是在编写代码的过程中带才找到的。&lt;br/&gt;
+我这个人在面试中真的无法做到像平时那样思考，这让我在面试中感觉自己是个无思考能力的人。还有我发现自己一定要先进入编程状态才能进行思考。所以我决定要解决这个问题时，我就打开一文本，开始写一些我已经想到的代码，直到现在，这个文本也还没有关闭过。&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt;第3点很浅显，它是基础，如果用递归实现的话这是递归的出口。第1点让我写出了两个for循环，但是循环体内是怎么实现，我纠结了很久。最开始我想用最简单的方法，把已计算出的数字放入一个数组，然后就把数组中的数字相加得出所需数字。但是我发现这个数组也不太用，我不想用二维数组。后来我才想清楚，直接在循环体内用一个递归函数就这个数字的值，然后把它打印出来，这个是行得通的。然后关键是这个递归函数怎么实现。&lt;br/&gt;&lt;/p&gt;
+&lt;p&gt;一开始我把递归函数的参数设为n，发现怎么实现都不太对，后来发现其实应该是把参数设置为i,j，这样就跟循环体的下标对应起来，就很好解决了。最终要解决的就是递归的出口问题，这个也不是我一开始想的那么简单。我把下标设置成是以1开始的，i&amp;lt;1的话，它的值就是0，1的话就是1. 而对应j,为1的话，它是0，而且j是不能大于i的，大于i它的值也为0。
+所以程序的最终实现是：&lt;/p&gt;
+&lt;h3&gt;代码实现&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;#include &amp;lt;stdio.h&amp;gt;&lt;/span&gt;
 
-&lt;span class="cp"&gt;###打印结果&lt;/span&gt;
+&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;yangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;yangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;yangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;pringYangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;=&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;=&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;yangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="n"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;%d   &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="n"&gt;printf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;1 &lt;br /&gt;
-1   1 &lt;br /&gt;
-1   2   1 &lt;br /&gt;
-1   3   3   1 &lt;br /&gt;
-1   4   6   4   1 &lt;br /&gt;
-1   5   10   10   5   1 &lt;br /&gt;
-1   6   15   20   15   6   1 &lt;br /&gt;
-1   7   21   35   35   21   7   1 &lt;br /&gt;
-1   8   28   56   70   56   28   8   1 &lt;br /&gt;
-1   9   36   84   126   126   84   36   9   1 &lt;br /&gt;
-1   10   45   120   210   252   210   120   45   10   1 &lt;br /&gt;
-1   11   55   165   330   462   462   330   165   55   11   1 &lt;br /&gt;
-1   12   66   220   495   792   924   792   495   220   66   12   1  &lt;/p&gt;
-&lt;p&gt;````
-虽然这个打印出来的结果不是金字塔形状，但是它的数字都是对的。对于打印成金字塔形状，以后再研究吧。&lt;/p&gt;</summary><category term="算法 杨辉三角"></category></entry><entry><title>浅谈VR</title><link href="http://szuwest.github.io/qian-tan-vr.html" rel="alternate"></link><updated>2016-06-11T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2016-06-11:qian-tan-vr.html</id><summary type="html">&lt;h2&gt;浅谈VR&lt;/h2&gt;
+&lt;p&gt;当我第一次写完代码时，并没有完全写对，j&amp;gt;i的情况没有处理好。我自己对照着杨辉三角的数字来检验的时候，发现了问题，然后改了过来，然后我就把代码拷贝到一个工程里运行，结果出来了，是对的！&lt;/p&gt;
+&lt;h3&gt;打印结果&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;2&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;3&lt;/span&gt;   &lt;span class="mi"&gt;3&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;4&lt;/span&gt;   &lt;span class="mi"&gt;6&lt;/span&gt;   &lt;span class="mi"&gt;4&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;5&lt;/span&gt;   &lt;span class="mi"&gt;10&lt;/span&gt;   &lt;span class="mi"&gt;10&lt;/span&gt;   &lt;span class="mi"&gt;5&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;6&lt;/span&gt;   &lt;span class="mi"&gt;15&lt;/span&gt;   &lt;span class="mi"&gt;20&lt;/span&gt;   &lt;span class="mi"&gt;15&lt;/span&gt;   &lt;span class="mi"&gt;6&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;7&lt;/span&gt;   &lt;span class="mi"&gt;21&lt;/span&gt;   &lt;span class="mi"&gt;35&lt;/span&gt;   &lt;span class="mi"&gt;35&lt;/span&gt;   &lt;span class="mi"&gt;21&lt;/span&gt;   &lt;span class="mi"&gt;7&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;8&lt;/span&gt;   &lt;span class="mi"&gt;28&lt;/span&gt;   &lt;span class="mi"&gt;56&lt;/span&gt;   &lt;span class="mi"&gt;70&lt;/span&gt;   &lt;span class="mi"&gt;56&lt;/span&gt;   &lt;span class="mi"&gt;28&lt;/span&gt;   &lt;span class="mi"&gt;8&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;9&lt;/span&gt;   &lt;span class="mi"&gt;36&lt;/span&gt;   &lt;span class="mi"&gt;84&lt;/span&gt;   &lt;span class="mi"&gt;126&lt;/span&gt;   &lt;span class="mi"&gt;126&lt;/span&gt;   &lt;span class="mi"&gt;84&lt;/span&gt;   &lt;span class="mi"&gt;36&lt;/span&gt;   &lt;span class="mi"&gt;9&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;10&lt;/span&gt;   &lt;span class="mi"&gt;45&lt;/span&gt;   &lt;span class="mi"&gt;120&lt;/span&gt;   &lt;span class="mi"&gt;210&lt;/span&gt;   &lt;span class="mi"&gt;252&lt;/span&gt;   &lt;span class="mi"&gt;210&lt;/span&gt;   &lt;span class="mi"&gt;120&lt;/span&gt;   &lt;span class="mi"&gt;45&lt;/span&gt;   &lt;span class="mi"&gt;10&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;11&lt;/span&gt;   &lt;span class="mi"&gt;55&lt;/span&gt;   &lt;span class="mi"&gt;165&lt;/span&gt;   &lt;span class="mi"&gt;330&lt;/span&gt;   &lt;span class="mi"&gt;462&lt;/span&gt;   &lt;span class="mi"&gt;462&lt;/span&gt;   &lt;span class="mi"&gt;330&lt;/span&gt;   &lt;span class="mi"&gt;165&lt;/span&gt;   &lt;span class="mi"&gt;55&lt;/span&gt;   &lt;span class="mi"&gt;11&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;   
+&lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="mi"&gt;12&lt;/span&gt;   &lt;span class="mi"&gt;66&lt;/span&gt;   &lt;span class="mi"&gt;220&lt;/span&gt;   &lt;span class="mi"&gt;495&lt;/span&gt;   &lt;span class="mi"&gt;792&lt;/span&gt;   &lt;span class="mi"&gt;924&lt;/span&gt;   &lt;span class="mi"&gt;792&lt;/span&gt;   &lt;span class="mi"&gt;495&lt;/span&gt;   &lt;span class="mi"&gt;220&lt;/span&gt;   &lt;span class="mi"&gt;66&lt;/span&gt;   &lt;span class="mi"&gt;12&lt;/span&gt;   &lt;span class="mi"&gt;1&lt;/span&gt;  
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;虽然这个打印出来的结果不是金字塔形状，但是它的数字都是对的。对于打印成金字塔形状，以后再研究吧。&lt;/p&gt;</summary><category term="算法 杨辉三角"></category></entry><entry><title>浅谈VR</title><link href="http://szuwest.github.io/qian-tan-vr.html" rel="alternate"></link><updated>2016-06-11T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2016-06-11:qian-tan-vr.html</id><summary type="html">&lt;h2&gt;浅谈VR&lt;/h2&gt;
 &lt;p&gt;最近VR火得不行，就连央视财经也有报道说“4年后VR市场规模高达550亿元！人才缺口达80万”。然后刚刚结束的高考，某一个省份的语文作文题也是跟VR相关。所以说，VR是今后几年最热门的一个话题和技术之一，没有人会反对。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;VR&lt;/strong&gt;, 是Virtual Reality的缩写，即虚拟现实，它其实不是最近新的技术，它只是因为移动互联网的兴起而变得热门起来。我记得真正被全世界人认识和讨论的触发事件是Facebook发重金收购了Oculus VR公司。而除了VR，实际上还有另外一个相近技术&lt;strong&gt;AR&lt;/strong&gt;. AR是Augmented Reality缩写，即增强现实。AR跟VR有挺大不同的，我现在研究得也不多，以后有机会我也想写一下AR相关的文字。&lt;/p&gt;
 &lt;h2&gt;VR的应用&lt;/h2&gt;
@@ -971,7 +971,7 @@ runEnterAnimation方法：&lt;/p&gt;
 
 &lt;p&gt;ActivityOptions.makeThumbnailScaleUpAnimation提供了更高级的功能：将一个缩略图方法的Activity动画。这个有时候挺有用的。ActivityOptions还提供了其他的一些方法，感兴趣的话可以参考它的API。
 更多请参考&lt;a href="http://developer.android.com/reference/android/app/ActivityOptions.html"&gt;ActivityOptions API&lt;/a&gt; 和 &lt;a href="https://developer.android.com/training/material/animations.html"&gt;Google官方教程:Defining Custom Animations&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;下一节我会讲更高级更复杂的一些自定义Activity动画。&lt;/p&gt;</summary><category term="Android"></category></entry><entry><title>技术，社交，生活</title><link href="http://szuwest.github.io/ji-zhu-she-jiao-sheng-huo.html" rel="alternate"></link><updated>2014-10-23T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2014-10-23:ji-zhu-she-jiao-sheng-huo.html</id><summary type="html">&lt;h3&gt;技术不能停&lt;/h3&gt;
+&lt;p&gt;下一节我会讲更高级更复杂的一些自定义Activity动画。&lt;/p&gt;</summary><category term="动画"></category></entry><entry><title>技术，社交，生活</title><link href="http://szuwest.github.io/ji-zhu-she-jiao-sheng-huo.html" rel="alternate"></link><updated>2014-10-23T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2014-10-23:ji-zhu-she-jiao-sheng-huo.html</id><summary type="html">&lt;h3&gt;技术不能停&lt;/h3&gt;
 &lt;hr /&gt;
 &lt;p&gt;最近看了很多其他技术人员的文章，然后我又从iOS转战Android，感觉自己弱爆了，自己的技术跟那些厉害的人根本没得比。有句话说，知道得越多，知道自己不知道越多。现在自己还有冲进，应该尽力学多一点。&lt;/p&gt;
 &lt;p&gt;从计算机行业来说，技术千变万化，但是有些东西是基础性的。这些基本功决定你能走多远。算法，数据结构，编译原理，操作系统，这些基本的课程非常重要，而这又恰恰是我的弱项，我吃过这个亏。我想弥补。最近看微博看到&lt;strong&gt;陈皓&lt;/strong&gt;这样的大牛把leetcode的题目刷完了，真是佩服不已。我之前我到上面刷过一下子，但是没有坚持下来。主要是有些还是挺难的，而且英语还是有点吃力。我决定先从基本功开始，进行一个系统的学习。虽然网络上又很多资料，但是网络上的资料都是不系统的，只能参考而已，不能作为学习材料。&lt;/p&gt;
