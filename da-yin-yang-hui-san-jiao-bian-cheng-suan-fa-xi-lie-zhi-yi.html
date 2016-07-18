@@ -78,13 +78,11 @@
 
 <p>面试时我很容易紧张，人在紧张情况下貌似是很难转起来的，这是我的一大弊端。
 当时面试官只在纸上画了前5行，只告诉了我杨辉三角的特点就是每个数字都是它左上角的那个数字和右上角的那个数字相加得来，第一个数字是1。我当时只得出运用递归算法来解这道题会比较容易理解。但是该怎么写我写不出来。后来很长一段时间我并没有忘记这道题，但是我没有去查怎么解决，我偶尔会想一下该怎么做。最近这一两周我对解决这个到题的欲望越来越强烈，所以我开始在记事本上动手写代码解决。后来我发现了杨辉三角的一些规律，这些规律帮助我将代码写了出来。<br/></p>
-<blockquote>
 <ul>
 <li>1.杨辉三角第n行有n个数字</li>
 <li>2.每个数字都是它左上角的那个数字和右上角的那个数字相加得来，更具体一点这个数字是a(i,j),那么它是a(i-1,j-1)和a(i-1, j)相加得来的</li>
 <li>3.第1个数字是1.如果这个数字的左上角或右上角的那个数字不存在，那么就当做0</li>
 </ul>
-</blockquote>
 <h3>我的分析过程</h3>
 <p>说实话，现在看起来这些规律显而易见，但是我还是在编写代码的过程中带才找到的。<br/>
 我这个人在面试中真的无法做到像平时那样思考，这让我在面试中感觉自己是个无思考能力的人。还有我发现自己一定要先进入编程状态才能进行思考。所以我决定要解决这个问题时，我就打开一文本，开始写一些我已经想到的代码，直到现在，这个文本也还没有关闭过。<br/></p>
@@ -92,9 +90,9 @@
 <p>一开始我把递归函数的参数设为n，发现怎么实现都不太对，后来发现其实应该是把参数设置为i,j，这样就跟循环体的下标对应起来，就很好解决了。最终要解决的就是递归的出口问题，这个也不是我一开始想的那么简单。我把下标设置成是以1开始的，i&lt;1的话，它的值就是0，1的话就是1. 而对应j,为1的话，它是0，而且j是不能大于i的，大于i它的值也为0。
 所以程序的最终实现是：</p>
 <h3>代码实现</h3>
-<div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<div class="highlight"><pre><span class="err">\#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
 
-<span class="kt">int</span> <span class="nf">yangHuiTriangle</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">int</span> <span class="n">yangHuiTriangle</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -107,7 +105,7 @@
     <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">void</span> <span class="nf">pringYangHuiTriangle</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="n">pringYangHuiTriangle</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;=</span><span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
             <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">yangHuiTriangle</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>
@@ -179,15 +177,13 @@
         <h5 class="sidebar-title">Categories</h5>
         <ul class="side-nav">
             <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
-            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程 架构</a></li>
+            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
             <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
-            <li><a href="http://szuwest.github.io/category/ji-zhu-sheng-huo.html">技术生活</a></li>
             <li><a href="http://szuwest.github.io/category/ji-zhu-xin-de.html">技术心得</a></li>
             <li><a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a></li>
             <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
             <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
             <li><a href="http://szuwest.github.io/category/test.html">Test</a></li>
-            <li><a href="http://szuwest.github.io/category/za-tan.html">杂谈</a></li>
    
         </ul>
 

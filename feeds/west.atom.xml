@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2016-07-17T00:00:00+08:00</updated><entry><title>打印杨辉三角--编程算法系列之一</title><link href="http://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html" rel="alternate"></link><updated>2016-07-17T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2016-07-17:da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html</id><summary type="html">&lt;h2&gt;前言&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2016-07-18T00:00:00+08:00</updated><entry><title>iOS持续集成记(iOS+Jenkins+Cocoapods+蒲公英)</title><link href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html" rel="alternate"></link><updated>2016-07-18T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2016-07-18:ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html</id><summary type="html">&lt;h2&gt;iOS持续集成记（iOS+Jenkins+Cocoapods+蒲公英）&lt;/h2&gt;
+&lt;p&gt;原来我们iOS项目是有持续集成环境的，但是有一次升级系统还是升级xcode后，Jenkins就打不出可用的安装包了。原来负责整个打包机的同事又离职了，有一段时间我们都是手动打包给QA同事安装测试，现在领导要求必须把持续集成环境弄好，我们花了大约两周才基本弄好整个持续集成环境，现在把我整个过程中遇到的坑记录一下。&lt;/p&gt;
+&lt;h2&gt;重装系统&lt;/h2&gt;
+&lt;p&gt;打包机自从某一次升级系统之后就变得非常慢，打个包需要1个小时左右，简直要命。所以新的环境必须要建立在重装后的系统上。因为要格式化硬盘，所以要制作系统启动盘，这个网上也有不少教程，这里有个需要注意的，下载macOS系统时，一定要从官方下载。我一开始是自己在百度云上下的，制作好安装盘后重启电脑，并且将硬盘格式化后安装系统，发现验证不通过，好在另外一个同事在官网下了一个，我在它的电脑上重新制作了一次安装盘。假设你只要一台Mac电脑，遇到这种情况你就悲剧了。&lt;/p&gt;
+&lt;h2&gt;git拉取代码的坑&lt;/h2&gt;
+&lt;p&gt;系统装好了，Jenkins也装好了，然后配置拉去代码，可是代码死活拉不下来，为此我的同事搞了差不多一天，试了各种方法，也搞不下来代码，都是在一半的时候失败了。后来我也去弄了半天，同样的错误。主要原因可能是代码量太大了，因为其他的小工程可以git clone 下来。我突然想到换一下拉取协议试试，不采用HTTP方式，而是采用git@host/xxxx.git的方式来拉取代码，果然成功了。采用这种方式后，在Jenkins里需要配置ssh的RSA秘钥，在gitlab上面要配置公钥，但是我在Jenkins里配置私钥时，拷贝私钥时，只拷贝了中间那部分，导致一直验证不过，也折腾了很长一段时间才发现，并改正了过来。&lt;/p&gt;
+&lt;h2&gt;CocoaPods的坑&lt;/h2&gt;
+&lt;p&gt;我们项目用了CocoaPods，而且pods里还有我们的私有库。虽然git clone代码下来了，但是pod install死活不成功。开始以为是pod环境问题，查了很多资料也解决不了。后来我问了一个遇到过这种情况同事，他说是Podfile的source问题，改成ssh协议拉取就可以了。看来仍然是git的问题。&lt;/p&gt;
+&lt;p&gt;CocoaPods也能拉取到了，终于可以进入build步骤了。在Jenkins里配置有一个要特别注意的地方，因为使用CocoaPods的工程编译的是workspace，而不是普通的project。Jenkins里xcode配置需要指定workspace的名称，才能正确编译。&lt;/p&gt;
+&lt;h2&gt;企业版编译和修改BundleID&lt;/h2&gt;
+&lt;p&gt;由于我们打出来的包需要时外部可以随时安装的，所以需要是企业证书的安装包。然而企业包的BundleID是跟正常AppStore的包的BundleID不一样的。一般做法是在正常的AppStore包的BundleID后面直接加上Enterprise。我一开始修改了info.plist后，发现还是因为BundleID跟证书不匹配而编译失败，发现BundleID还是没有变。最终网上查资料才发现，光改了info.plist的BundleID还不够，还要修改project配置里的BundleID。我在网上找了很久也没有找到比较好的修改project里参数的方法。不过最终我在stackoverflow上找个一种方法，在xcodebuild的编译参数里，可以加入一个修改BundleID的参数，这个问题就这样解决了。&lt;br/&gt;
+&lt;strong&gt;Custom xcodebuild arguments&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;CODE_SIGN_RESOURCE_RULES_PATH=$(SDKROOT)/ResourceRules.plist PRODUCT_BUNDLE_IDENTIFIER=BundleID&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;随便提一下，Jenkins的配置里有一个叫Change BundleID的配置项，貌似没有什么用。&lt;/p&gt;
+&lt;h2&gt;上传和发邮件&lt;/h2&gt;
+&lt;p&gt;安装包打出来了，要上传到共享服务器和发布到外网给大家安装，还要发邮件通知QA和相关人员。这一步网上很多都是通过编写Python脚本来实现。我试过Jenkins的FTP插件配置，将安装包上传到我们内部共享服务器，但是失败了，没有太多时间研究就放弃了。转而研究上传蒲公英。我试过网上的一些方法，但是只有通过curl方式上传才成功的。但是注意curl命令后的的file参数有个@。例如 curl -F "file=@path"&lt;/p&gt;
+&lt;p&gt;为了上传ipa和发邮件成功，我还查阅了不少Python的语法和bash shell的语法，收获不少。每一次折腾都是进步。&lt;/p&gt;</summary><category term="Jenkins Cocoapods 蒲公英"></category></entry><entry><title>打印杨辉三角--编程算法系列之一</title><link href="http://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html" rel="alternate"></link><updated>2016-07-17T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2016-07-17:da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html</id><summary type="html">&lt;h2&gt;前言&lt;/h2&gt;
 &lt;p&gt;算法是程序员从职业开始到职业结束，估计都是绕不开的话题。所有大公司技术面试都会考算法题，不管国内国外。我一直想非得这样算法吗，没有别的更好的考察方式吗？有没有算法不行但是写程序很厉害的人？我没有答案。也许算法确实比较好的考察方法，如果你确实是个聪明人，你应该克服算法不行的问题。运用算法解决某些问题，或者编写程序去实现某个算法，对程序员是一个重要的能力。所以我要锻炼自己拥有这个能力。我准备将我以前遇到的一些面试题目，真正的完全靠自己去实现，并记录下来。&lt;/p&gt;
 &lt;h2&gt;杨辉三角&lt;/h2&gt;
 &lt;p&gt;如果你听说过杨辉三角，但是又不记得具体是什么规格，那你跟当年的我一样。大概一两年前，X公司某个项目招人，他们的HR找到我让我去试试，当时我想试试也无妨。前面的一，二技术面试都没太多问题，他们问的都是工作中的技术，后来有一面只面了我纯算法问题，就是打印杨辉三角，我一下懵了，结果是死得很难看。
@@ -22,13 +42,11 @@
 
 &lt;p&gt;面试时我很容易紧张，人在紧张情况下貌似是很难转起来的，这是我的一大弊端。
 当时面试官只在纸上画了前5行，只告诉了我杨辉三角的特点就是每个数字都是它左上角的那个数字和右上角的那个数字相加得来，第一个数字是1。我当时只得出运用递归算法来解这道题会比较容易理解。但是该怎么写我写不出来。后来很长一段时间我并没有忘记这道题，但是我没有去查怎么解决，我偶尔会想一下该怎么做。最近这一两周我对解决这个到题的欲望越来越强烈，所以我开始在记事本上动手写代码解决。后来我发现了杨辉三角的一些规律，这些规律帮助我将代码写了出来。&lt;br/&gt;&lt;/p&gt;
-&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;1.杨辉三角第n行有n个数字&lt;/li&gt;
 &lt;li&gt;2.每个数字都是它左上角的那个数字和右上角的那个数字相加得来，更具体一点这个数字是a(i,j),那么它是a(i-1,j-1)和a(i-1, j)相加得来的&lt;/li&gt;
 &lt;li&gt;3.第1个数字是1.如果这个数字的左上角或右上角的那个数字不存在，那么就当做0&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/blockquote&gt;
 &lt;h3&gt;我的分析过程&lt;/h3&gt;
 &lt;p&gt;说实话，现在看起来这些规律显而易见，但是我还是在编写代码的过程中带才找到的。&lt;br/&gt;
 我这个人在面试中真的无法做到像平时那样思考，这让我在面试中感觉自己是个无思考能力的人。还有我发现自己一定要先进入编程状态才能进行思考。所以我决定要解决这个问题时，我就打开一文本，开始写一些我已经想到的代码，直到现在，这个文本也还没有关闭过。&lt;br/&gt;&lt;/p&gt;
@@ -36,9 +54,9 @@
 &lt;p&gt;一开始我把递归函数的参数设为n，发现怎么实现都不太对，后来发现其实应该是把参数设置为i,j，这样就跟循环体的下标对应起来，就很好解决了。最终要解决的就是递归的出口问题，这个也不是我一开始想的那么简单。我把下标设置成是以1开始的，i&amp;lt;1的话，它的值就是0，1的话就是1. 而对应j,为1的话，它是0，而且j是不能大于i的，大于i它的值也为0。
 所以程序的最终实现是：&lt;/p&gt;
 &lt;h3&gt;代码实现&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;#include &amp;lt;stdio.h&amp;gt;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;\#&lt;/span&gt;&lt;span class="n"&gt;include&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;stdio&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
 
-&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;yangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;yangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
     &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
     &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
@@ -51,7 +69,7 @@
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 
-&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;pringYangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;pringYangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;=&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
         &lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;=&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
             &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;yangHuiTriangle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
