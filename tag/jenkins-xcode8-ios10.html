@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog - iOS</title>
+    <title>West's blog - Jenkins Xcode8 iOS10</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -78,62 +78,6 @@
 
 <p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>            </article>
 
-
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html"><h3 class="article-title">iOS系统相册上传不得不说的那些事儿</h3></a>
-<h6 class="subheader" title="2016-05-02T00:00:00">2016-05-02
-</h6>
-
-
-<p>最近在开发手机相册自动备份的功能，这就需要用到上传文件的功能。
-其实我一年前也做过同样的功能，当时也做得不算很好。这次是别人做了，然后那人离职了。我来接受这块，然后发现有问题，然后准备认真的研究一下这个问题，顺便学习更多的iOS开发的知识。</p>
-<h2>系统相册概述</h2>
-<p>首先说一下iOS相册的问题。iOS的相片都是存放在系统库ALAssetLibrary中，开发者从这个库中读取到的是一个个ALAsset对象，而不是一个文件系统的File文件。当然iOS8系统新增了Photo Framework,但是只是增强了相关功能，还是不能直接取到File。 这个Android平台或者PC平台很不一样的。</p>
-<p>我们知道一般的上传文件流程就是，将本地的文件转换为二进制数据或流，通过HTTP协议或者socket协议，本地和服务器之间建立一个连接，本地将流写入这个连接，服务器那边接收这个流，并将接收到的流写入文件，直接客户端那边将整个文件传完，传输就结束了。上传文件这个过程一般会被封装库，使用者只需传入必要的参数就可以了。我以前做自动备份相册的时候，就是使用了别人提供的静态库，它上传文件API就是需要传一个文件的本地路径。这就麻烦了，因为我们的应用从iOS系统库读取到的对象是ALAsset, 所以我需要先将ALAsset从系统中导出，写入我们应用的沙盒中，然后再把它在沙盒中路径传给上传库进行上传。</p>
-<h2>导出ALAsset</h2>
-<p>据我所知，iOS系统cocoa层网络传输基本上只有<strong>NSURLConnection</strong>和基于<strong>NSURLSession</strong>一套API。它们提供的接口基本上都是基于NSData，或者文件路径或者NSInputStream。网上有很多库或者框架都是基于这两套API来做上传，我们一般也使用第三方的框架来减少工作量 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ioswang-luo-bian-cheng-xi-tong-xiang-ce-shang-chuan-dao-chu-shi-pin-nsurlconnection-nsurlsession-da-wen-jian-shang-chuan-hou-tai-shang-chuan.html">iOS网络编程 系统相册上传 导出视频 NSURLConnection NSURLSession 大文件上传 后台上传 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/swiftchu-tan.html"><h3 class="article-title">swift初探</h3></a>
-<h6 class="subheader" title="2014-06-22T00:00:00">2014-06-22
-</h6>
-
-
-<h1>swift初探</h1>
-<p>自从swift公布以来，火得不得了。如果你是开发者，还没有看过swift，那还真是out了（不过话说回来，并不是没有看过swift就不是好开发者。好的程序员跟看没看过某种语言没有什么关系）。我从公布以来就断断续续的看，一直在看官方的英文文档。偶尔也看看别人写的或者翻译的文章。现在虽然没有把官方文档看完，但是也看了大部分，可以写写感想心得。</p>
-<p>简单来说，swift是集合了许多脚本语言的特性而又不像其他一般的脚本语言的苹果新生代开发语言。swift集合了很多语言的特性，如ruby，object-c，c++，c#等，其中长得最像的应该是ruby。咋看之下swift就想ruby一样的脚本语言。完全面向对象，类型定义，closure特性，函数式编程等等。不过据官方文档介绍，swift语言不是解释型语言，它最终会编译成二进制代码，并且它的运行效率比object-c要快。说比object-C要快我是比较怀疑的，而外国开发者进行了测试，得出结论是如果不强加一些编译优化的话，是快不过objC的。</p>
-<p>如果对ruby，Object-C，c++语言熟悉的话，学起swift来应该没有什么难度。但是它还有很多语法特性是别的语言没有的，并且有些在我看来有点奇怪的特性。不过这是都没有什么，说明自己见识少，熟悉了就好了。首先一个比较特别的是，你不在需要在每行代码结束时加上分号，直接回车换行就行 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/swift.html">swift </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/swiftchu-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/swiftchu-tan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-            <!-- /#posts-list -->
 <div class="pagination-centered">
 <h6 class="subheader">Page 1 of 1</h6>
 
@@ -141,6 +85,10 @@
 
 </p>
 </div>
+
+
+
+            <!-- /#posts-list -->
 
     </div>
     <!-- End Main Content -->

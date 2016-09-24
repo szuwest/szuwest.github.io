@@ -49,6 +49,43 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html"><h3 class="article-title">升级Xcode8后需要注意的事项</h3></a>
+<h6 class="subheader" title="2016-09-24T00:00:00">2016-09-24
+</h6>
+
+
+<h2>升级Xcode8后需要注意的事项</h2>
+<p>随着iPhone7开卖适配iOS10成了必不可少的事情。要适配iOS10，升级Xcode8又是必须的事情。可以一旦升级Xcode8之后会发现一堆坑在里面。每次升级Xcode或者iOS系统或者Mac系统都是有一堆的坑，每次都要折腾得你死去活来不罢休。这有点像飞蛾扑火，明明知道前面是火坑，也要往下跳。</p>
+<h3>升级第一坑，注释代码快捷键失效</h3>
+<p>当你经过漫长的等待Xcode下载和安装之后，满心欢喜打开Xcode，发现字体变了，貌似看上去还不错（有同事跟我说这很丑），然后开始写代码，发现可以高亮显示当前编辑行，不错嘛，写着写着突然想注释掉一行代码，发现command+/怎么按都没反应，十分恼火。这什么破玩意儿，这么明显的bug都有。然后网上搜解决方案，确实有人也遇到这个问题。貌似需要跑一个命令什么的。实际上不用那么费劲，重启一下Xcode就好了。</p>
+<h3>升级第二坑，iOS的字体变宽了</h3>
+<p>当我Run一下程序想看看我们的程序在iOS10上有没有问题，启动之后打开引导页，发现最底下的两个按钮字显示不全了：注册账号 变成了 注···号，登录账号变成了 登···号，这是什么鬼？我没有动过这块的任何代码，甚至连这个页面的xib也没有打开过。后来才知道，运来是iOS的字体变宽了，如果你一个按钮在iOS9原来刚好放下4个字，然后iOS10它就装不下了。现在的解决办法是手动调节控件的宽度，发现问题一个解决一个。</p>
+<h3>升级第三坑，xib不兼容Xcode7了</h3>
+<p>这个坑实在试太无良知了，怎么可以这样做。由于我比较早升级到Xcode8，其他同事还没升级，我在Xcode8上编辑过一个xib文件，提交了。另外一个同事更新代码后就编译不过了：提示要使用Xcode8.这不是强制升级么？你用Xcode8编辑xib后，Xcode会加入一行代码说明 </p>
+<p><code>&lt;plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/&gt;
+        &lt;capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/&gt;</code></p>
+<p>这就是说这是用Xcode8保存的，你必须要要用Xcode8打开。这给团队协作带来极大不便，逼着大家要升级。当然也有解决办法。在File Inspector里有个open in Latest Xcode 的选项，把它改为Xcode7.x就会重新保一下。</p>
+<h3>升级第四坑，sigining方式变了</h3>
+<p>这是个大坑，当然你可以说它是大好，如果它没有给你带来不便利的话。Xcode8里有个自动管理签名开发，即将签名改为自动管理签名后者手动管理签名。其实就是要你登录你的开发账号，然后选择你的develop team。可是一般团队里就一个开发者账号，你就必须给每个人的电脑上都登录一下这个开发者账号。如果能把账号密码公开给大家当然没问题，不能的话就只有管理者去每个人的电脑上登录一下账号。</p>
+<p>这都还是算好的，因为我们开发者自己弄两下就可以搞定。但是有个蛋疼的地方：我们给测试同事打包是在打包机上自动打包的，采用的是Jenkins持续集成环境，并且打包采用的证书是企业版证书，打包出来之后需要给大家随意安装的。当升级Xcode8之后，signing方式改变了，然后打包就失败了。因为打包机上我们是必须重新修改BundleID，然后指定签名文件。但是我们平时开发是Xcode配置是自动签名方式，打包机是通过Jenkins重新配置了打包方式，这样就出问题了。。。</p>
+<p>我现在尝试去解决这种冲突，但是还没搞定。develop team貌似Xcode8中新加的，以前不需要指定。我也网上找了一些资料，貌似有人想直接打包前直接用she'll脚本修改工程文件配置。这也是一个方向。接下来下周我估计要把这个问题研究一下。每次环境变动，Jenkins都要重新搞，折腾得我苦不堪言。什么时候苹果把签名和调试不要搞得那么复杂，造福一下开发者就好了。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html"><h3 class="article-title">关于技术人员加班问题的看法</h3></a>
 <h6 class="subheader" title="2016-09-04T00:00:00">2016-09-04
 </h6>
@@ -59,17 +96,7 @@
 <h3>我们加班的缘由</h3>
 <p>两个星期前，我们接到消息，要在两周之类上线3.0大版本。3.0版本改版非常大，虽然一部分功能已经开发了，但是一直在改，功能就从来没有稳定过。而且我们还正在开发2.7版本，突然间两周之类要上线3.0版本，是不可能的。但是这应该是老板的命令，我们应该没有还价的可能，所以加班是不可避免。还有一个更加不可避免加班的理由：我们的一个同事这个时候被借走了，借去别的子公司帮忙开发。这个借人也不是我们可以商量的，这个公司老板的要求，所以雪上加箱。</p>
 <h3>加班开发和家庭影响</h3>
-<p>为了能尽可能达成目标，我们每天都是工作到10点多，有些同事要搞到凌晨2点多，从产品，设计，到测试，所有人都需要加班。周末两天也需要加班。我老婆对我每天都很晚回家意见非常大，所以我尽量能10点多之后就回家，不然肯定闹家庭矛盾。周日我也不得不请假，留了另外两个同事在加班开发。其实我们已经非常高效了，我们的人力比Android客户端的人力还要少，大家都要努力加班赶进度。后来两个星期后，结果当然是新版上不了线的，所以拖后了几天。他们还想我们客户端周末来加班赶进度，可是我真的不想再加班了，因为我们的团队已经连续上了12天班了，所以我就没有要求加班，我觉得必须让大家停一下，因为后面半个月还有更艰巨的任务等着我们，我不想把我们的队伍搞残。</p>
-<h2>加班的伤害</h2>
-<p>本来我想说说加班是否有必要，但是想了想在这个行业貌似有时候加班是不可避免。就像我们现在的情况。但是造成需要加班来实现需求和赶进度是谁的过错？是技术人员无能，还是管理层的过错。我倾向于管理层的过错。管理层很多时候想不清楚，或者想清楚了计划没有做好，需要团队加班来开发。很多时候加班是可以避免的。就像我们现在的情况，其实3.0版本一早就开始规划了，为什么之前没有想好，而突然一句话就说要上线？之前那么多时间去干嘛了？就算有些变化不可避免，一定要加班才能解决，我希望管理层也有心里准备，长时间加班的造成伤害是很大，而且加班赶出来的东西，质量无法保证，有可能会造成一些技术债务。有些伤害可能无法弥补的。</p>
-<ul>
-<li>给技术人员身体健康造成影响。每天加班给技术人员造成休息时间不足，没有时间锻炼，长期处于亚健康状体，一旦得病对身体影响很大</li>
-<li>造成家庭矛盾。每天很晚回家，陪伴家人的时间很短。夫妻很容易闹矛盾，这个影响家庭和谐，严重的话会影响婚姻。</li>
-<li>产品质量无法保证，有可能会造成一些技术债务。每天大量的工作，人很容易疲惫，大家为了赶进度，也会忽略质量。这样很难保证产品的质量是最优的，有些架构不好的话，会造成一些技术债务。后面需要花大量时间来偿还。</li>
-<li>容易造成人员流失。我觉得这可能对公司伤害最大的。因为长期的加班形态会造成上面3个不好的影响，然后员工就很有可能离开。尤其是时候没有做好弥补的情况。例如产品最终是做出来了，但是没有达到预期效果，虽然员工加班了，没有办法得到他们期望的薪酬或者奖励补偿，他们会对公司很失望，所以很容易就会选择离开。这个是非常自然的，我自己以前就经历一次。我们加班加点花了两个月将产品做出来了，最后很多人就离开了，我也自己当时还幻想公司会给我加薪或者给的年终奖多一些，最终的结果很失望，我也选择了离开。所以我对大部分的加班赶产品的形式都是不看好的。</li>
-</ul>
-<p>所以我是反对长期加班的，对于那种996的上班时间，更是不看好，这简直是剥削，这是管理层的失职。如果是非加班不可，一定要做好计划，不能长期加班，给予调休和补偿。</p>
-<p>总之，能不加班就不要加班，其他方面做好，提高工作效率和协作效率，这才是正道。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
+<p>为了能尽可能达成目标，我们每天都是工作到10点多，有些同事要搞到凌晨2点多，从产品，设计，到测试，所有人都需要加班。周末两天也需要加班。我老婆对我每天都很晚回家意见非常大，所以我尽量能10点多之后就回家，不然肯定闹家庭矛盾。周日我也不得不请假，留了另外两个同事在加班开发。其实我们已经非常高效了，我们的人力比Android客户端的人力还要少，大家都要努力加班赶进度 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/jia-ban.html">加班 </a>
@@ -77,11 +104,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -293,30 +318,6 @@
 
 
 <p><a href="http://szuwest.github.io/androidxia-zai-qi-kai-fa.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidxia-zai-qi-kai-fa.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html"><h3 class="article-title">再谈iOS开发和Android开发之间的切换</h3></a>
-<h6 class="subheader" title="2015-07-18T00:00:00">2015-07-18
-</h6>
-
-
-<h1>再谈iOS开发和Android开发之间的切换</h1>
-<p>由于项目变化的原因，Android开发增加了很多人手，而iOS开发团队又被调走，只留下了两个人。所以iOS开发负责人找我谈话希望我过去帮忙做iOS。出于对项目整体进度而言，我去帮忙iOS开发是最好的。我可以在iOS和Android开发之间随意切换，而Android开发确实有点多人，iOS人手严重不足，招人很难，其他人转iOS开发也需要时间，所以我就答应了。</p>
-<p>说起我的Android和开发经历，真是很多感概。从我决定离开第一家做芯片的公司开始，我就想进入iOS开发或者Android开发。其实我最开始是想做iOS开发的，但是当时很难找，我不但没有经验，还是从一家芯片公司刚跳出来（虽然我是软件工程专业出身，但是一开始却进入了芯片行业，说多了都是泪）。最终一家小公司接受了我做Android开发，那时候是2011年初。但是做了大半年多的Android开发之后，公司发现Android很难赚钱，就想转做iOS开发，因为它的生态环境好。开始是我们老大去做，但是他搞了半天还没搞出个helloworld列子，所以就让我去做了。由于我大学的时候就学过Object-C，也接触Object-C开发，所以很快就上手了。再后来，苦于小公司技术进步慢，就跳槽来了现在的X公司。</p>
-<p>我是以Android技术面进入X公司的，但是进来之后，我的老大跟我说，你想做Android还是iOS开发，因为我本身也在做iOS开发，也像往这个方向，就选了iOS开发。那个时候，项目采用的方式全编码方式，没有用xib ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-xin-de.html">技术心得</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/android-ios.html">Android iOS </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

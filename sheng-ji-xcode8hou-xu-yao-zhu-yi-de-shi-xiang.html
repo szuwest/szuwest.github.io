@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog - iOS</title>
+    <title>升级Xcode8后需要注意的事项</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -45,16 +45,17 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
-        
-        
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html" rel="bookmark"
+        title="Permalink to 升级Xcode8后需要注意的事项">升级Xcode8后需要注意的事项</a></h3>
+    </header>
 
-            <article>
-                <a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html"><h3 class="article-title">升级Xcode8后需要注意的事项</h3></a>
 <h6 class="subheader" title="2016-09-24T00:00:00">2016-09-24
 </h6>
 
 
-<h2>升级Xcode8后需要注意的事项</h2>
+    <h2>升级Xcode8后需要注意的事项</h2>
 <p>随着iPhone7开卖适配iOS10成了必不可少的事情。要适配iOS10，升级Xcode8又是必须的事情。可以一旦升级Xcode8之后会发现一堆坑在里面。每次升级Xcode或者iOS系统或者Mac系统都是有一堆的坑，每次都要折腾得你死去活来不罢休。这有点像飞蛾扑火，明明知道前面是火坑，也要往下跳。</p>
 <h3>升级第一坑，注释代码快捷键失效</h3>
 <p>当你经过漫长的等待Xcode下载和安装之后，满心欢喜打开Xcode，发现字体变了，貌似看上去还不错（有同事跟我说这很丑），然后开始写代码，发现可以高亮显示当前编辑行，不错嘛，写着写着突然想注释掉一行代码，发现command+/怎么按都没反应，十分恼火。这什么破玩意儿，这么明显的bug都有。然后网上搜解决方案，确实有人也遇到这个问题。貌似需要跑一个命令什么的。实际上不用那么费劲，重启一下Xcode就好了。</p>
@@ -68,7 +69,8 @@
 <h3>升级第四坑，sigining方式变了</h3>
 <p>这是个大坑，当然你可以说它是大好，如果它没有给你带来不便利的话。Xcode8里有个自动管理签名开发，即将签名改为自动管理签名后者手动管理签名。其实就是要你登录你的开发账号，然后选择你的develop team。可是一般团队里就一个开发者账号，你就必须给每个人的电脑上都登录一下这个开发者账号。如果能把账号密码公开给大家当然没问题，不能的话就只有管理者去每个人的电脑上登录一下账号。</p>
 <p>这都还是算好的，因为我们开发者自己弄两下就可以搞定。但是有个蛋疼的地方：我们给测试同事打包是在打包机上自动打包的，采用的是Jenkins持续集成环境，并且打包采用的证书是企业版证书，打包出来之后需要给大家随意安装的。当升级Xcode8之后，signing方式改变了，然后打包就失败了。因为打包机上我们是必须重新修改BundleID，然后指定签名文件。但是我们平时开发是Xcode配置是自动签名方式，打包机是通过Jenkins重新配置了打包方式，这样就出问题了。。。</p>
-<p>我现在尝试去解决这种冲突，但是还没搞定。develop team貌似Xcode8中新加的，以前不需要指定。我也网上找了一些资料，貌似有人想直接打包前直接用she'll脚本修改工程文件配置。这也是一个方向。接下来下周我估计要把这个问题研究一下。每次环境变动，Jenkins都要重新搞，折腾得我苦不堪言。什么时候苹果把签名和调试不要搞得那么复杂，造福一下开发者就好了。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>我现在尝试去解决这种冲突，但是还没搞定。develop team貌似Xcode8中新加的，以前不需要指定。我也网上找了一些资料，貌似有人想直接打包前直接用she'll脚本修改工程文件配置。这也是一个方向。接下来下周我估计要把这个问题研究一下。每次环境变动，Jenkins都要重新搞，折腾得我苦不堪言。什么时候苹果把签名和调试不要搞得那么复杂，造福一下开发者就好了。</p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
@@ -76,72 +78,22 @@
 
 
 
-<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>            </article>
 
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html";
+        var disqus_url = "http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html";
 
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html"><h3 class="article-title">iOS系统相册上传不得不说的那些事儿</h3></a>
-<h6 class="subheader" title="2016-05-02T00:00:00">2016-05-02
-</h6>
-
-
-<p>最近在开发手机相册自动备份的功能，这就需要用到上传文件的功能。
-其实我一年前也做过同样的功能，当时也做得不算很好。这次是别人做了，然后那人离职了。我来接受这块，然后发现有问题，然后准备认真的研究一下这个问题，顺便学习更多的iOS开发的知识。</p>
-<h2>系统相册概述</h2>
-<p>首先说一下iOS相册的问题。iOS的相片都是存放在系统库ALAssetLibrary中，开发者从这个库中读取到的是一个个ALAsset对象，而不是一个文件系统的File文件。当然iOS8系统新增了Photo Framework,但是只是增强了相关功能，还是不能直接取到File。 这个Android平台或者PC平台很不一样的。</p>
-<p>我们知道一般的上传文件流程就是，将本地的文件转换为二进制数据或流，通过HTTP协议或者socket协议，本地和服务器之间建立一个连接，本地将流写入这个连接，服务器那边接收这个流，并将接收到的流写入文件，直接客户端那边将整个文件传完，传输就结束了。上传文件这个过程一般会被封装库，使用者只需传入必要的参数就可以了。我以前做自动备份相册的时候，就是使用了别人提供的静态库，它上传文件API就是需要传一个文件的本地路径。这就麻烦了，因为我们的应用从iOS系统库读取到的对象是ALAsset, 所以我需要先将ALAsset从系统中导出，写入我们应用的沙盒中，然后再把它在沙盒中路径传给上传库进行上传。</p>
-<h2>导出ALAsset</h2>
-<p>据我所知，iOS系统cocoa层网络传输基本上只有<strong>NSURLConnection</strong>和基于<strong>NSURLSession</strong>一套API。它们提供的接口基本上都是基于NSData，或者文件路径或者NSInputStream。网上有很多库或者框架都是基于这两套API来做上传，我们一般也使用第三方的框架来减少工作量 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ioswang-luo-bian-cheng-xi-tong-xiang-ce-shang-chuan-dao-chu-shi-pin-nsurlconnection-nsurlsession-da-wen-jian-shang-chuan-hou-tai-shang-chuan.html">iOS网络编程 系统相册上传 导出视频 NSURLConnection NSURLSession 大文件上传 后台上传 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/swiftchu-tan.html"><h3 class="article-title">swift初探</h3></a>
-<h6 class="subheader" title="2014-06-22T00:00:00">2014-06-22
-</h6>
-
-
-<h1>swift初探</h1>
-<p>自从swift公布以来，火得不得了。如果你是开发者，还没有看过swift，那还真是out了（不过话说回来，并不是没有看过swift就不是好开发者。好的程序员跟看没看过某种语言没有什么关系）。我从公布以来就断断续续的看，一直在看官方的英文文档。偶尔也看看别人写的或者翻译的文章。现在虽然没有把官方文档看完，但是也看了大部分，可以写写感想心得。</p>
-<p>简单来说，swift是集合了许多脚本语言的特性而又不像其他一般的脚本语言的苹果新生代开发语言。swift集合了很多语言的特性，如ruby，object-c，c++，c#等，其中长得最像的应该是ruby。咋看之下swift就想ruby一样的脚本语言。完全面向对象，类型定义，closure特性，函数式编程等等。不过据官方文档介绍，swift语言不是解释型语言，它最终会编译成二进制代码，并且它的运行效率比object-c要快。说比object-C要快我是比较怀疑的，而外国开发者进行了测试，得出结论是如果不强加一些编译优化的话，是快不过objC的。</p>
-<p>如果对ruby，Object-C，c++语言熟悉的话，学起swift来应该没有什么难度。但是它还有很多语法特性是别的语言没有的，并且有些在我看来有点奇怪的特性。不过这是都没有什么，说明自己见识少，熟悉了就好了。首先一个比较特别的是，你不在需要在每行代码结束时加上分号，直接回车换行就行 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/swift.html">swift </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/swiftchu-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/swiftchu-tan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-            <!-- /#posts-list -->
-<div class="pagination-centered">
-<h6 class="subheader">Page 1 of 1</h6>
-
-<p>
-
-</p>
-</div>
-
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
     </div>
     <!-- End Main Content -->
 
