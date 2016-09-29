@@ -49,6 +49,73 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html"><h3 class="article-title">升级Xcode8后Jenkins打包问题</h3></a>
+<h6 class="subheader" title="2016-09-29T00:00:00">2016-09-29
+</h6>
+
+
+<h2>升级Xcode8后Jenkins打包问题</h2>
+<p>上次说升级Xcode8之后，Jenkins自动打包就不行了，今天终于弄好了。前前后后话的时间有一天的时间才搞好，不容易。尝试了30多次才成功了，说多了都是泪。。现在记录一下。</p>
+<h3>我们的需求</h3>
+<p>说一下我们的需求。我们开发人员采用的是正式签名，正式的BundleID，但是我们Jenkins自动打包出来的是企业版，用的是企业版BundleID。代码是同一份，但是Jenkins打包企业版时时要先修改BundleID和相关版本号之类的。在Xcode7时代，我已经将Jenkins配置好，可以正常打出企业版的安装包。但是升级到Xcode8之后，Jenkins打包会报错，即原来的配置已经不能打出企业包来了。</p>
+<h3>解决方法</h3>
+<p>先说不能打包的原因，主要是签名方式冲突。Jenkins的配置是指定签名，而我们Xcode8采用的是自动签名。我们开发时采用自动签名，而且打企业版安装采用的签名文件跟我们开发时的签名文件时不一样的。所以Jenkins打包肯定得采用手动签名方式。</p>
+<p>报错如下：</p>
+<div class="highlight"><pre><span class="n">xxxxx</span> <span class="n">has</span> <span class="n">conflicting</span> <span class="n">provisioning</span> <span class="n">settings</span><span class="p">.</span> <span class="n">xxxxx</span> <span class="n">is</span> <span class="n">automatically</span> <span class="kt">signed</span><span class="p">,</span> <span class="n">but</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">xxxxxxxxxxxxx</span> <span class="n">has</span> <span class="n">been</span> <span class="n">manually</span> <span class="n">specified</span><span class="p">.</span> <span class="n">Set</span> <span class="n">the</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">value</span> <span class="n">to</span> <span class="s">&quot;iPhone Developer&quot;</span> <span class="n">in</span> <span class="n">the</span> <span class="n">build</span> <span class="n">settings</span> <span class="n">editor</span><span class="p">,</span> <span class="n">or</span> <span class="k">switch</span> <span class="n">to</span> <span class="n">manual</span> <span class="n">signing</span> <span class="n">in</span> <span class="n">the</span> <span class="n">project</span> <span class="n">editor</span><span class="p">.</span>
+</pre></div>
+
+
+<p>所以解决方法也很直接，就是不采用自动签名。可是我找遍了国内外网上资料，没有人提供 自动关闭 自动签名 的方法。倒是有人在苹果的网站上提问如何关闭自动签名。我在国内一些网站上也有一些人提到这个问题，其中有人用 bashsell 的sed 文本替换命令来修改project.pbxproj里面的内容。</p>
+<p>总之我的方向就是关闭自动打包，修改一些配置，然后让它可以打包。说起来简单，自动签名方式怎么关闭，需要改哪些配置，我不知道，只能摸索和不断的尝试。</p>
+<p>一开始我尝试按照网上的一个列子来关闭自动签名方式。它是采用 sed 命令。由于我本身对bash shell 也不是很熟悉，试了好多次都没有成功。而且到后面我发现要关闭自动签名，只将 ProvisioningStyle 改为 Manual是不够的。我自己手动的去关闭和开启自动签名，看看project.pbxproj到底哪些参数改变了，然后采用我比较熟悉的PlistBuddy命令，写了个脚本去改变这些值，来达到关闭自动签名的效果。</p>
+<p>最终我写出来的脚本大概是这样的：</p>
+<div class="highlight"><pre>#修改ProvisioningStyle 
+/usr/libexec/PlistBuddy -c “Set :objects:574F440C1AEE5EA3003F9BB5:attributes:TargetAttributes:574F44131AEE5EA3003F9BB5:ProvisioningStyle Manual”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+#修改Distribution签名配置
+/usr/libexec/PlistBuddy -c “Set :objects:2B888A201AFB4C3F005E1E12:buildSettings:CODE_SIGN_IDENTITY[sdk=iphoneos*] ‘xxxxxxxxxxxxxx’”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE  &#39;xxxxxxxxxxxx&#39;”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE_SPECIFIER xxxxxxxxxxxx”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+#修改Debug签名配置
+/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:CODE_SIGN_IDENTITY[sdk=iphoneos*] ‘iPhone Distribution’”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE  &#39;xxxxxxxxxxxx&#39;”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE_SPECIFIER xxxxxxxxxxxx”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+#修改Release签名配置
+/usr/libexec/PlistBuddy -c “Set :objects:2B888A201AFB4C3F005E1E12:buildSettings:CODE_SIGN_IDENTITY[sdk=iphoneos*] ‘iPhone Distribution’”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE  &#39;xxxxxxxxxxxx&#39;”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+
+/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE_SPECIFIER xxxxxxxxxxxx”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
+</pre></div>
+
+
+<p>归纳起来，就是先将签名方式ProvisioningStyle改为手动的，然后将Distribution，Debug, Release 相关的CODE_SIGN_IDENTITY[sdk=iphoneos*]，buildSettings:PROVISIONING_PROFILE，PROVISIONING_PROFILE_SPECIFIER的值做对应的修改。另外BundleID和develop team我没有用PlistBuddy来修改，而是通过在Jenkins的配置<strong>Custom xcodebuild arguments</strong> 加入参数 <code>DEVELOPMENT_TEAM=DLF3GQKP4Q PRODUCT_BUNDLE_IDENTIFIER=xxxxxxxxx</code> 来指定。这样编译器会自动修改相关值</p>
+<p>配置完这些，ipa包是能打出来了，但是却最后失败了，报错是签名问题，还有找不到ResourceRules.plist。</p>
+<p>最终我发现只要 把Jenkins配置中的把 Sign IPA at build time 的勾选去掉，然后打包就没有问题了。然后我也把在Jenkins的配置<strong>Custom xcodebuild arguments</strong> 参数中，原来有的参数 <code>CODE_SIGN_RESOURCE_RULES_PATH=$(SDKROOT)/ResourceRules.plist</code> 去掉，打出来的安装包也没有问题。当时这个参数在Xcode7是必填的，现在Xcode8却可以去掉了。</p>
+<p>以上就是我被Xcode8折腾经验总结。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html"><h3 class="article-title">升级Xcode8后需要注意的事项</h3></a>
 <h6 class="subheader" title="2016-09-24T00:00:00">2016-09-24
 </h6>
@@ -59,16 +126,7 @@
 <h3>升级第一坑，注释代码快捷键失效</h3>
 <p>当你经过漫长的等待Xcode下载和安装之后，满心欢喜打开Xcode，发现字体变了，貌似看上去还不错（有同事跟我说这很丑），然后开始写代码，发现可以高亮显示当前编辑行，不错嘛，写着写着突然想注释掉一行代码，发现command+/怎么按都没反应，十分恼火。这什么破玩意儿，这么明显的bug都有。然后网上搜解决方案，确实有人也遇到这个问题。貌似需要跑一个命令什么的。实际上不用那么费劲，重启一下Xcode就好了。</p>
 <h3>升级第二坑，iOS的字体变宽了</h3>
-<p>当我Run一下程序想看看我们的程序在iOS10上有没有问题，启动之后打开引导页，发现最底下的两个按钮字显示不全了：注册账号 变成了 注···号，登录账号变成了 登···号，这是什么鬼？我没有动过这块的任何代码，甚至连这个页面的xib也没有打开过。后来才知道，运来是iOS的字体变宽了，如果你一个按钮在iOS9原来刚好放下4个字，然后iOS10它就装不下了。现在的解决办法是手动调节控件的宽度，发现问题一个解决一个。</p>
-<h3>升级第三坑，xib不兼容Xcode7了</h3>
-<p>这个坑实在试太无良知了，怎么可以这样做。由于我比较早升级到Xcode8，其他同事还没升级，我在Xcode8上编辑过一个xib文件，提交了。另外一个同事更新代码后就编译不过了：提示要使用Xcode8.这不是强制升级么？你用Xcode8编辑xib后，Xcode会加入一行代码说明 </p>
-<p><code>&lt;plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/&gt;
-        &lt;capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/&gt;</code></p>
-<p>这就是说这是用Xcode8保存的，你必须要要用Xcode8打开。这给团队协作带来极大不便，逼着大家要升级。当然也有解决办法。在File Inspector里有个open in Latest Xcode 的选项，把它改为Xcode7.x就会重新保一下。</p>
-<h3>升级第四坑，sigining方式变了</h3>
-<p>这是个大坑，当然你可以说它是大好，如果它没有给你带来不便利的话。Xcode8里有个自动管理签名开发，即将签名改为自动管理签名后者手动管理签名。其实就是要你登录你的开发账号，然后选择你的develop team。可是一般团队里就一个开发者账号，你就必须给每个人的电脑上都登录一下这个开发者账号。如果能把账号密码公开给大家当然没问题，不能的话就只有管理者去每个人的电脑上登录一下账号。</p>
-<p>这都还是算好的，因为我们开发者自己弄两下就可以搞定。但是有个蛋疼的地方：我们给测试同事打包是在打包机上自动打包的，采用的是Jenkins持续集成环境，并且打包采用的证书是企业版证书，打包出来之后需要给大家随意安装的。当升级Xcode8之后，signing方式改变了，然后打包就失败了。因为打包机上我们是必须重新修改BundleID，然后指定签名文件。但是我们平时开发是Xcode配置是自动签名方式，打包机是通过Jenkins重新配置了打包方式，这样就出问题了。。。</p>
-<p>我现在尝试去解决这种冲突，但是还没搞定。develop team貌似Xcode8中新加的，以前不需要指定。我也网上找了一些资料，貌似有人想直接打包前直接用she'll脚本修改工程文件配置。这也是一个方向。接下来下周我估计要把这个问题研究一下。每次环境变动，Jenkins都要重新搞，折腾得我苦不堪言。什么时候苹果把签名和调试不要搞得那么复杂，造福一下开发者就好了。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>当我Run一下程序想看看我们的程序在iOS10上有没有问题，启动之后打开引导页，发现最底下的两个按钮字显示不全了：注册账号 变成了 注···号，登录账号变成了 登···号，这是什么鬼？我没有动过这块的任何代码，甚至连这个页面的xib也没有打开过。后来才知道，运来是iOS的字体变宽了，如果你一个按钮在iOS9原来刚好放下4个字，然后iOS10它就装不下了 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
@@ -76,11 +134,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
