@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>iOS上传文件支持断点续传</title>
+
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+
+    <!-- So Firefox can bookmark->"abo this site" -->
+
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html" rel="bookmark"
+        title="Permalink to iOS上传文件支持断点续传">iOS上传文件支持断点续传</a></h3>
+    </header>
+
+<h6 class="subheader" title="2016-09-30T00:00:00">2016-09-30
+</h6>
+
+
+    <h2>iOS上传文件支持断点续传</h2>
+<p>在挺久之前我写过一篇文章里提到上传文件的断点续传的问题，我没有找到好的方法。以前我采用的方式是用<strong>NSFileHandl</strong>的方法seekToFileOffset，移到已经文件已经上传了的部分，然后采用readDataToEndOfFile读取剩下部分到内存中NSData。但是这个方案问题是，如果文件很大，需读取的NSData很大，内存就会爆掉。所以最终没有采用这个方案。</p>
+<p>最近我们来个新同事，技术能力很不错。我让他去研究一下这个问题。开始他找到的方案跟我之前的那个是一样的，我说这个我之前有考虑过，不能采用。然后他继续研究，后来发现了原来<strong>NSInputStream</strong>有相关按offset读取文件的接口。不，正确来说是<strong>NSStream的</strong>接口，而且有点隐蔽性质的。</p>
+<div class="highlight"><pre><span class="o">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">setProperty</span><span class="o">:</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">property</span> <span class="n">forKey</span><span class="o">:</span><span class="p">(</span><span class="n">NSStreamPropertyKey</span><span class="p">)</span><span class="n">key</span><span class="p">;</span>
+
+<span class="n">NSStreamFileCurrentOffsetKey</span>
+<span class="o">--</span><span class="n">Value</span> <span class="n">is</span> <span class="n">an</span> <span class="n">NSNumber</span> <span class="n">object</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">current</span> <span class="n">absolute</span> <span class="n">offset</span> <span class="n">of</span> <span class="n">the</span> <span class="n">stream</span><span class="p">.</span>
+</pre></div>
+
+
+<p>只要对NSInputStream指定它的NSStreamFileCurrentOffsetKey的值为你想要的offset，文件在读取的时候就会从这个offset开始读取。</p>
+<p>有了这个API，用AFN来支持上传的断点续传，也就很容易了。不过要支持这个时候AFN的progress就是需要上传部分的progress。要展示整个文件的progress的话，需要再转化一下。</p>
+<p>现在断点续传的问题已解决，就还剩下 看不导出系统相册里的视频文件，直接读取上传这个问题没有解决了。看看什么时候能把这个问题也解决掉^_^</p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/shang-chuan-duan-dian-xu-chuan-nsinputstream.html">上传 断点续传 NSInputStream </a>
+</p>
+
+
+
+
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html";
+        var disqus_url = "http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html";
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+
+
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
+            <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
+            <li><a href="http://szuwest.github.io/category/ji-zhu-xin-de.html">技术心得</a></li>
+            <li><a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a></li>
+            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
+            <li><a href="http://szuwest.github.io/category/test.html">Test</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
+            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+        </ul>
+		
+        <h5 class="sidebar-title">Social</h5>
+        <ul class="side-nav">
+            <li><a href="https://github.com/szuwest">Github</a></li>
+            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
+            <li><a href="http://weibo.com/szuwest">微博</a></li>
+        </ul>
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+                <p>West's blog by West</p>
+            </div>
+            </div>
+    </div>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55687145-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</footer>

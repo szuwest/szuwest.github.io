@@ -49,6 +49,41 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html"><h3 class="article-title">iOS上传文件支持断点续传</h3></a>
+<h6 class="subheader" title="2016-09-30T00:00:00">2016-09-30
+</h6>
+
+
+<h2>iOS上传文件支持断点续传</h2>
+<p>在挺久之前我写过一篇文章里提到上传文件的断点续传的问题，我没有找到好的方法。以前我采用的方式是用<strong>NSFileHandl</strong>的方法seekToFileOffset，移到已经文件已经上传了的部分，然后采用readDataToEndOfFile读取剩下部分到内存中NSData。但是这个方案问题是，如果文件很大，需读取的NSData很大，内存就会爆掉。所以最终没有采用这个方案。</p>
+<p>最近我们来个新同事，技术能力很不错。我让他去研究一下这个问题。开始他找到的方案跟我之前的那个是一样的，我说这个我之前有考虑过，不能采用。然后他继续研究，后来发现了原来<strong>NSInputStream</strong>有相关按offset读取文件的接口。不，正确来说是<strong>NSStream的</strong>接口，而且有点隐蔽性质的。</p>
+<div class="highlight"><pre><span class="o">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">setProperty</span><span class="o">:</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">property</span> <span class="n">forKey</span><span class="o">:</span><span class="p">(</span><span class="n">NSStreamPropertyKey</span><span class="p">)</span><span class="n">key</span><span class="p">;</span>
+
+<span class="n">NSStreamFileCurrentOffsetKey</span>
+<span class="o">--</span><span class="n">Value</span> <span class="n">is</span> <span class="n">an</span> <span class="n">NSNumber</span> <span class="n">object</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">current</span> <span class="n">absolute</span> <span class="n">offset</span> <span class="n">of</span> <span class="n">the</span> <span class="n">stream</span><span class="p">.</span>
+</pre></div>
+
+
+<p>只要对NSInputStream指定它的NSStreamFileCurrentOffsetKey的值为你想要的offset，文件在读取的时候就会从这个offset开始读取。</p>
+<p>有了这个API，用AFN来支持上传的断点续传，也就很容易了。不过要支持这个时候AFN的progress就是需要上传部分的progress。要展示整个文件的progress的话，需要再转化一下。</p>
+<p>现在断点续传的问题已解决，就还剩下 看不导出系统相册里的视频文件，直接读取上传这个问题没有解决了。看看什么时候能把这个问题也解决掉^_^</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/shang-chuan-duan-dian-xu-chuan-nsinputstream.html">上传 断点续传 NSInputStream </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html"><h3 class="article-title">升级Xcode8后Jenkins打包问题</h3></a>
 <h6 class="subheader" title="2016-09-29T00:00:00">2016-09-29
 </h6>
@@ -61,44 +96,7 @@
 <h3>解决方法</h3>
 <p>先说不能打包的原因，主要是签名方式冲突。Jenkins的配置是指定签名，而我们Xcode8采用的是自动签名。我们开发时采用自动签名，而且打企业版安装采用的签名文件跟我们开发时的签名文件时不一样的。所以Jenkins打包肯定得采用手动签名方式。</p>
 <p>报错如下：</p>
-<div class="highlight"><pre><span class="n">xxxxx</span> <span class="n">has</span> <span class="n">conflicting</span> <span class="n">provisioning</span> <span class="n">settings</span><span class="p">.</span> <span class="n">xxxxx</span> <span class="n">is</span> <span class="n">automatically</span> <span class="kt">signed</span><span class="p">,</span> <span class="n">but</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">xxxxxxxxxxxxx</span> <span class="n">has</span> <span class="n">been</span> <span class="n">manually</span> <span class="n">specified</span><span class="p">.</span> <span class="n">Set</span> <span class="n">the</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">value</span> <span class="n">to</span> <span class="s">&quot;iPhone Developer&quot;</span> <span class="n">in</span> <span class="n">the</span> <span class="n">build</span> <span class="n">settings</span> <span class="n">editor</span><span class="p">,</span> <span class="n">or</span> <span class="k">switch</span> <span class="n">to</span> <span class="n">manual</span> <span class="n">signing</span> <span class="n">in</span> <span class="n">the</span> <span class="n">project</span> <span class="n">editor</span><span class="p">.</span>
-</pre></div>
-
-
-<p>所以解决方法也很直接，就是不采用自动签名。可是我找遍了国内外网上资料，没有人提供 自动关闭 自动签名 的方法。倒是有人在苹果的网站上提问如何关闭自动签名。我在国内一些网站上也有一些人提到这个问题，其中有人用 bashsell 的sed 文本替换命令来修改project.pbxproj里面的内容。</p>
-<p>总之我的方向就是关闭自动打包，修改一些配置，然后让它可以打包。说起来简单，自动签名方式怎么关闭，需要改哪些配置，我不知道，只能摸索和不断的尝试。</p>
-<p>一开始我尝试按照网上的一个列子来关闭自动签名方式。它是采用 sed 命令。由于我本身对bash shell 也不是很熟悉，试了好多次都没有成功。而且到后面我发现要关闭自动签名，只将 ProvisioningStyle 改为 Manual是不够的。我自己手动的去关闭和开启自动签名，看看project.pbxproj到底哪些参数改变了，然后采用我比较熟悉的PlistBuddy命令，写了个脚本去改变这些值，来达到关闭自动签名的效果。</p>
-<p>最终我写出来的脚本大概是这样的：</p>
-<div class="highlight"><pre>#修改ProvisioningStyle 
-/usr/libexec/PlistBuddy -c “Set :objects:574F440C1AEE5EA3003F9BB5:attributes:TargetAttributes:574F44131AEE5EA3003F9BB5:ProvisioningStyle Manual”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-#修改Distribution签名配置
-/usr/libexec/PlistBuddy -c “Set :objects:2B888A201AFB4C3F005E1E12:buildSettings:CODE_SIGN_IDENTITY[sdk=iphoneos*] ‘xxxxxxxxxxxxxx’”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE  &#39;xxxxxxxxxxxx&#39;”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE_SPECIFIER xxxxxxxxxxxx”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-#修改Debug签名配置
-/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:CODE_SIGN_IDENTITY[sdk=iphoneos*] ‘iPhone Distribution’”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE  &#39;xxxxxxxxxxxx&#39;”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE_SPECIFIER xxxxxxxxxxxx”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-#修改Release签名配置
-/usr/libexec/PlistBuddy -c “Set :objects:2B888A201AFB4C3F005E1E12:buildSettings:CODE_SIGN_IDENTITY[sdk=iphoneos*] ‘iPhone Distribution’”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE  &#39;xxxxxxxxxxxx&#39;”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-
-/usr/libexec/PlistBuddy -c “Set :objects:574F443B1AEE5EA4003F9BB5:buildSettings:PROVISIONING_PROFILE_SPECIFIER xxxxxxxxxxxx”  <span class="cp">${</span><span class="n">WORKSPACE</span><span class="cp">}</span>/xxxxx/xxxxx.xcodeproj/project.pbxproj
-</pre></div>
-
-
-<p>归纳起来，就是先将签名方式ProvisioningStyle改为手动的，然后将Distribution，Debug, Release 相关的CODE_SIGN_IDENTITY[sdk=iphoneos*]，buildSettings:PROVISIONING_PROFILE，PROVISIONING_PROFILE_SPECIFIER的值做对应的修改。另外BundleID和develop team我没有用PlistBuddy来修改，而是通过在Jenkins的配置<strong>Custom xcodebuild arguments</strong> 加入参数 <code>DEVELOPMENT_TEAM=DLF3GQKP4Q PRODUCT_BUNDLE_IDENTIFIER=xxxxxxxxx</code> 来指定。这样编译器会自动修改相关值</p>
-<p>配置完这些，ipa包是能打出来了，但是却最后失败了，报错是签名问题，还有找不到ResourceRules.plist。</p>
-<p>最终我发现只要 把Jenkins配置中的把 Sign IPA at build time 的勾选去掉，然后打包就没有问题了。然后我也把在Jenkins的配置<strong>Custom xcodebuild arguments</strong> 参数中，原来有的参数 <code>CODE_SIGN_RESOURCE_RULES_PATH=$(SDKROOT)/ResourceRules.plist</code> 去掉，打出来的安装包也没有问题。当时这个参数在Xcode7是必填的，现在Xcode8却可以去掉了。</p>
-<p>以上就是我被Xcode8折腾经验总结。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<div class="highlight"><pre><span class="n">xxxxx</span> <span class="n">has</span> <span class="n">conflicting</span> <span class="n">provisioning</span> <span class="n">settings</span><span class="p">.</span> <span class="n">xxxxx</span> <span class="n">is</span> <span class="n">automatically</span> <span class="kt">signed</span><span class="p">,</span> <span class="n">but</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">xxxxxxxxxxxxx</span> <span class="n">has</span> <span class="n">been</span> <span class="n">manually</span> <span class="n">specified ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
@@ -106,11 +104,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 

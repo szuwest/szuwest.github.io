@@ -50,6 +50,33 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html"><h3 class="article-title">iOS系统相册上传不得不说的那些事儿</h3></a>
+<h6 class="subheader" title="2016-05-02T00:00:00">2016-05-02
+</h6>
+
+
+<p>最近在开发手机相册自动备份的功能，这就需要用到上传文件的功能。
+其实我一年前也做过同样的功能，当时也做得不算很好。这次是别人做了，然后那人离职了。我来接受这块，然后发现有问题，然后准备认真的研究一下这个问题，顺便学习更多的iOS开发的知识。</p>
+<h2>系统相册概述</h2>
+<p>首先说一下iOS相册的问题。iOS的相片都是存放在系统库ALAssetLibrary中，开发者从这个库中读取到的是一个个ALAsset对象，而不是一个文件系统的File文件。当然iOS8系统新增了Photo Framework,但是只是增强了相关功能，还是不能直接取到File。 这个Android平台或者PC平台很不一样的。</p>
+<p>我们知道一般的上传文件流程就是，将本地的文件转换为二进制数据或流，通过HTTP协议或者socket协议，本地和服务器之间建立一个连接，本地将流写入这个连接，服务器那边接收这个流，并将接收到的流写入文件，直接客户端那边将整个文件传完，传输就结束了。上传文件这个过程一般会被封装库，使用者只需传入必要的参数就可以了。我以前做自动备份相册的时候，就是使用了别人提供的静态库，它上传文件API就是需要传一个文件的本地路径。这就麻烦了，因为我们的应用从iOS系统库读取到的对象是ALAsset, 所以我需要先将ALAsset从系统中导出，写入我们应用的沙盒中，然后再把它在沙盒中路径传给上传库进行上传。</p>
+<h2>导出ALAsset</h2>
+<p>据我所知，iOS系统cocoa层网络传输基本上只有<strong>NSURLConnection</strong>和基于<strong>NSURLSession</strong>一套API。它们提供的接口基本上都是基于NSData，或者文件路径或者NSInputStream。网上有很多库或者框架都是基于这两套API来做上传，我们一般也使用第三方的框架来减少工作量 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ioswang-luo-bian-cheng-xi-tong-xiang-ce-shang-chuan-dao-chu-shi-pin-nsurlconnection-nsurlsession-da-wen-jian-shang-chuan-hou-tai-shang-chuan.html">iOS网络编程 系统相册上传 导出视频 NSURLConnection NSURLSession 大文件上传 后台上传 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/androidxia-zai-qi-kai-fa.html"><h3 class="article-title">Android下载器开发</h3></a>
 <h6 class="subheader" title="2015-07-18T00:00:00">2015-07-18
 </h6>
@@ -272,27 +299,6 @@
 
 
 <p><a href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html"><h3 class="article-title">关于Pelican上Disqus无法加载的问题</h3></a>
-<h6 class="subheader" title="2014-12-01T00:00:00">2014-12-01
-</h6>
-
-
-<p>最近发现我的博客Disqus加载不出来，以前是好好的。后来根据它的提示去找问题，找了半天也找不出问题所在。然后网上search，发现了一篇跟我类似的问题文章<a href="http://whilgeek.github.io/posts/2014/07/we-were-unable-to-load-disqus/">这里</a>。我的配置文件里确实有 <code>RELATIVE_URLS = True</code>,把它设置为False也没用。检查了N遍shortname，到Disqus设置里各种试各种检查，都还是没有解决。</p>
-<p>没有办法，我只好在Disqus上重新创建一个新的site，然后回来配置相应的改了。run起来了，可以了。神了。</p>
-<p>不过经过这一次的折腾，我还学到不少别的东西。前段不太懂的人，真是悲剧。以后在这方面好好补补</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
