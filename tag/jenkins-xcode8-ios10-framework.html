@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>升级Xcode8后Jenkins打包问题</title>
+    <title>West's blog - Jenkins Xcode8 iOS10 framework</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -45,17 +45,16 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
-<article>
-    <header>
-        <h3 class="article-title"><a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html" rel="bookmark"
-        title="Permalink to 升级Xcode8后Jenkins打包问题">升级Xcode8后Jenkins打包问题</a></h3>
-    </header>
+        
+        
 
+            <article>
+                <a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html"><h3 class="article-title">升级Xcode8后Jenkins打包问题</h3></a>
 <h6 class="subheader" title="2016-09-29T00:00:00">2016-09-29
 </h6>
 
 
-    <h2>升级Xcode8后Jenkins打包问题</h2>
+<h2>升级Xcode8后Jenkins打包问题</h2>
 <p>上次说升级Xcode8之后，Jenkins自动打包就不行了，今天终于弄好了。前前后后话的时间有一天的时间才搞好，不容易。尝试了30多次才成功了，说多了都是泪。。现在记录一下。</p>
 <h3>我们的需求</h3>
 <p>说一下我们的需求。我们开发人员采用的是正式签名，正式的BundleID，但是我们Jenkins自动打包出来的是企业版，用的是企业版BundleID。代码是同一份，但是Jenkins打包企业版时时要先修改BundleID和相关版本号之类的。在Xcode7时代，我已经将Jenkins配置好，可以正常打出企业版的安装包。但是升级到Xcode8之后，Jenkins打包会报错，即原来的配置已经不能打出企业包来了。</p>
@@ -126,8 +125,7 @@
 <p>Command /usr/bin/codesign failed with exit code 1, 并且还 returned: -25308, unknown error -1=fffffffffff 之类的关键字，很有可能就是因为升级到了最新系统macOS Sierra导致的。</p>
 <p>解决方式：</p>
 <p>打开keychain，然后找到你打包用到的那个证书，展开证书，选中那个密钥，右击--&gt;显示简介--&gt;访问控制，然后选择 <strong>允许所有应用程序访问此项目</strong>,就可以了。</p>
-<p>感谢Soto同学的反馈</p>
-<p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>感谢Soto同学的反馈</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10-framework.html">Jenkins Xcode8 iOS10 framework </a>
@@ -135,22 +133,20 @@
 
 
 
+<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html#disqus_thread">comments</a></p>            </article>
 
-	<h4>Comments</h4>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-        var disqus_shortname = 'westblog'
-        var disqus_identifier = "sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html";
-        var disqus_url = "http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html";
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
 
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</article>
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
     </div>
     <!-- End Main Content -->
 
