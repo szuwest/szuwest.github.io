@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>iOS后台下载和断点续传</title>
+
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+
+    <!-- So Firefox can bookmark->"abo this site" -->
+
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html" rel="bookmark"
+        title="Permalink to iOS后台下载和断点续传">iOS后台下载和断点续传</a></h3>
+    </header>
+
+<h6 class="subheader" title="2016-12-08T00:00:00">2016-12-08
+</h6>
+
+
+    <h2>iOS后台下载和断点续传</h2>
+<p>最近在重新整理我们项目里的iOS的后台下载，因为原来方法（ASIHTTPRequest方式）无法做到后台一直下载，这个问题被我老婆吐槽了好几次。所以我重新整理一下，用NSURLSession来下载，达到了比较好的效果。现在总结自己的一些经验。</p>
+<h3>背景</h3>
+<p>项目最开始我们是用了NSURLSession来做后台下载的。但是有两个严重的问题</p>
+<ul>
+<li>有时候偶现的不能下载，就是一启动下载就失败。一旦出现这种情况，无法恢复，怎么样都无法下载，所有任务都一样</li>
+<li>下载速度很慢，只有几十到几百KB/S，网络正常，Android端同一个文件下载速度飞快</li>
+<li>程序杀掉之后无法重新继续下载</li>
+</ul>
+<p>按道理这些问题都不应该出现，可是我们的应用就是出现了这些问题，而且难以调试，同事调试了很久都没有结果。最后我也没认真研究，但是我发现ASIHTTPRequest可以很好地解决上面的几个问题，然后我就在原来的基础上加了ASIHTTPRequest的下载方式。</p>
+<p>ASIHTTPRequest方式的下载不错，速度很快，也能很好的断点续传，但是跟Android的还是慢了一点，不过我觉得这可能是系统不同的原因。ASIHTTPRequest还有一个比较致命的弱点，就是不能后台下载，这对于下载大文件来说是必须的。在iOS平台要做后台下载，最好的方式还是使用NSURLSession。</p>
+<p>所以我决定好好研究一下NSURLSession，并且改用这种方式。</p>
+<h3>NSURLSession后台下载</h3>
+<p>实际上NSURLSession的后台下载真的很强大，苹果真做了件很好的事。当你创建一个后台下载任务的时候，实际上你就把这个下载交给系统来接管了。所以即使你把APP杀掉，下载也不会停止，很牛逼。而且如果出现手机网络变化之类的，系统会在后台帮你重试，当网络又正常了它会继续下载。所有估计一旦你启动了后台下载任务，要么下载完，要么你手动取消，要么服务器那边出错，不然这个下载不会停止。</p>
+<p>虽然NSURLSession那么强，但是要做一个体验比较好的下载器还需要注意很多地方。</p>
+<blockquote>
+<ul>
+<li>必须是支持后台下载的NSURLSessionConfiguration</li>
+<li>必须用这个 (NSURLSession <em>)sessionWithConfiguration:(NSURLSessionConfiguration </em>)configuration delegate:(nullable id <NSURLSessionDelegate>)delegate delegateQueue:(nullable NSOperationQueue *)queue来创建NSURLSession，并且delegate不能为空。NSURLSession最好全局唯一</li>
+<li>必须实现delegate几个重要的方法</li>
+<li>最好实现 APPDelegate中的- (void)application:(UIApplication <em>)application handleEventsForBackgroundURLSession:(NSString </em>)identifier completionHandler:(void (^)())completionHandler方法，并且把completionHandler保存起来适时调用</li>
+<li>在手动暂停或者失败后，要把resumeData保存起来，最好是保存的本地，重新启动下载是需要这个来继续下载</li>
+</ul>
+</blockquote>
+<p>还有需要注意的是 在 - (void)URLSession:(NSURLSession <em>)session
+      downloadTask:(NSURLSessionDownloadTask </em>)downloadTask
+didFinishDownloadingToURL:(NSURL *)location 这个回调方法里，必须location指向的临时文件移动到你的沙盒目录中，因为这个方法一旦返回后，就会去删除这个临时文件。</p>
+<p>根据上面这些，我自己做了一个下载任务管理器，可以创建多个任务，并可以配置多个任务并行下载。当一个下载任务完成后便会启动下一个等待中的任务。这样的话，你就可以创建完下载任务后，就关闭程序，该干啥就干啥去。下载完了它会发本地通知。</p>
+<p>不过这个下载器在公司的项目里用，牵涉比较多，还支持ASIHTTPRequest下载，所以暂时没法开源。不过有一个demo包含了核心的思想。</p>
+<p>demo在这里 <a href="https://github.com/szuwest/BackgroundDownloadDemo">BackgroundDownloadDemo</a></p>
+<h3>参考资料：</h3>
+<blockquote>
+<p>1.<a href="https://onevcat.com/2013/08/ios7-background-multitask/">WWDC 2013 Session笔记 - iOS7中的多任务</a></p>
+<p>2.<a href="http://www.jianshu.com/p/b4edfa0b71d8#">基于iOS 10、realm封装的下载器（支持存储读取、断点续传、后台下载、杀死APP重启后的断点续传等功能）</a></p>
+<p>3.<a href="http://www.jianshu.com/p/1211cf99dfc3">iOS使用NSURLSession进行下载（包括后台下载，断点下载）</a></p>
+</blockquote>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/nsurlsession-asihttprequest-hou-tai-xia-zai.html">NSURLSession ASIHTTPRequest 后台下载 </a>
+</p>
+
+
+
+
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html";
+        var disqus_url = "http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html";
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+
+
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
+            <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
+            <li><a href="http://szuwest.github.io/category/ji-zhu-xin-de.html">技术心得</a></li>
+            <li><a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a></li>
+            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
+            <li><a href="http://szuwest.github.io/category/test.html">Test</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
+            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+        </ul>
+		
+        <h5 class="sidebar-title">Social</h5>
+        <ul class="side-nav">
+            <li><a href="https://github.com/szuwest">Github</a></li>
+            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
+            <li><a href="http://weibo.com/szuwest">微博</a></li>
+        </ul>
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+                <p>West's blog by West</p>
+            </div>
+            </div>
+    </div>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55687145-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</footer>
