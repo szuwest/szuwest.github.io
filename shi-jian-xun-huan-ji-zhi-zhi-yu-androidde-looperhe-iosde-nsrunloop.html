@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog - 技术杂谈</title>
+    <title>事件循环机制之于Android的Looper和iOS的NSRunLoop</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -45,16 +45,17 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
-        
-        
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html" rel="bookmark"
+        title="Permalink to 事件循环机制之于Android的Looper和iOS的NSRunLoop">事件循环机制之于Android的Looper和iOS的NSRunLoop</a></h3>
+    </header>
 
-            <article>
-                <a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html"><h3 class="article-title">事件循环机制之于Android的Looper和iOS的NSRunLoop</h3></a>
 <h6 class="subheader" title="2016-12-04T00:00:00">2016-12-04
 </h6>
 
 
-<h2>事件循环机制之于Android的Looper和iOS的NSRunLoop</h2>
+    <h2>事件循环机制之于Android的Looper和iOS的NSRunLoop</h2>
 <p>Android和iOS同为手机操作系统，有很多相同之处。有很多设计几乎是一样的，统一种设计模式，不同的实现。例如事件模型，它大体逻辑是这样的：</p>
 <div class="highlight"><pre><span class="kd">function</span> <span class="nx">loop</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">initialize</span><span class="p">();</span>
@@ -184,7 +185,8 @@
 <p><a href="http://blog.csdn.net/lmj623565791/article/details/47017485"> Android 基于Message的进程间通信 Messenger完全解析</a></p>
 </blockquote>
 <h2>总结</h2>
-<p>iOS和Android同为当今最流行的移动操作系统，在很多系统设计方面都是非常像。或许说他们彼此借鉴，技术本来就是这样样子。消息循环机制本来就是一种设计模式，只是Android和iOS根据自己的平台做了一套实现。通过对比学习，自己收获很多，但是我也感觉自己还不够深入，现在只是学到点皮毛而已。继续努力。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a>
+<p>iOS和Android同为当今最流行的移动操作系统，在很多系统设计方面都是非常像。或许说他们彼此借鉴，技术本来就是这样样子。消息循环机制本来就是一种设计模式，只是Android和iOS根据自己的平台做了一套实现。通过对比学习，自己收获很多，但是我也感觉自己还不够深入，现在只是学到点皮毛而已。继续努力。</p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/android-ios-looper-nsrunloop.html">Android iOS Looper NSRunLoop </a>
@@ -192,148 +194,22 @@
 
 
 
-<p><a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html#disqus_thread">comments</a></p>            </article>
 
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html";
+        var disqus_url = "http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html";
 
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html"><h3 class="article-title">iOS持续集成记(iOS+Jenkins+Cocoapods+蒲公英)</h3></a>
-<h6 class="subheader" title="2016-07-18T00:00:00">2016-07-18
-</h6>
-
-
-<h2>iOS持续集成记（iOS+Jenkins+Cocoapods+蒲公英）</h2>
-<p>原来我们iOS项目是有持续集成环境的，但是有一次升级系统还是升级xcode后，Jenkins就打不出可用的安装包了。原来负责整个打包机的同事又离职了，有一段时间我们都是手动打包给QA同事安装测试，现在领导要求必须把持续集成环境弄好，我们花了大约两周才基本弄好整个持续集成环境，现在把我整个过程中遇到的坑记录一下。</p>
-<h2>重装系统</h2>
-<p>打包机自从某一次升级系统之后就变得非常慢，打个包需要1个小时左右，简直要命。所以新的环境必须要建立在重装后的系统上。因为要格式化硬盘，所以要制作系统启动盘，这个网上也有不少教程，这里有个需要注意的，下载macOS系统时，一定要从官方下载。我一开始是自己在百度云上下的，制作好安装盘后重启电脑，并且将硬盘格式化后安装系统，发现验证不通过，好在另外一个同事在官网下了一个，我在它的电脑上重新制作了一次安装盘。假设你只要一台Mac电脑，遇到这种情况你就悲剧了。</p>
-<h2>git拉取代码的坑</h2>
-<p>系统装好了，Jenkins也装好了，然后配置拉去代码，可是代码死活拉不下来，为此我的同事搞了差不多一天，试了各种方法，也搞不下来代码，都是在一半的时候失败了。后来我也去弄了半天，同样的错误。主要原因可能是代码量太大了，因为其他的小工程可以git clone 下来。我突然想到换一下拉取协议试试，不采用HTTP方式，而是采用git ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/jenkins-cocoapods-pu-gong-ying.html">Jenkins Cocoapods 蒲公英 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/qian-tan-vr.html"><h3 class="article-title">浅谈VR</h3></a>
-<h6 class="subheader" title="2016-06-11T00:00:00">2016-06-11
-</h6>
-
-
-<h2>浅谈VR</h2>
-<p>最近VR火得不行，就连央视财经也有报道说“4年后VR市场规模高达550亿元！人才缺口达80万”。然后刚刚结束的高考，某一个省份的语文作文题也是跟VR相关。所以说，VR是今后几年最热门的一个话题和技术之一，没有人会反对。</p>
-<p><strong>VR</strong>, 是Virtual Reality的缩写，即虚拟现实，它其实不是最近新的技术，它只是因为移动互联网的兴起而变得热门起来。我记得真正被全世界人认识和讨论的触发事件是Facebook发重金收购了Oculus VR公司。而除了VR，实际上还有另外一个相近技术<strong>AR</strong>. AR是Augmented Reality缩写，即增强现实。AR跟VR有挺大不同的，我现在研究得也不多，以后有机会我也想写一下AR相关的文字。</p>
-<h2>VR的应用</h2>
-<p>前几天我配老婆去海雅缤纷城逛街，然后发现那里有一个VR体验区，主要是VR电影和游戏结合的项目，还有一个是VR自行车。我体验了一下一个叫《地城游记》的游戏，感觉还可以。它主要是你坐在一个机器上，带上头盔，手可以握着一个杆，杆上有个按键，游戏中你可以按那个键来进行射击怪物。你坐在机器上，机器会根据游戏来进行晃动，例如我体验的是坐着过山车，它就会根据过山车来进行晃动，模拟你看到场景，就好像你真的在坐过山车一样。游戏中会有一些蝙蝠或者龙飞在你前面，然后有声音提示你射击它，你就会知道按那个键 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/vr-ar.html">VR AR </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/qian-tan-vr.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/qian-tan-vr.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html"><h3 class="article-title">关于H5和移动客户端开发的未来</h3></a>
-<h6 class="subheader" title="2016-06-02T00:00:00">2016-06-02
-</h6>
-
-
-<h2>关于H5和移动客户端开发的未来</h2>
-<p><br/>从去年开始，我已经强烈感觉到移动端web开发的时候可能即将带来。我想为了避免以后找不到工作，我们客户端开发人员不得不开始学习移动端web开发或者混合开发。</p>
-<p>近一两年来，前端开发真的非常火，招不到人。就像前几年的移动客户端开发人才很热门一样。这不得不说得益于移动互联网快速的发展。web确实有它不可替代的好处，快速迭代和开发，不局限与特定平台，这是APP无法做到的。近来APP的开发趋近稳定饱和，而手机的处理能力越来越强，浏览器厂商也支持HTML5越来越完善，移动web开发必然崛起。现在H5已经成了所有技术小白人士都懂的一个词，这足以说明移动web开发已经到来。</p>
-<h2>我与H5的故事</h2>
-<p>HTML5技术早就开始了，但是一直没有完全普及，最近两年才真正的普及起来，H5也成了它的缩写代名词。早在2010我做毕业设计的时候，我就有研究过它。那是HTML5标准已经制定完毕，浏览器厂商已经开始慢慢的支持。我当时开始学习web开发，学习了JavaScript，学习了HTML，学习了CSS。我的毕业设计题目是《基于Google APP Engine 系统的web开发》当时GAE刚发布不久，然后我还采用了当时Google Web Tookit框架来开发我将要做的web即时通讯系统。当时Google还没推出中国，谷歌的各种服务都还在（只有一些些东西需要翻墙）。我用GWT开发我的即时通讯系统，用Google搜索资料和参与Google group讨论和学习，那真是一段充实的时光。那是我了解到ajax技术 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/qian-duan-kai-fa-h5-reactnative.html">前端开发 H5 ReactNative </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html"><h3 class="article-title">同一个应用的安卓版本和iOS版本开发杂谈</h3></a>
-<h6 class="subheader" title="2016-05-13T00:00:00">2016-05-13
-</h6>
-
-
-<h2>同一个应用的安卓版本和iOS版本开发杂谈</h2>
-<p>我前段时间帮朋友做了一个应用，当然说的更实在一点可以时候就是做外包应用，包括安卓版本和iOS版本。现在想谈一谈感想和总结。
-<br/><br/>
-从1月份开始正式开发，最终在5月底完成所有交互，前后算起来就5个月的时间，当然中间有断断续续的开发和沟通。总的来说，这个时间超出了我的预期，所以总得来说我觉得价格有点不合适，稍微便宜了一些。但是因为这是我第一次做这种事情，而且也总体也还在我可接受的范围内，所以就当做一个经验了。个人做外包开发 不能低估工作量和沟通时间。越不正式的外包（朋友间的）需要的沟通和反复修改的情况会越多。千万不要低估这些情况。
-<br/></p>
-<h2>Android版本开发</h2>
-<p>我是先开发安卓版本的，原因当然是安卓开发调试方便，修改方便，还有就是我比较熟悉Android开发。一开始朋友想先开发iPhone版本，我说这个调试不方便，说服他先开发安卓版本，我觉得我这个决策是对的。我的开发主要时间都是周末或者平时的空闲时间。了解了需求之后，安卓的第一个包含主要功能的初级版本一个月之后就出来了。然后我就打了个包给朋友用。当然会有很多问题，然后反复沟通和修改，几个星期之后，主要版本出来了。这时候已经是2月多了，我记得是在我放春节假之前改了改了一个版本给他，这个版本做了一些小细节修改和bug修复。由于朋友他没有测试人员，只能靠他自己测试，我自己测试得也不多，开始难免会有些bug，不过他会集中反馈，然后我集中修改，年后回来又改了一两个版本，3月多终于基本完成安卓版本的开发 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/androidkai-fa-ioskai-fa-wai-bao.html">Android开发 iOS开发 外包 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html"><h3 class="article-title">当做了一段时间的Android的困惑</h3></a>
-<h6 class="subheader" title="2014-12-14T00:00:00">2014-12-14
-</h6>
-
-
-<h1>当做了一段时间的Android的困惑</h1>
-<p>当做一门技术到达一定的时间之后，就会陷入一个困境。不知道如何提高。任何一门技术，都是刚开始的时候，进步非常快，然后收获非常多，但是越往后越难有进步。因为因为任何一门技术都有一定的瓶颈，如何打破这个瓶颈，是很重要的。一旦打破这个瓶颈，就会进入下一个平台，下一个级别。然而第二个级别也还是会重复第一个级别的步骤。如此重复。</p>
-<p>我们大多数人都是会在第一个第二个级别上挣扎前进，无法突破。我不知道自己的Android技术现在时处在第一还是第二个级别，但是我现在确实遇到了瓶颈，感觉突破很艰难。最近产品上又有些需求比较难做，自己感觉可以实现，但是真要做出来，需要花很多时间和精力，还不能确定完全实现产品所需效果。而项目本身是比较紧急的，如果既要实现效果又要保证进度，估计我要不吃饭不睡觉才可以实现，这真是不可能的。其实这总结到一句话就是自己的实力还没达到随心所用的地步，特别是一些需要定制的动画交互方面的。这些效果别人都都能做出来了，但是自己要做同样的效果，需要绞尽脑汁。</p>
-<p>鸟厂的Android人才真的很少，有Android技术三年以上的人全公司估计少之又少。鸟厂其实人才不少，但是留不住，很多人呆了一年就离开，真是件令人悲伤的事，可是互联网行业还真是大部分公司都是这样子。有时候人真需要沟通交互才可以进步 更快。我已经很久没有试过这个感觉了。那种进步很快，跟大家交流碰出火花的情形少之又少，还是两年前刚来鸟厂的时候有这个感觉。有时候觉得挺孤独的 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu-za-tan.html">技术杂谈</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/kun-huo-android.html">困惑，Android </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-            <!-- /#posts-list -->
-<div class="pagination-centered">
-<h6 class="subheader">Page 1 of 1</h6>
-
-<p>
-
-</p>
-</div>
-
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
     </div>
     <!-- End Main Content -->
 
