@@ -1,5 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2017-02-04T00:00:00+08:00</updated><entry><title>2017年</title><link href="http://szuwest.github.io/2017nian.html" rel="alternate"></link><updated>2017-02-04T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2017-02-04:2017nian.html</id><summary type="html">&lt;h1&gt;2017年&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2017-07-02T00:00:00+08:00</updated><entry><title>Coturn在iOS端应用和libevent的编译</title><link href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html" rel="alternate"></link><updated>2017-07-02T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2017-07-02:coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html</id><summary type="html">&lt;h1&gt;Coturn在iOS端应用和libevent的编译&lt;/h1&gt;
+&lt;p&gt;coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。&lt;/p&gt;
+&lt;p&gt;我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.&lt;/p&gt;
+&lt;p&gt;Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。&lt;/p&gt;
+&lt;p&gt;下面是libevent的编译脚本主要内容&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;###########################################################################
+# Choose your libevent version and your currently-installed iOS SDK version:
+#
+VERSION=&amp;quot;2.1.8-stable&amp;quot;
+USERSDKVERSION=&amp;quot;10.3&amp;quot;
+MINIOSVERSION=&amp;quot;8.0&amp;quot;
+VERIFYGPG=false
+
+###########################################################################
+#
+# Don&amp;#39;t change anything under this line!
+#
+###########################################################################
+
+# No need to change this since xcode build will only compile in the
+# necessary bits from the libraries we create
+ARCHS=&amp;quot;i386 x86_64 armv7 armv7s arm64&amp;quot;
+
+DEVELOPER=`xcode-select -print-path`
+#DEVELOPER=&amp;quot;/Applications/Xcode.app/Contents/Developer&amp;quot;
+
+# for continuous integration
+# https://travis-ci.org/mtigas/iOS-OnionBrowser
+if [ &amp;quot;$1&amp;quot; == &amp;quot;--noverify&amp;quot; ]; then
+    VERIFYGPG=false
+fi
+if [ &amp;quot;$2&amp;quot; == &amp;quot;--travis&amp;quot; ]; then
+    ARCHS=&amp;quot;i386 x86_64&amp;quot;
+fi
+
+if [[ ! -z &amp;quot;&lt;span class="nv"&gt;$TRAVIS&lt;/span&gt;&amp;quot; &lt;span class="err"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nv"&gt;$TRAVIS&lt;/span&gt; ]]; then
+    # Travis CI highest available version
+    echo &amp;quot;==================== TRAVIS CI ====================&amp;quot;
+    SDKVERSION=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;USERSDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+else
+    SDKVERSION=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;USERSDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+fi
+
+cd &amp;quot;`dirname \&amp;quot;$0\&amp;quot;`&amp;quot;
+REPOROOT=$(pwd)
+
+# Where we&amp;#39;ll end up storing things in the end
+OUTPUTDIR=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;REPOROOT&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/dependencies&amp;quot;
+mkdir -p &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUTDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/include
+mkdir -p &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUTDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/lib
+
+
+BUILDDIR=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;REPOROOT&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/build&amp;quot;
+
+# where we will keep our sources and build from.
+SRCDIR=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;BUILDDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/src&amp;quot;
+mkdir -p &lt;span class="nv"&gt;$SRCDIR&lt;/span&gt;
+# where we will store intermediary builds
+INTERDIR=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;BUILDDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/built&amp;quot;
+mkdir -p &lt;span class="nv"&gt;$INTERDIR&lt;/span&gt;
+
+########################################
+
+cd &lt;span class="nv"&gt;$SRCDIR&lt;/span&gt;
+
+# Exit the script if an error happens
+set -e
+
+if [ ! -e &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;SRCDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz&amp;quot; ]; then
+    echo &amp;quot;Downloading libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz&amp;quot;
+    curl -LO https://github.com/libevent/libevent/releases/download/release-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz
+fi
+echo &amp;quot;Using libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz&amp;quot;
+
+# up to you to set up `gpg` and add keys to your keychain
+# may have to import from link on http://www.wangafu.net/~nickm/ or http://www.citi.umich.edu/u/provos/
+if &lt;span class="nv"&gt;$VERIFYGPG&lt;/span&gt;; then
+    if [ ! -e &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;SRCDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz.asc&amp;quot; ]; then
+        curl -LO https://github.com/libevent/libevent/releases/download/release-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz.asc
+    fi
+    echo &amp;quot;Using libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz.asc&amp;quot;
+    if out=$(gpg --status-fd 1 --verify &amp;quot;libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz.asc&amp;quot; &amp;quot;libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz&amp;quot; 2&amp;gt;/dev/null) &lt;span class="err"&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+    echo &amp;quot;&lt;span class="nv"&gt;$out&lt;/span&gt;&amp;quot; | grep -qs &amp;quot;^\[GNUPG:\] VALIDSIG&amp;quot;; then
+        echo &amp;quot;&lt;span class="nv"&gt;$out&lt;/span&gt;&amp;quot; | egrep &amp;quot;GOODSIG|VALIDSIG&amp;quot;
+        echo &amp;quot;Verified GPG signature for source...&amp;quot;
+    else
+        echo &amp;quot;&lt;span class="nv"&gt;$out&lt;/span&gt;&amp;quot; &amp;gt;&lt;span class="err"&gt;&amp;amp;&lt;/span&gt;2
+        echo &amp;quot;COULD NOT VERIFY PACKAGE SIGNATURE...&amp;quot;
+        exit 1
+    fi
+fi
+
+tar zxf libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.tar.gz -C &lt;span class="nv"&gt;$SRCDIR&lt;/span&gt;
+cd &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;SRCDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+
+set +e # don&amp;#39;t bail out of bash script if ccache doesn&amp;#39;t exist
+CCACHE=`which ccache`
+if [ $? == &amp;quot;0&amp;quot; ]; then
+    echo &amp;quot;Building with ccache: &lt;span class="nv"&gt;$CCACHE&lt;/span&gt;&amp;quot;
+    CCACHE=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;CCACHE&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt; &amp;quot;
+else
+    echo &amp;quot;Building without ccache&amp;quot;
+    CCACHE=&amp;quot;&amp;quot;
+fi
+set -e # back to regular &amp;quot;bail out on error&amp;quot; mode
+
+export ORIGINALPATH=&lt;span class="nv"&gt;$PATH&lt;/span&gt;
+
+for ARCH in &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCHS&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;
+do
+    if [ &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot; == &amp;quot;i386&amp;quot; ] || [ &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot; == &amp;quot;x86_64&amp;quot; ];
+    then
+        PLATFORM=&amp;quot;iPhoneSimulator&amp;quot;
+        EXTRA_CONFIG=&amp;quot;--host=&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;-apple-darwin&amp;quot;
+    else
+        PLATFORM=&amp;quot;iPhoneOS&amp;quot;
+        EXTRA_CONFIG=&amp;quot;--host=arm-apple-darwin&amp;quot;
+    fi
+
+    mkdir -p &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;INTERDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}${&lt;/span&gt;&lt;span class="n"&gt;SDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.sdk&amp;quot;
+
+    export PATH=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;DEVELOPER&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/Toolchains/XcodeDefault.xctoolchain/usr/bin/:&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;DEVELOPER&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/Platforms/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.platform/Developer/usr/bin/:&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;DEVELOPER&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/Toolchains/XcodeDefault.xctoolchain/usr/bin:&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;DEVELOPER&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/usr/bin:&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ORIGINALPATH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+    export CC=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;CCACHE&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;`which gcc` -arch &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt; -miphoneos-version-min=&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;MINIOSVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+
+    ./configure --disable-shared --enable-static --disable-debug-mode &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;EXTRA_CONFIG&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt; --disable-clock-gettime \
+    --prefix=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;INTERDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}${&lt;/span&gt;&lt;span class="n"&gt;SDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.sdk&amp;quot; \
+    LDFLAGS=&amp;quot;&lt;span class="nv"&gt;$LDFLAGS&lt;/span&gt; -L&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUTDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/lib&amp;quot; \
+    CFLAGS=&amp;quot;&lt;span class="nv"&gt;$CFLAGS&lt;/span&gt; -Os -I&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUTDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/include -isysroot &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;DEVELOPER&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/Platforms/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.platform/Developer/SDKs/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}${&lt;/span&gt;&lt;span class="n"&gt;SDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.sdk&amp;quot; \
+    CPPFLAGS=&amp;quot;&lt;span class="nv"&gt;$CPPFLAGS&lt;/span&gt; -I&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUTDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/include -isysroot &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;DEVELOPER&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/Platforms/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.platform/Developer/SDKs/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}${&lt;/span&gt;&lt;span class="n"&gt;SDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.sdk&amp;quot;
+
+    # Build the application and install it to the fake SDK intermediary dir
+    # we have set up. Make sure to clean up afterward because we will re-use
+    # this source tree to cross-compile other targets.
+    make -j$(sysctl hw.ncpu | awk &amp;#39;{print $2}&amp;#39;)
+    make install
+    make clean
+done
+
+########################################
+
+echo &amp;quot;Build library...&amp;quot;
+
+# These are the libs that comprise libevent. `libevent_openssl` and `libevent_pthreads`
+# may not be compiled if those dependencies aren&amp;#39;t available.
+OUTPUT_LIBS=&amp;quot;libevent.a libevent_core.a libevent_extra.a libevent_openssl.a libevent_pthreads.a&amp;quot;
+for OUTPUT_LIB in &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUT_LIBS&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;; do
+    INPUT_LIBS=&amp;quot;&amp;quot;
+    for ARCH in &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCHS&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;; do
+        if [ &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot; == &amp;quot;i386&amp;quot; ] || [ &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot; == &amp;quot;x86_64&amp;quot; ];
+        then
+            PLATFORM=&amp;quot;iPhoneSimulator&amp;quot;
+        else
+            PLATFORM=&amp;quot;iPhoneOS&amp;quot;
+        fi
+        INPUT_ARCH_LIB=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;INTERDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}${&lt;/span&gt;&lt;span class="n"&gt;SDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.sdk/lib/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUT_LIB&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+        if [ -e &lt;span class="nv"&gt;$INPUT_ARCH_LIB&lt;/span&gt; ]; then
+            INPUT_LIBS=&amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;INPUT_LIBS&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt; &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;INPUT_ARCH_LIB&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+        fi
+    done
+    # Combine the three architectures into a universal library.
+    if [ -n &amp;quot;&lt;span class="nv"&gt;$INPUT_LIBS&lt;/span&gt;&amp;quot;  ]; then
+        lipo -create &lt;span class="nv"&gt;$INPUT_LIBS&lt;/span&gt; \
+        -output &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUTDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/lib/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUT_LIB&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+    else
+        echo &amp;quot;&lt;span class="nv"&gt;$OUTPUT_LIB&lt;/span&gt; does not exist, skipping (are the dependencies installed?)&amp;quot;
+    fi
+done
+
+for ARCH in &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCHS&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;; do
+    if [ &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot; == &amp;quot;i386&amp;quot; ] || [ &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot; == &amp;quot;x86_64&amp;quot; ];
+    then
+        PLATFORM=&amp;quot;iPhoneSimulator&amp;quot;
+    else
+        PLATFORM=&amp;quot;iPhoneOS&amp;quot;
+    fi
+    cp -R &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;INTERDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;PLATFORM&lt;/span&gt;&lt;span class="cp"&gt;}${&lt;/span&gt;&lt;span class="n"&gt;SDKVERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;ARCH&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;.sdk/include/* &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;OUTPUTDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/include/
+    if [ $? == &amp;quot;0&amp;quot; ]; then
+        # We only need to copy the headers over once. (So break out of forloop
+        # once we get first success.)
+        break
+    fi
+done
+
+
+####################
+
+echo &amp;quot;Building done.&amp;quot;
+echo &amp;quot;Cleaning up...&amp;quot;
+rm -fr &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;INTERDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;
+rm -fr &amp;quot;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;SRCDIR&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;/libevent-&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;VERSION&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;&amp;quot;
+echo &amp;quot;Done.&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;资料地址&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/coturn/coturn"&gt;Coturn地址&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/szuwest/libevent_ios"&gt;libevent_ios编译脚本&lt;/a&gt;&lt;/p&gt;</summary><category term="iOS Coturn libevent"></category></entry><entry><title>2017年</title><link href="http://szuwest.github.io/2017nian.html" rel="alternate"></link><updated>2017-02-04T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2017-02-04:2017nian.html</id><summary type="html">&lt;h1&gt;2017年&lt;/h1&gt;
 &lt;p&gt;中国人主要过农历年，农历年过后才真正算新的一年。2017年对于我自己来说有点不一样。2017年我压力会很大，也很焦虑。&lt;/p&gt;
 &lt;p&gt;2017年我工作即将满7年，想不到这么快就7年了。自己仍然没有什么成就，当然焦虑了。并且已经成家，生活压力会更大。还有考虑以后孩子之类，有时候会觉得自己没有准备好，可是自己已经不年轻了。&lt;/p&gt;
 &lt;p&gt;2017年我自己也给自己制定了一些目标，目标不多。但是实现起来比较难，但也无法让步。&lt;/p&gt;

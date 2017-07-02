@@ -49,6 +49,225 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
+<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
+</h6>
+
+
+<h1>Coturn在iOS端应用和libevent的编译</h1>
+<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
+<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
+<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
+<p>下面是libevent的编译脚本主要内容</p>
+<div class="highlight"><pre>###########################################################################
+# Choose your libevent version and your currently-installed iOS SDK version:
+#
+VERSION=&quot;2.1.8-stable&quot;
+USERSDKVERSION=&quot;10.3&quot;
+MINIOSVERSION=&quot;8.0&quot;
+VERIFYGPG=false
+
+###########################################################################
+#
+# Don&#39;t change anything under this line!
+#
+###########################################################################
+
+# No need to change this since xcode build will only compile in the
+# necessary bits from the libraries we create
+ARCHS=&quot;i386 x86_64 armv7 armv7s arm64&quot;
+
+DEVELOPER=`xcode-select -print-path`
+#DEVELOPER=&quot;/Applications/Xcode.app/Contents/Developer&quot;
+
+# for continuous integration
+# https://travis-ci.org/mtigas/iOS-OnionBrowser
+if [ &quot;$1&quot; == &quot;--noverify&quot; ]; then
+    VERIFYGPG=false
+fi
+if [ &quot;$2&quot; == &quot;--travis&quot; ]; then
+    ARCHS=&quot;i386 x86_64&quot;
+fi
+
+if [[ ! -z &quot;<span class="nv">$TRAVIS</span>&quot; <span class="err">&amp;&amp;</span> <span class="nv">$TRAVIS</span> ]]; then
+    # Travis CI highest available version
+    echo &quot;==================== TRAVIS CI ====================&quot;
+    SDKVERSION=&quot;<span class="cp">${</span><span class="n">USERSDKVERSION</span><span class="cp">}</span>&quot;
+else
+    SDKVERSION=&quot;<span class="cp">${</span><span class="n">USERSDKVERSION</span><span class="cp">}</span>&quot;
+fi
+
+cd &quot;`dirname \&quot;$0\&quot;`&quot;
+REPOROOT=$(pwd)
+
+# Where we&#39;ll end up storing things in the end
+OUTPUTDIR=&quot;<span class="cp">${</span><span class="n">REPOROOT</span><span class="cp">}</span>/dependencies&quot;
+mkdir -p <span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include
+mkdir -p <span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/lib
+
+
+BUILDDIR=&quot;<span class="cp">${</span><span class="n">REPOROOT</span><span class="cp">}</span>/build&quot;
+
+# where we will keep our sources and build from.
+SRCDIR=&quot;<span class="cp">${</span><span class="n">BUILDDIR</span><span class="cp">}</span>/src&quot;
+mkdir -p <span class="nv">$SRCDIR</span>
+# where we will store intermediary builds
+INTERDIR=&quot;<span class="cp">${</span><span class="n">BUILDDIR</span><span class="cp">}</span>/built&quot;
+mkdir -p <span class="nv">$INTERDIR</span>
+
+########################################
+
+cd <span class="nv">$SRCDIR</span>
+
+# Exit the script if an error happens
+set -e
+
+if [ ! -e &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot; ]; then
+    echo &quot;Downloading libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot;
+    curl -LO https://github.com/libevent/libevent/releases/download/release-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz
+fi
+echo &quot;Using libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot;
+
+# up to you to set up `gpg` and add keys to your keychain
+# may have to import from link on http://www.wangafu.net/~nickm/ or http://www.citi.umich.edu/u/provos/
+if <span class="nv">$VERIFYGPG</span>; then
+    if [ ! -e &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc&quot; ]; then
+        curl -LO https://github.com/libevent/libevent/releases/download/release-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc
+    fi
+    echo &quot;Using libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc&quot;
+    if out=$(gpg --status-fd 1 --verify &quot;libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc&quot; &quot;libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot; 2&gt;/dev/null) <span class="err">&amp;&amp;</span>
+    echo &quot;<span class="nv">$out</span>&quot; | grep -qs &quot;^\[GNUPG:\] VALIDSIG&quot;; then
+        echo &quot;<span class="nv">$out</span>&quot; | egrep &quot;GOODSIG|VALIDSIG&quot;
+        echo &quot;Verified GPG signature for source...&quot;
+    else
+        echo &quot;<span class="nv">$out</span>&quot; &gt;<span class="err">&amp;</span>2
+        echo &quot;COULD NOT VERIFY PACKAGE SIGNATURE...&quot;
+        exit 1
+    fi
+fi
+
+tar zxf libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz -C <span class="nv">$SRCDIR</span>
+cd &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>&quot;
+
+set +e # don&#39;t bail out of bash script if ccache doesn&#39;t exist
+CCACHE=`which ccache`
+if [ $? == &quot;0&quot; ]; then
+    echo &quot;Building with ccache: <span class="nv">$CCACHE</span>&quot;
+    CCACHE=&quot;<span class="cp">${</span><span class="n">CCACHE</span><span class="cp">}</span> &quot;
+else
+    echo &quot;Building without ccache&quot;
+    CCACHE=&quot;&quot;
+fi
+set -e # back to regular &quot;bail out on error&quot; mode
+
+export ORIGINALPATH=<span class="nv">$PATH</span>
+
+for ARCH in <span class="cp">${</span><span class="n">ARCHS</span><span class="cp">}</span>
+do
+    if [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;i386&quot; ] || [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;x86_64&quot; ];
+    then
+        PLATFORM=&quot;iPhoneSimulator&quot;
+        EXTRA_CONFIG=&quot;--host=<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>-apple-darwin&quot;
+    else
+        PLATFORM=&quot;iPhoneOS&quot;
+        EXTRA_CONFIG=&quot;--host=arm-apple-darwin&quot;
+    fi
+
+    mkdir -p &quot;<span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk&quot;
+
+    export PATH=&quot;<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Toolchains/XcodeDefault.xctoolchain/usr/bin/:<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Platforms/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}</span>.platform/Developer/usr/bin/:<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Toolchains/XcodeDefault.xctoolchain/usr/bin:<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/usr/bin:<span class="cp">${</span><span class="n">ORIGINALPATH</span><span class="cp">}</span>&quot;
+    export CC=&quot;<span class="cp">${</span><span class="n">CCACHE</span><span class="cp">}</span>`which gcc` -arch <span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span> -miphoneos-version-min=<span class="cp">${</span><span class="n">MINIOSVERSION</span><span class="cp">}</span>&quot;
+
+    ./configure --disable-shared --enable-static --disable-debug-mode <span class="cp">${</span><span class="n">EXTRA_CONFIG</span><span class="cp">}</span> --disable-clock-gettime \
+    --prefix=&quot;<span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk&quot; \
+    LDFLAGS=&quot;<span class="nv">$LDFLAGS</span> -L<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/lib&quot; \
+    CFLAGS=&quot;<span class="nv">$CFLAGS</span> -Os -I<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include -isysroot <span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Platforms/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}</span>.platform/Developer/SDKs/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>.sdk&quot; \
+    CPPFLAGS=&quot;<span class="nv">$CPPFLAGS</span> -I<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include -isysroot <span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Platforms/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}</span>.platform/Developer/SDKs/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>.sdk&quot;
+
+    # Build the application and install it to the fake SDK intermediary dir
+    # we have set up. Make sure to clean up afterward because we will re-use
+    # this source tree to cross-compile other targets.
+    make -j$(sysctl hw.ncpu | awk &#39;{print $2}&#39;)
+    make install
+    make clean
+done
+
+########################################
+
+echo &quot;Build library...&quot;
+
+# These are the libs that comprise libevent. `libevent_openssl` and `libevent_pthreads`
+# may not be compiled if those dependencies aren&#39;t available.
+OUTPUT_LIBS=&quot;libevent.a libevent_core.a libevent_extra.a libevent_openssl.a libevent_pthreads.a&quot;
+for OUTPUT_LIB in <span class="cp">${</span><span class="n">OUTPUT_LIBS</span><span class="cp">}</span>; do
+    INPUT_LIBS=&quot;&quot;
+    for ARCH in <span class="cp">${</span><span class="n">ARCHS</span><span class="cp">}</span>; do
+        if [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;i386&quot; ] || [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;x86_64&quot; ];
+        then
+            PLATFORM=&quot;iPhoneSimulator&quot;
+        else
+            PLATFORM=&quot;iPhoneOS&quot;
+        fi
+        INPUT_ARCH_LIB=&quot;<span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk/lib/<span class="cp">${</span><span class="n">OUTPUT_LIB</span><span class="cp">}</span>&quot;
+        if [ -e <span class="nv">$INPUT_ARCH_LIB</span> ]; then
+            INPUT_LIBS=&quot;<span class="cp">${</span><span class="n">INPUT_LIBS</span><span class="cp">}</span> <span class="cp">${</span><span class="n">INPUT_ARCH_LIB</span><span class="cp">}</span>&quot;
+        fi
+    done
+    # Combine the three architectures into a universal library.
+    if [ -n &quot;<span class="nv">$INPUT_LIBS</span>&quot;  ]; then
+        lipo -create <span class="nv">$INPUT_LIBS</span> \
+        -output &quot;<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/lib/<span class="cp">${</span><span class="n">OUTPUT_LIB</span><span class="cp">}</span>&quot;
+    else
+        echo &quot;<span class="nv">$OUTPUT_LIB</span> does not exist, skipping (are the dependencies installed?)&quot;
+    fi
+done
+
+for ARCH in <span class="cp">${</span><span class="n">ARCHS</span><span class="cp">}</span>; do
+    if [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;i386&quot; ] || [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;x86_64&quot; ];
+    then
+        PLATFORM=&quot;iPhoneSimulator&quot;
+    else
+        PLATFORM=&quot;iPhoneOS&quot;
+    fi
+    cp -R <span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk/include/* <span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include/
+    if [ $? == &quot;0&quot; ]; then
+        # We only need to copy the headers over once. (So break out of forloop
+        # once we get first success.)
+        break
+    fi
+done
+
+
+####################
+
+echo &quot;Building done.&quot;
+echo &quot;Cleaning up...&quot;
+rm -fr <span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>
+rm -fr &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>&quot;
+echo &quot;Done.&quot;
+</pre></div>
+
+
+<h3>资料地址</h3>
+<p><a href="https://github.com/coturn/coturn">Coturn地址</a></p>
+<p><a href="https://github.com/szuwest/libevent_ios">libevent_ios编译脚本</a></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/2017nian.html"><h3 class="article-title">2017年</h3></a>
 <h6 class="subheader" title="2017-02-04T00:00:00">2017-02-04
 </h6>
@@ -69,11 +288,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/2017nian.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/2017nian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/2017nian.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -313,32 +530,6 @@
 
 
 <p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html"><h3 class="article-title">关于技术人员加班问题的看法</h3></a>
-<h6 class="subheader" title="2016-09-04T00:00:00">2016-09-04
-</h6>
-
-
-<h2>关于技术人员加班问题的看法</h2>
-<p>身在IT行业，加班是永远绕不开的话题。互联网是以快速变化著称，加班似乎是成了名正言顺的。最近58同城加班996的问题也引起了广泛关注，而恰好最近两个星期，我们部门也一直在加班。我准备也谈谈这个问题。</p>
-<h3>我们加班的缘由</h3>
-<p>两个星期前，我们接到消息，要在两周之类上线3.0大版本。3.0版本改版非常大，虽然一部分功能已经开发了，但是一直在改，功能就从来没有稳定过。而且我们还正在开发2.7版本，突然间两周之类要上线3.0版本，是不可能的。但是这应该是老板的命令，我们应该没有还价的可能，所以加班是不可避免。还有一个更加不可避免加班的理由：我们的一个同事这个时候被借走了，借去别的子公司帮忙开发。这个借人也不是我们可以商量的，这个公司老板的要求，所以雪上加箱。</p>
-<h3>加班开发和家庭影响</h3>
-<p>为了能尽可能达成目标，我们每天都是工作到10点多，有些同事要搞到凌晨2点多，从产品，设计，到测试，所有人都需要加班。周末两天也需要加班。我老婆对我每天都很晚回家意见非常大，所以我尽量能10点多之后就回家，不然肯定闹家庭矛盾。周日我也不得不请假，留了另外两个同事在加班开发。其实我们已经非常高效了，我们的人力比Android客户端的人力还要少，大家都要努力加班赶进度 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/jia-ban.html">加班 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

@@ -50,6 +50,31 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html"><h3 class="article-title">Android图片缓存和相关开源项目</h3></a>
+<h6 class="subheader" title="2015-05-16T00:00:00">2015-05-16
+</h6>
+
+
+<h1>Android图片缓存和相关开源项目</h1>
+<p>现在几乎所有大一点的Android项目都会用到图片缓存。而Android应用的内存占用大户就是图片，几乎所有内存问题都会涉及到图片问题，而已图片为主的应用也会涉及到性能问题。我觉得每一个资深的Android工程师都要对图片缓存技术有所了解，并且有自己想法。图片缓存是在面试别人时必问的问题。</p>
+<p>图片缓存可以分为两点：内存缓存和磁盘缓存，当然还有必然要涉及的图片解码，图片下载，这里主要讲讲内存缓存和磁盘缓存，附带说一下图片解码和下载。</p>
+<h2>内存缓存</h2>
+<p>由于一张图片基本上会被重用或者在多个界面显示，而图片的下载和解码都是比较耗时的动作，要给用户比较好的体验，将一张图片缓存在内存中就尤为必要。如果一个应用图片比较多，要将所有图片都缓存在内存中显然不现实，特别是比较低端的机器上，内存非常有限。所以这个内存缓存必然有所限制，那么问题来了，缓存池设置多大，并且满了之后怎么处理成了要点。我们知道Android系统中给每个应用设置了最大堆，超出了这个最大堆限制就会报OutOfMemory错误。所以一般就是根据这个最大堆来设置图片缓存池的大小，业内普遍做法是取最大堆内存的8分之一，这个经验值，我觉得可以应用情况做调整。而缓存池满了之后该又要加入新的图片，怎么对已在池中的图片移除，有很多方法。最常用的是LRU（least recently used）算法。我一般会问面试者这个算法是怎么实现的，看过代码的人或者算法学得比较好的人就能答出。还有用的比较多大算法是使用频率算法，移除最大图片算法等。然而我认为比较好的内存缓存技术还应结合弱引用来用。这里涉及到什么事强引用，软引用和弱引用也是我必考项。为什么还要结合弱引用来使用比较好呢？如果一个应用要显示的图片比较多 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-tu-pian-huan-cun-imageloader-fresco.html">Android源码学习 图片缓存 ImageLoader Fresco </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html"><h3 class="article-title">Android开发中何时使用多进程？</h3></a>
 <h6 class="subheader" title="2015-03-10T00:00:00">2015-03-10
 </h6>
@@ -285,39 +310,6 @@
 
 
 <p><a href="http://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/activitydong-hua-er.html"><h3 class="article-title">Activity动画（二）</h3></a>
-<h6 class="subheader" title="2014-11-12T00:00:00">2014-11-12
-</h6>
-
-
-<h1>Activity动画（二）</h1>
-<p>如果要统一所有的Activity的打开可关闭动画，可以有一个很简便的方法：就是设置Application的theme。在Application的theme里有一个Android:windowAnimationStyle的属性，可以定义了一个Activity的打开和关闭动画。例如下面的例子就自定义了一个theme。</p>
-<hr />
-<p>````
-<style name="ThemeLightNoTitle" mce_bogus="1" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
-    </style></p>
-<div class="highlight"><pre><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&quot;AnimationActivity&quot;</span> <span class="na">mce_bogus=</span><span class="s">&quot;1&quot;</span> <span class="na">parent=</span><span class="s">&quot;@android:style/Animation.Activity&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityOpenEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_in<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityOpenExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_out<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_in<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_out<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;item ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/android-ji-zhu-dong-hua.html">Android 技术 动画 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/activitydong-hua-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/activitydong-hua-er.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

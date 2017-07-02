@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Coturn在iOS端应用和libevent的编译</title>
+
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+
+    <!-- So Firefox can bookmark->"abo this site" -->
+
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html" rel="bookmark"
+        title="Permalink to Coturn在iOS端应用和libevent的编译">Coturn在iOS端应用和libevent的编译</a></h3>
+    </header>
+
+<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
+</h6>
+
+
+    <h1>Coturn在iOS端应用和libevent的编译</h1>
+<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
+<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
+<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
+<p>下面是libevent的编译脚本主要内容</p>
+<div class="highlight"><pre>###########################################################################
+# Choose your libevent version and your currently-installed iOS SDK version:
+#
+VERSION=&quot;2.1.8-stable&quot;
+USERSDKVERSION=&quot;10.3&quot;
+MINIOSVERSION=&quot;8.0&quot;
+VERIFYGPG=false
+
+###########################################################################
+#
+# Don&#39;t change anything under this line!
+#
+###########################################################################
+
+# No need to change this since xcode build will only compile in the
+# necessary bits from the libraries we create
+ARCHS=&quot;i386 x86_64 armv7 armv7s arm64&quot;
+
+DEVELOPER=`xcode-select -print-path`
+#DEVELOPER=&quot;/Applications/Xcode.app/Contents/Developer&quot;
+
+# for continuous integration
+# https://travis-ci.org/mtigas/iOS-OnionBrowser
+if [ &quot;$1&quot; == &quot;--noverify&quot; ]; then
+    VERIFYGPG=false
+fi
+if [ &quot;$2&quot; == &quot;--travis&quot; ]; then
+    ARCHS=&quot;i386 x86_64&quot;
+fi
+
+if [[ ! -z &quot;<span class="nv">$TRAVIS</span>&quot; <span class="err">&amp;&amp;</span> <span class="nv">$TRAVIS</span> ]]; then
+    # Travis CI highest available version
+    echo &quot;==================== TRAVIS CI ====================&quot;
+    SDKVERSION=&quot;<span class="cp">${</span><span class="n">USERSDKVERSION</span><span class="cp">}</span>&quot;
+else
+    SDKVERSION=&quot;<span class="cp">${</span><span class="n">USERSDKVERSION</span><span class="cp">}</span>&quot;
+fi
+
+cd &quot;`dirname \&quot;$0\&quot;`&quot;
+REPOROOT=$(pwd)
+
+# Where we&#39;ll end up storing things in the end
+OUTPUTDIR=&quot;<span class="cp">${</span><span class="n">REPOROOT</span><span class="cp">}</span>/dependencies&quot;
+mkdir -p <span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include
+mkdir -p <span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/lib
+
+
+BUILDDIR=&quot;<span class="cp">${</span><span class="n">REPOROOT</span><span class="cp">}</span>/build&quot;
+
+# where we will keep our sources and build from.
+SRCDIR=&quot;<span class="cp">${</span><span class="n">BUILDDIR</span><span class="cp">}</span>/src&quot;
+mkdir -p <span class="nv">$SRCDIR</span>
+# where we will store intermediary builds
+INTERDIR=&quot;<span class="cp">${</span><span class="n">BUILDDIR</span><span class="cp">}</span>/built&quot;
+mkdir -p <span class="nv">$INTERDIR</span>
+
+########################################
+
+cd <span class="nv">$SRCDIR</span>
+
+# Exit the script if an error happens
+set -e
+
+if [ ! -e &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot; ]; then
+    echo &quot;Downloading libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot;
+    curl -LO https://github.com/libevent/libevent/releases/download/release-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz
+fi
+echo &quot;Using libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot;
+
+# up to you to set up `gpg` and add keys to your keychain
+# may have to import from link on http://www.wangafu.net/~nickm/ or http://www.citi.umich.edu/u/provos/
+if <span class="nv">$VERIFYGPG</span>; then
+    if [ ! -e &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc&quot; ]; then
+        curl -LO https://github.com/libevent/libevent/releases/download/release-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc
+    fi
+    echo &quot;Using libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc&quot;
+    if out=$(gpg --status-fd 1 --verify &quot;libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz.asc&quot; &quot;libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz&quot; 2&gt;/dev/null) <span class="err">&amp;&amp;</span>
+    echo &quot;<span class="nv">$out</span>&quot; | grep -qs &quot;^\[GNUPG:\] VALIDSIG&quot;; then
+        echo &quot;<span class="nv">$out</span>&quot; | egrep &quot;GOODSIG|VALIDSIG&quot;
+        echo &quot;Verified GPG signature for source...&quot;
+    else
+        echo &quot;<span class="nv">$out</span>&quot; &gt;<span class="err">&amp;</span>2
+        echo &quot;COULD NOT VERIFY PACKAGE SIGNATURE...&quot;
+        exit 1
+    fi
+fi
+
+tar zxf libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>.tar.gz -C <span class="nv">$SRCDIR</span>
+cd &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>&quot;
+
+set +e # don&#39;t bail out of bash script if ccache doesn&#39;t exist
+CCACHE=`which ccache`
+if [ $? == &quot;0&quot; ]; then
+    echo &quot;Building with ccache: <span class="nv">$CCACHE</span>&quot;
+    CCACHE=&quot;<span class="cp">${</span><span class="n">CCACHE</span><span class="cp">}</span> &quot;
+else
+    echo &quot;Building without ccache&quot;
+    CCACHE=&quot;&quot;
+fi
+set -e # back to regular &quot;bail out on error&quot; mode
+
+export ORIGINALPATH=<span class="nv">$PATH</span>
+
+for ARCH in <span class="cp">${</span><span class="n">ARCHS</span><span class="cp">}</span>
+do
+    if [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;i386&quot; ] || [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;x86_64&quot; ];
+    then
+        PLATFORM=&quot;iPhoneSimulator&quot;
+        EXTRA_CONFIG=&quot;--host=<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>-apple-darwin&quot;
+    else
+        PLATFORM=&quot;iPhoneOS&quot;
+        EXTRA_CONFIG=&quot;--host=arm-apple-darwin&quot;
+    fi
+
+    mkdir -p &quot;<span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk&quot;
+
+    export PATH=&quot;<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Toolchains/XcodeDefault.xctoolchain/usr/bin/:<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Platforms/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}</span>.platform/Developer/usr/bin/:<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Toolchains/XcodeDefault.xctoolchain/usr/bin:<span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/usr/bin:<span class="cp">${</span><span class="n">ORIGINALPATH</span><span class="cp">}</span>&quot;
+    export CC=&quot;<span class="cp">${</span><span class="n">CCACHE</span><span class="cp">}</span>`which gcc` -arch <span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span> -miphoneos-version-min=<span class="cp">${</span><span class="n">MINIOSVERSION</span><span class="cp">}</span>&quot;
+
+    ./configure --disable-shared --enable-static --disable-debug-mode <span class="cp">${</span><span class="n">EXTRA_CONFIG</span><span class="cp">}</span> --disable-clock-gettime \
+    --prefix=&quot;<span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk&quot; \
+    LDFLAGS=&quot;<span class="nv">$LDFLAGS</span> -L<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/lib&quot; \
+    CFLAGS=&quot;<span class="nv">$CFLAGS</span> -Os -I<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include -isysroot <span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Platforms/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}</span>.platform/Developer/SDKs/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>.sdk&quot; \
+    CPPFLAGS=&quot;<span class="nv">$CPPFLAGS</span> -I<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include -isysroot <span class="cp">${</span><span class="n">DEVELOPER</span><span class="cp">}</span>/Platforms/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}</span>.platform/Developer/SDKs/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>.sdk&quot;
+
+    # Build the application and install it to the fake SDK intermediary dir
+    # we have set up. Make sure to clean up afterward because we will re-use
+    # this source tree to cross-compile other targets.
+    make -j$(sysctl hw.ncpu | awk &#39;{print $2}&#39;)
+    make install
+    make clean
+done
+
+########################################
+
+echo &quot;Build library...&quot;
+
+# These are the libs that comprise libevent. `libevent_openssl` and `libevent_pthreads`
+# may not be compiled if those dependencies aren&#39;t available.
+OUTPUT_LIBS=&quot;libevent.a libevent_core.a libevent_extra.a libevent_openssl.a libevent_pthreads.a&quot;
+for OUTPUT_LIB in <span class="cp">${</span><span class="n">OUTPUT_LIBS</span><span class="cp">}</span>; do
+    INPUT_LIBS=&quot;&quot;
+    for ARCH in <span class="cp">${</span><span class="n">ARCHS</span><span class="cp">}</span>; do
+        if [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;i386&quot; ] || [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;x86_64&quot; ];
+        then
+            PLATFORM=&quot;iPhoneSimulator&quot;
+        else
+            PLATFORM=&quot;iPhoneOS&quot;
+        fi
+        INPUT_ARCH_LIB=&quot;<span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk/lib/<span class="cp">${</span><span class="n">OUTPUT_LIB</span><span class="cp">}</span>&quot;
+        if [ -e <span class="nv">$INPUT_ARCH_LIB</span> ]; then
+            INPUT_LIBS=&quot;<span class="cp">${</span><span class="n">INPUT_LIBS</span><span class="cp">}</span> <span class="cp">${</span><span class="n">INPUT_ARCH_LIB</span><span class="cp">}</span>&quot;
+        fi
+    done
+    # Combine the three architectures into a universal library.
+    if [ -n &quot;<span class="nv">$INPUT_LIBS</span>&quot;  ]; then
+        lipo -create <span class="nv">$INPUT_LIBS</span> \
+        -output &quot;<span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/lib/<span class="cp">${</span><span class="n">OUTPUT_LIB</span><span class="cp">}</span>&quot;
+    else
+        echo &quot;<span class="nv">$OUTPUT_LIB</span> does not exist, skipping (are the dependencies installed?)&quot;
+    fi
+done
+
+for ARCH in <span class="cp">${</span><span class="n">ARCHS</span><span class="cp">}</span>; do
+    if [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;i386&quot; ] || [ &quot;<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>&quot; == &quot;x86_64&quot; ];
+    then
+        PLATFORM=&quot;iPhoneSimulator&quot;
+    else
+        PLATFORM=&quot;iPhoneOS&quot;
+    fi
+    cp -R <span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">PLATFORM</span><span class="cp">}${</span><span class="n">SDKVERSION</span><span class="cp">}</span>-<span class="cp">${</span><span class="n">ARCH</span><span class="cp">}</span>.sdk/include/* <span class="cp">${</span><span class="n">OUTPUTDIR</span><span class="cp">}</span>/include/
+    if [ $? == &quot;0&quot; ]; then
+        # We only need to copy the headers over once. (So break out of forloop
+        # once we get first success.)
+        break
+    fi
+done
+
+
+####################
+
+echo &quot;Building done.&quot;
+echo &quot;Cleaning up...&quot;
+rm -fr <span class="cp">${</span><span class="n">INTERDIR</span><span class="cp">}</span>
+rm -fr &quot;<span class="cp">${</span><span class="n">SRCDIR</span><span class="cp">}</span>/libevent-<span class="cp">${</span><span class="n">VERSION</span><span class="cp">}</span>&quot;
+echo &quot;Done.&quot;
+</pre></div>
+
+
+<h3>资料地址</h3>
+<p><a href="https://github.com/coturn/coturn">Coturn地址</a></p>
+<p><a href="https://github.com/szuwest/libevent_ios">libevent_ios编译脚本</a></p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
+</p>
+
+
+
+
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html";
+        var disqus_url = "http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html";
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+
+
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
+            <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
+            <li><a href="http://szuwest.github.io/category/ji-zhu.html">技术</a></li>
+            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
+            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+        </ul>
+		
+        <h5 class="sidebar-title">Social</h5>
+        <ul class="side-nav">
+            <li><a href="https://github.com/szuwest">Github</a></li>
+            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
+            <li><a href="http://weibo.com/szuwest">微博</a></li>
+        </ul>
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+                <p>West's blog by West</p>
+            </div>
+            </div>
+    </div>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55687145-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</footer>
