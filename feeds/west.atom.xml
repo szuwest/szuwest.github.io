@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2017-07-02T00:00:00+08:00</updated><entry><title>Coturn在iOS端应用和libevent的编译</title><link href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html" rel="alternate"></link><updated>2017-07-02T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2017-07-02:coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html</id><summary type="html">&lt;h1&gt;Coturn在iOS端应用和libevent的编译&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2017-09-26T00:00:00+08:00</updated><entry><title>适配iOS11与iPhone X需要注意事项</title><link href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html" rel="alternate"></link><updated>2017-09-26T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2017-09-26:gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html</id><summary type="html">&lt;h1&gt;适配iOS11与iPhone X需要注意的事项&lt;/h1&gt;
+&lt;p&gt;最近苹果发布了iOS11和iPhone X，我之前开发的一个应用界面出现了问题，然后需要适配。记录一下需要注意的事项。&lt;/p&gt;
+&lt;h2&gt;适配iOS11&lt;/h2&gt;
+&lt;p&gt;第一个问题是iOS11导航栏改变了。除了加入largeTitle这种特性以外，还改变了很多东西，可以说是完全重写了导航栏。我遇到的问题是导航栏返回按钮图片变得很大，巨丑无比，所以得看看什么原因。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;我看了下我导航栏的设置代码，还做了挺多事，而且做了很多hack。第一是通过 &lt;strong&gt;[UINavigationBar appearance].backIndicatorImage&lt;/strong&gt; 和 &lt;strong&gt;[UINavigationBar appearance].backIndicatorTransitionMaskImage&lt;/strong&gt;设置了返回按钮图片，还有 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;UIBarButtonItem&lt;/span&gt; &lt;span class="n"&gt;appearance&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;setBackButtonTitlePositionAdjustment&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;UIOffsetMake&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSIntegerMin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NSIntegerMin&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;forBarMetrics&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;UIBarMetricsDefault&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;设置了把返回按钮右边的文字隐藏掉。还有通过hack 方式找到 _UINavigationBarBackIndicatorView把它的frame给改了。&lt;/p&gt;
+&lt;p&gt;因为iOS11的导航栏变化很大，_UINavigationBarBackIndicatorView这个类找不到了，所以frame修改就失败了。然后因为我发现我设置的返回按钮的那种图片本来是很大，因为设置了frame把它缩小了。而现在frame已经设置不了，所以就按图片原本的大小显示了。最后解决办法就是把图片大小设置成符合导航栏的大小。&lt;/p&gt;
+&lt;p&gt;图片大小是正常了，但是还是有别问题，因为返回按钮不是显示在垂直方向的中间，显示在偏下方了。最后发现是&lt;strong&gt;[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment&lt;/strong&gt;这句代码导致的。所以我判断了如果是iOS11系统的话，就不再调用这句代码。&lt;/p&gt;
+&lt;p&gt;图片正常了，显示位置也正常了，但是上面那句代码去掉之后，返回按钮右边的文字显示出来了。这又是个麻烦事。
+找了很多资料，还是没有找到理想的方案。最终在Stack Overflow上找到一种方式。在我的BaseViewController里viewDidLoad方法里，加入下面代码&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;navigationItem&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;backBarButtonItem&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;UIBarButtonItem&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithTitle&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;style&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;UIBarButtonItemStylePlain&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt; &lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这样可以完美去掉返回按钮右边的文字，没有副作用。&lt;/p&gt;
+&lt;p&gt;iOS11还有很多其他的改变，网上很多文章讲。我暂时只遇到了导航栏的问题，其他的还好。&lt;/p&gt;
+&lt;h2&gt;适配iPhone X&lt;/h2&gt;
+&lt;p&gt;由于iPhone X是全面屏，并且分辨率变了，所有iPhone X上可能也需要适配。我的APP就是出现了一点问题。&lt;/p&gt;
+&lt;p&gt;iPhone X的UI上变化很大的一点是状态栏，它不再是20dp,而是44dp。如果你的界面上硬编码了这个，那就很有可能会出现问题。&lt;/p&gt;
+&lt;p&gt;我的APP上用了第三方的一个叫ViewPageController的类，这个类专门是用来做tab切换的。由于它在代码了写frame的时候，计算时参考状态栏的高度是20，所有iPhone X就出问题了。暂时我的解决办法就是：判断是iPhone X的话，就把状态栏的高度定为44.那么如果判断设备是iPhone X呢。&lt;/p&gt;
+&lt;p&gt;一般来说主要有两种方式：
+一是通过屏幕来判断&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UI_USER_INTERFACE_IDIOM&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;UIUserInterfaceIdiomPhone&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;CGSize&lt;/span&gt; &lt;span class="n"&gt;screenSize&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;UIScreen&lt;/span&gt; &lt;span class="n"&gt;mainScreen&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;bounds&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;screenSize&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mf"&gt;812.0f&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;iPhone X&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;二是通过model来判断&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;NSString&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;modelID&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[[&lt;/span&gt;&lt;span class="n"&gt;UIDevice&lt;/span&gt; &lt;span class="n"&gt;currentDevice&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;modelIdentifier&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="kt"&gt;BOOL&lt;/span&gt; &lt;span class="n"&gt;isIphoneX&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;modelID&lt;/span&gt; &lt;span class="n"&gt;isEqualToString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;iPhone10,5&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;modelID&lt;/span&gt; &lt;span class="n"&gt;isEqualToString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;iPhone10,6&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;第二种方式需要从官网上确认一下还没有没别的型号。&lt;/p&gt;</summary><category term="iOS11 iPhoneX"></category></entry><entry><title>Coturn在iOS端应用和libevent的编译</title><link href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html" rel="alternate"></link><updated>2017-07-02T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2017-07-02:coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html</id><summary type="html">&lt;h1&gt;Coturn在iOS端应用和libevent的编译&lt;/h1&gt;
 &lt;p&gt;coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。&lt;/p&gt;
 &lt;p&gt;我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.&lt;/p&gt;
 &lt;p&gt;Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。&lt;/p&gt;
