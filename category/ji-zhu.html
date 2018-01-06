@@ -49,6 +49,31 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/qian-tan-reactnativede-you-lie.html"><h3 class="article-title">浅谈ReactNative的优劣</h3></a>
+<h6 class="subheader" title="2018-01-02T00:00:00">2018-01-02
+</h6>
+
+
+<h1>浅谈ReactNative的优劣</h1>
+<p>最近做了两个ReactNative的项目，有一些想法，记录一下。</p>
+<p>先说一下我做的两个项目吧，一个是介绍我们公司声纹云能力的APP，一个是录音采集工具APP。这两个APP都是采用ReactNative技术来开发。整体状况，第一个</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/reactnative.html">ReactNative </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/qian-tan-reactnativede-you-lie.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html"><h3 class="article-title">手机局域网内（包括热点）发现和组网通讯实现</h3></a>
 <h6 class="subheader" title="2017-11-05T00:00:00">2017-11-05
 </h6>
@@ -64,28 +89,7 @@
 <li>有人一直在监听一个端口X，接收UDP包</li>
 <li>有人在一直往这个端口X发送UDP包</li>
 </ul>
-<p>监听端的人收到了UDP包后，就知道了发送者的Ip地址。但这时发送者是不知道接收者的，因为这是UDP包，无连接的状态的。那怎么做才让发送者也知道了。其实只要发过来再做一次就行。发送者同时也是监听者，这就行了。不过发送者A监听的是另一个端口Y，接收者B接收到包后，发送一个Y端口的包给A就行了。</p>
-<p>总结起来：</p>
-<ul>
-<li>主机监听端口X，一直发送Y端口的广播UDP包</li>
-<li>从机监听端口Y，接收到UDP包后，往X端口发送UDP包。</li>
-</ul>
-<p>这样就能双方知道对方的Ip地址了。发送的数据包也可以很讲究，例如发送json数据，可以自己定义一些字段，当接收者收到之后，解析数据，如果不符合规则的数据包直接丢弃掉。这就可以支撑一些业务逻辑了。</p>
-<h3>广播地址</h3>
-<p>广播地址是什么呢，一般都是用255.255.255.255，也有不用广播用组播地址例如192.168.43.255.这个组播地址就是热点的时候采用的地址，因为开启热点之后，那个手机的IP地址是固定的，是192.168.43.1其他端的手机都是这个地址后面的192.168.43.X。如果广播发送不了或者被禁掉了？一般来说还有一种方法，就是子网掩码里面的所有Ip地址遍历发一遍，这也是办法之一。</p>
-<h2>一对多的通信</h2>
-<p>当知道对方的Ip地址后，一切都好办了。端对端的通信有挺多方法，一对多的通信也不少。如果要同时考虑在Android和iOS都好实现的话，其实可选的不是很多。</p>
-<p>最保守的方法就是直接采用TCP协议建立sock来通信。在iOS端和Android端都有很好的socket库，不用担心能不能实现和兼容性问题。这个方案挺好但是缺点也明显，因为sock通信只定义了最基础的，消息格式要完全自己定制和实现，还多心跳之类的，这里的工作量还不少。也许还有少的框架实现了这些，但是要同时在iOS端和安卓端都有实现，我还真不知道有哪些。而且我的情景里最重要的是有一个主机在里面，所有的从机都跟主机通信，所以必须说要有一个server。</p>
-<p>我后来采用的的WebSocket来实现。WebSocket在Android上有很多库，不过大多数都是client端的,包括了server端的有AndroidAsync,Java-Websocket。我采用的是AndroidAysnc。而iOS端可选择的就更少了。我在github上找了很多库，都是只支持client的，有支持server的都是很久很老的项目，找到一个采用swift写的叫Telegraph库，试用了起来，这个库实现得不是很好，有挺多问题，不尽如意。最终现在iOS端只有采用了Facebook的SocketRocket来作为client端，server端暂时没有好的实现。</p>
-<p>采用WebSocket来实现双向通信有不少好处，例如它直接支持发送字符串消息，二进制数据（文件），还有连接上和断开都有相应的事件，还有ping-pong这种心跳机制，我觉得挺好的。iOS端的WebSocket server暂时没有找到可靠的第三方实现，比较遗憾。</p>
-<p>我自己做了demo工程，上传到github。</p>
-<ul>
-<li><a href="https://github.com/szuwest/Recorder">Android局域网发现和建立一对多通信</a></li>
-<li><a href="https://github.com/szuwest/SpeakinRecorder">iOS局域网发现和建立一对多通信</a></li>
-</ul>
-<h2>后记</h2>
-<p>后来我找到了一个还算比较可靠的包含server的iOS的WebSocket库：<strong>PocketSocket</strong>。我已经使用起来了，整体比较稳定，虽然有些还是不是很完善，比起其他的，已经很好了。唯一比较大的问题是它不支持设置连接超时，需要自己设置一个心跳来自己检测。总体来说也不错了.</p>
-<p><a href="https://github.com/zwopple/PocketSocket">PocketSocket</a></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<p>监听端的人收到了UDP包后，就知道了发送者的Ip地址。但这时发送者是不知道接收者的，因为这是UDP包，无连接的状态的。那怎么做才让发送者也知道了。其实只要发过来再做一次就行。发送者同时也是监听者，这就行了。不过发送者A监听的是另一个端口Y，接收者B接收到包后 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/ju-yu-wang-re-dian-tong-xun-yan-bo-websocket.html">局域网 热点 通讯 广播 WebSocket </a>
@@ -93,11 +97,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -326,30 +328,6 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
 
 
 <p><a href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html"><h3 class="article-title">再谈iOS开发和Android开发之间的切换</h3></a>
-<h6 class="subheader" title="2015-07-18T00:00:00">2015-07-18
-</h6>
-
-
-<h1>再谈iOS开发和Android开发之间的切换</h1>
-<p>由于项目变化的原因，Android开发增加了很多人手，而iOS开发团队又被调走，只留下了两个人。所以iOS开发负责人找我谈话希望我过去帮忙做iOS。出于对项目整体进度而言，我去帮忙iOS开发是最好的。我可以在iOS和Android开发之间随意切换，而Android开发确实有点多人，iOS人手严重不足，招人很难，其他人转iOS开发也需要时间，所以我就答应了。</p>
-<p>说起我的Android和开发经历，真是很多感概。从我决定离开第一家做芯片的公司开始，我就想进入iOS开发或者Android开发。其实我最开始是想做iOS开发的，但是当时很难找，我不但没有经验，还是从一家芯片公司刚跳出来（虽然我是软件工程专业出身，但是一开始却进入了芯片行业，说多了都是泪）。最终一家小公司接受了我做Android开发，那时候是2011年初。但是做了大半年多的Android开发之后，公司发现Android很难赚钱，就想转做iOS开发，因为它的生态环境好。开始是我们老大去做，但是他搞了半天还没搞出个helloworld列子，所以就让我去做了。由于我大学的时候就学过Object-C，也接触Object-C开发，所以很快就上手了。再后来，苦于小公司技术进步慢，就跳槽来了现在的X公司。</p>
-<p>我是以Android技术面进入X公司的，但是进来之后，我的老大跟我说，你想做Android还是iOS开发，因为我本身也在做iOS开发，也像往这个方向，就选了iOS开发。那个时候，项目采用的方式全编码方式，没有用xib ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/android-ios.html">Android iOS </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
