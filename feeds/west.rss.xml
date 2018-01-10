@@ -1,5 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Sat, 06 Jan 2018 00:00:00 +0800</lastBuildDate><item><title>Android so库加固加壳方案</title><link>http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html</link><description>&lt;h1&gt;Android so库加固加壳方案&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Wed, 10 Jan 2018 00:00:00 +0800</lastBuildDate><item><title>Code Review方案</title><link>http://szuwest.github.io/code-reviewfang-an.html</link><description>&lt;h1&gt;Code Review方案&lt;/h1&gt;
+&lt;h2&gt;定义&lt;/h2&gt;
+&lt;p&gt;Code Review代码评审是指在软件开发过程中，通过对源代码进行系统性检查的过程。通常的目的是查找各种缺陷，包括代码缺陷、功能实现问题、编码合理性、性能优化等；保证软件总体质量和提高开发者自身水平&lt;/p&gt;
+&lt;h2&gt;code review 的好处&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;提高代码质量。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;及早发现潜在缺陷，降低修改/弥补缺陷的成本。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;促进团队内部知识共享，提高团队整体水平。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;评审过程对于评审人员来说，也是一种思路重构的过程。帮助更多的人理解系统。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;是一个传递知识的手段，可以让其它并不熟悉代码的人知道作者的意图和想法，从而可以在以后轻松维护代码。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;鼓励程序员们相互学习对方的长处和优点。 &lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;可以被用来确认自己的设计和实现是一个清楚和简单的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;code review形式&lt;/h2&gt;
+&lt;p&gt;一般code review有两种形式，一种是代码评审会议，我称之为Code Review Meeting，就是将团队成员都组织起来开会，让代码Owner上去讲自己代码的实现和思路，其它人发表意见和进行讨论，也有把这种叫做team review。另外一种是一对一评审，我称之为Single Review，就是项目owner提交代码之后，让reviewer在空闲的时候帮忙评审代码，并且写出批注，owner收到批注后，进行修改或者回复。但注意这里的reviewer并不是只有技术主管或架构师之类的才能做，代码质量监管仅仅靠架构师是不够的，需要所有经验丰富或有专长的同学参与其中。也有人将这个形式叫peer review。
+现在大部分公司都使用为Single Review形式，或者两者混合使用。&lt;/p&gt;
+&lt;h2&gt;code review 工具&lt;/h2&gt;
+&lt;p&gt;我们这里只介绍single review形式的工具。现在有比较受好评code review工具有Facebook的Phabricator，Google的Gerrit，他们都是开源的.另外微软也有他的code review工具TFS(Team Foundation Server),据说也挺好用，不过是收费的。不过现在大家用得最多的code review方式是基于Pull Request工作流方法，结合gitlab或者github来使用。现在Git是最流行的代码管理工具，结合gitlab的pull request，很容易实现code review。&lt;/p&gt;
+&lt;h2&gt;Code Review流程&lt;/h2&gt;
+&lt;p&gt;这里介绍一下基于gitflow+gitlab来做code review的流程。要在gitlab里做好code review需要有个前提，就是做好权限管理。每个成员在项目里都有对应的角色，例如owner，master，developer等。然后项目代码里设置受保护分支，master一定是受保护的分支，还可以根据需要设置其他分支为受保护分支。developer权限的成员是不能向master或者其他受保护分支push代码的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;所以结合code review，开发中的整个流程就是：建立feature分支--&amp;gt;编写代码--&amp;gt;push分支代码--&amp;gt;gitlab上发起一个合并请求（pull request）--&amp;gt;审核人员审核代码，如有需要，提出修改意见--&amp;gt;开发人员修改代码--&amp;gt;审核人员审核通过，合并代码，删除分支&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;下面介绍一下详细的流程，和对应的git操作命令：&lt;/p&gt;
+&lt;p&gt;1、根据开发任务，建立git分支, 分支名称模式为feature/任务名，比如关于API相关的一项任务，建立分支feature/api。
+git checkout -b feature/api&lt;/p&gt;
+&lt;p&gt;2、运行git branch 确认切换到了feature/api分支&lt;/p&gt;
+&lt;p&gt;3、编辑代码完成开发任务， commit相关代码
+git add -A
+git commit -m "implement api architecture"&lt;/p&gt;
+&lt;p&gt;4、将分支代码push到服务器
+git push origin -u feature/api&lt;/p&gt;
+&lt;p&gt;5、登录到gitlab源代码库，如http://192.168.0.2/native/record-app ，点击合并请求（Pull request）按钮去创建一个合并请求（pull request）&lt;/p&gt;
+&lt;p&gt;6、再pull request详细页面， 填写相关标题／说明／reviewer， 目前请将reviewer设成相关人员&lt;/p&gt;
+&lt;p&gt;7、请提醒reviewer去审核pull request，系统也会发邮件提醒reviewer&lt;/p&gt;
+&lt;p&gt;8、Reviewer打开pull request页面，查看代码修改情况，也可以在相应的代码处添加注视，提示代码作者哪里应该修正。&lt;/p&gt;
+&lt;p&gt;9、代码作者根据reviewer的要求，调整代码后commit／push到服务器。 然后reviewer继续设置， 如此循环，知道没有问题。&lt;/p&gt;
+&lt;p&gt;10、当代码没有问题以后， 需要将任务代码merge到主代码库， 有两种方法：
+ a、Reviewer可以在pull request页面点击Merge按钮， 把代码merge到主代码库
+ b、Reviewer手动本地merge， 并push到服务器。
+git pull origin develop
+git log ..develop&lt;/p&gt;
+&lt;p&gt;如果看到develop里有修改没在当前分支， 那么运行git rebase develop来把develop的修改加入到当前分支
+运行一下合并命令
+git checkout develop
+git merge --no-ff feature/api
+git push&lt;/p&gt;
+&lt;p&gt;11、代码作者删除feature子分支。
+git checkout develop
+git branch -D feature/api
+git push origin :feature/api&lt;/p&gt;
+&lt;p&gt;git pull origin develop &lt;/p&gt;
+&lt;p&gt;总结：核心流程就是 建立分支--发起PR请求--审核--合并，不断的循环反复。&lt;/p&gt;
+&lt;h2&gt;code review注意事项&lt;/h2&gt;
+&lt;p&gt;待补充&lt;/p&gt;
+&lt;h2&gt;参考资料&lt;/h2&gt;
+&lt;p&gt;&lt;a href="http://blog.csdn.net/june_y/article/details/50817993"&gt;学习笔记_Git之CodeReview流程&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://blog.csdn.net/wh_19910525/article/details/68068397"&gt;使用gitlab做git flow及代码审查&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://blog.jobbole.com/76854/"&gt;Git工作流指南：Pull Request工作流&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://blog.csdn.net/jsjwk/article/details/50379836"&gt;如何做好代码审查？Code Review Meeting还是Single Review
+&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.cnblogs.com/wenhx/p/How-We-Code-Review.html"&gt;我们是怎么做Code Review的&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://blog.csdn.net/huver2007/article/details/75095303"&gt;如何进行高效迅速的CodeReview&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://blog.csdn.net/lackin/article/details/7754967"&gt;如何有效的做Code Review&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;知乎上的讨论：&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.zhihu.com/question/19977889"&gt;有人实践过 Phabricator 以及 Arcanist 作为 code review 的工具么？&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.zhihu.com/question/41089988"&gt;大家的公司的code review都是怎么做的？遇到过什么问题么？&lt;/a&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Wed, 10 Jan 2018 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2018-01-10:code-reviewfang-an.html</guid><category>codereview</category></item><item><title>Android so库加固加壳方案</title><link>http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html</link><description>&lt;h1&gt;Android so库加固加壳方案&lt;/h1&gt;
 &lt;p&gt;Android应用主要包含资源文件和代码，而代码一般包括Java代码和C/C++代码。Java代码编译后会生成dex文件，而C/C++编译后会生成so文件。Android应用的保护，主要对编译后的dex文件和so文件来保护，防止被别人反编译查看到里面的核心代码和逻辑。&lt;/p&gt;
 &lt;p&gt;对于Java代码，一般在编译时做代码混淆，编译后的文件名，函数名和变量名会变成一些无意义的名字，这个即使代码被反编译出来，也很难读懂。不过由于调用关系和逻辑都还在，花些时间还是有可能读懂。所以就有了一些防止反编译的方法出现。这就包括了dex加壳或者加密方法。对dex文件保护的方法现在有不少成熟的方案，有不少第三方公司免费提供加固方案。&lt;/p&gt;
 &lt;p&gt;对于C/C++代码的保护方案，会比Java代码的更麻烦一下。C/C++经过编译后生成so文件，这个so文件同样会能被反编译。由于我们的主要算法都采用C/C++来实现，并生成so文件提供给合作方使用，我们重点说的是C/C++代码和so文件的保护。&lt;/p&gt;
