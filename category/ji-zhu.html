@@ -49,6 +49,41 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html"><h3 class="article-title">浅谈ReactNative技术的优劣</h3></a>
+<h6 class="subheader" title="2018-02-06T00:00:00">2018-02-06
+</h6>
+
+
+<h1>浅谈ReactNative技术的优劣</h1>
+<p>去年大概10月份开始使用ReactNative技术来开发项目，现在也已经有几个月时间了。也上线了三个ReactNative开发的项目。一直想谈谈使用ReactNative的开发感受。</p>
+<ul>
+<li>使用react-native确实可以提高界面开发效率，因为两个平台，只需要编写一套代码。react-native在这方面做了很多工作，让界面开发跟web开发基本一致。web开发人员可以很方便的写react-native界面，不需要二次学习。而且在react-native里面的像素是逻辑像素，可以比较好的适配界面。</li>
+<li>react-native界面开发方式跟web开发是基本一致的，这跟native开发界面有很大不同。react-native界面开发是声明式开发，而且是继承于react框架，而纯native开发人员根本不了解这个框架，需要学习成本。它的View布局层次跟原生的布局层次不太一样。我自己也搞了挺久才搞清楚。</li>
+<li>react-native很适合那些纯http数据交互的应用。即那些数据和内容都是从服务器拉取，APP只是展示和消费的场景应用。这样不但界面可以react-native来写，HTTP请求也可以很方便的用ReactNative来写。</li>
+<li>react-native不适合用于那些需要复杂的通信方式的应用，也不适用于那些强多媒体资源的应用，例如要做相册，音视频播放的应用。因为react-native上不方便用socket的那些通信方法，需要自己封装。然后内存问题也不太好把控。对于相册，多媒体播放，ReactNative也没有封装。</li>
+<li>react-native对于web转native开发是很有用，对纯native开发转react-native开发不是很友好，主要是思维方式发生比较大的变化。</li>
+<li>react-native不能隔绝native开发的知识。要做APP开发，最终还是需懂得native开发的一些知识，react-native并不能完全屏蔽这些。一个纯web开发想要转react-native开发，还是需要懂native开发的人来帮助和指导，或者自己需要先学习native相关知识。</li>
+</ul>
+<h1>react-native开发会是未来的方向吗</h1>
+<p>这个我也不敢说。不过ReactNative开发未来会代替掉一些native发，这是一定会发生的，或许已经正在发生。不过react-native版本最新的还是0.51版本，还有很多需要完善的地方。不过想在JavaScript貌似有大一统的趋势。我们公司现在都是用js来做PC客户端的。有个叫electron的框架貌似很流行，可以开发windows和Mac的桌面APP。只要会js，就可以写Mac客户端，这还真是我之前没有想过的。这样看，真的貌似js有大一统的趋势。</p>
+<p>不过，不管怎样过，我觉得react-native还是无法完全替代原生开发，毕竟有很多东西需要用原生来开发。而且，react-native本身就是基于原生的，它只是做了一层转化而已。所以原生的开发能力不会削弱。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/react-native.html">react-native </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/code-reviewfang-an.html"><h3 class="article-title">Code Review方案</h3></a>
 <h6 class="subheader" title="2018-01-10T00:00:00">2018-01-10
 </h6>
@@ -96,57 +131,7 @@
 </li>
 </ul>
 <h2>code review形式</h2>
-<p>一般code review有两种形式，一种是代码评审会议，我称之为Code Review Meeting，就是将团队成员都组织起来开会，让代码Owner上去讲自己代码的实现和思路，其它人发表意见和进行讨论，也有把这种叫做team review。另外一种是一对一评审，我称之为Single Review，就是项目owner提交代码之后，让reviewer在空闲的时候帮忙评审代码，并且写出批注，owner收到批注后，进行修改或者回复。但注意这里的reviewer并不是只有技术主管或架构师之类的才能做，代码质量监管仅仅靠架构师是不够的，需要所有经验丰富或有专长的同学参与其中。也有人将这个形式叫peer review。
-现在大部分公司都使用为Single Review形式，或者两者混合使用。</p>
-<h2>code review 工具</h2>
-<p>我们这里只介绍single review形式的工具。现在有比较受好评code review工具有Facebook的Phabricator，Google的Gerrit，他们都是开源的.另外微软也有他的code review工具TFS(Team Foundation Server),据说也挺好用，不过是收费的。不过现在大家用得最多的code review方式是基于Pull Request工作流方法，结合gitlab或者github来使用。现在Git是最流行的代码管理工具，结合gitlab的pull request，很容易实现code review。</p>
-<h2>Code Review流程</h2>
-<p>这里介绍一下基于gitflow+gitlab来做code review的流程。要在gitlab里做好code review需要有个前提，就是做好权限管理。每个成员在项目里都有对应的角色，例如owner，master，developer等。然后项目代码里设置受保护分支，master一定是受保护的分支，还可以根据需要设置其他分支为受保护分支。developer权限的成员是不能向master或者其他受保护分支push代码的。</p>
-<p><strong>所以结合code review，开发中的整个流程就是：建立feature分支--&gt;编写代码--&gt;push分支代码--&gt;gitlab上发起一个合并请求（pull request）--&gt;审核人员审核代码，如有需要，提出修改意见--&gt;开发人员修改代码--&gt;审核人员审核通过，合并代码，删除分支</strong></p>
-<p>下面介绍一下详细的流程，和对应的git操作命令：</p>
-<p>1、根据开发任务，建立git分支, 分支名称模式为feature/任务名，比如关于API相关的一项任务，建立分支feature/api。
-git checkout -b feature/api</p>
-<p>2、运行git branch 确认切换到了feature/api分支</p>
-<p>3、编辑代码完成开发任务， commit相关代码
-git add -A
-git commit -m "implement api architecture"</p>
-<p>4、将分支代码push到服务器
-git push origin -u feature/api</p>
-<p>5、登录到gitlab源代码库，如http://192.168.0.2/native/record-app ，点击合并请求（Pull request）按钮去创建一个合并请求（pull request）</p>
-<p>6、再pull request详细页面， 填写相关标题／说明／reviewer， 目前请将reviewer设成相关人员</p>
-<p>7、请提醒reviewer去审核pull request，系统也会发邮件提醒reviewer</p>
-<p>8、Reviewer打开pull request页面，查看代码修改情况，也可以在相应的代码处添加注视，提示代码作者哪里应该修正。</p>
-<p>9、代码作者根据reviewer的要求，调整代码后commit／push到服务器。 然后reviewer继续设置， 如此循环，知道没有问题。</p>
-<p>10、当代码没有问题以后， 需要将任务代码merge到主代码库， 有两种方法：
- a、Reviewer可以在pull request页面点击Merge按钮， 把代码merge到主代码库
- b、Reviewer手动本地merge， 并push到服务器。
-git pull origin develop
-git log ..develop</p>
-<p>如果看到develop里有修改没在当前分支， 那么运行git rebase develop来把develop的修改加入到当前分支
-运行一下合并命令
-git checkout develop
-git merge --no-ff feature/api
-git push</p>
-<p>11、代码作者删除feature子分支。
-git checkout develop
-git branch -D feature/api
-git push origin :feature/api</p>
-<p>git pull origin develop </p>
-<p>总结：核心流程就是 建立分支--发起PR请求--审核--合并，不断的循环反复。</p>
-<h2>code review注意事项</h2>
-<p>待补充</p>
-<h2>参考资料</h2>
-<p><a href="http://blog.csdn.net/june_y/article/details/50817993">学习笔记_Git之CodeReview流程</a></p>
-<p><a href="http://blog.csdn.net/wh_19910525/article/details/68068397">使用gitlab做git flow及代码审查</a></p>
-<p><a href="http://blog.jobbole.com/76854/">Git工作流指南：Pull Request工作流</a></p>
-<p><a href="http://blog.csdn.net/jsjwk/article/details/50379836">如何做好代码审查？Code Review Meeting还是Single Review
-</a></p>
-<p><a href="https://www.cnblogs.com/wenhx/p/How-We-Code-Review.html">我们是怎么做Code Review的</a></p>
-<p><a href="http://blog.csdn.net/huver2007/article/details/75095303">如何进行高效迅速的CodeReview</a></p>
-<p><a href="http://blog.csdn.net/lackin/article/details/7754967">如何有效的做Code Review</a></p>
-<p>知乎上的讨论：</p>
-<p><a href="https://www.zhihu.com/question/19977889">有人实践过 Phabricator 以及 Arcanist 作为 code review 的工具么？</a></p>
-<p><a href="https://www.zhihu.com/question/41089988">大家的公司的code review都是怎么做的？遇到过什么问题么？</a></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<p>一般code review有两种形式，一种是代码评审会议，我称之为Code Review Meeting，就是将团队成员都组织起来开会，让代码Owner上去讲自己代码的实现和思路，其它人发表意见和进行讨论，也有把这种叫做team review。另外一种是一对一评审，我称之为Single Review，就是项目owner提交代码之后，让reviewer在空闲的时候帮忙评审代码，并且写出批注，owner收到批注后，进行修改或者回复 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/codereview.html">codereview </a>
@@ -154,11 +139,9 @@ git push origin :feature/api</p>
 
 
 
-<p><a href="http://szuwest.github.io/code-reviewfang-an.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/code-reviewfang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/code-reviewfang-an.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -389,31 +372,6 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
 
 
 <p><a href="http://szuwest.github.io/qian-tan-vr.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/qian-tan-vr.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html"><h3 class="article-title">关于H5和移动客户端开发的未来</h3></a>
-<h6 class="subheader" title="2016-06-02T00:00:00">2016-06-02
-</h6>
-
-
-<h2>关于H5和移动客户端开发的未来</h2>
-<p><br/>从去年开始，我已经强烈感觉到移动端web开发的时候可能即将带来。我想为了避免以后找不到工作，我们客户端开发人员不得不开始学习移动端web开发或者混合开发。</p>
-<p>近一两年来，前端开发真的非常火，招不到人。就像前几年的移动客户端开发人才很热门一样。这不得不说得益于移动互联网快速的发展。web确实有它不可替代的好处，快速迭代和开发，不局限与特定平台，这是APP无法做到的。近来APP的开发趋近稳定饱和，而手机的处理能力越来越强，浏览器厂商也支持HTML5越来越完善，移动web开发必然崛起。现在H5已经成了所有技术小白人士都懂的一个词，这足以说明移动web开发已经到来。</p>
-<h2>我与H5的故事</h2>
-<p>HTML5技术早就开始了，但是一直没有完全普及，最近两年才真正的普及起来，H5也成了它的缩写代名词。早在2010我做毕业设计的时候，我就有研究过它。那是HTML5标准已经制定完毕，浏览器厂商已经开始慢慢的支持。我当时开始学习web开发，学习了JavaScript，学习了HTML，学习了CSS。我的毕业设计题目是《基于Google APP Engine 系统的web开发》当时GAE刚发布不久，然后我还采用了当时Google Web Tookit框架来开发我将要做的web即时通讯系统。当时Google还没推出中国，谷歌的各种服务都还在（只有一些些东西需要翻墙）。我用GWT开发我的即时通讯系统，用Google搜索资料和参与Google group讨论和学习，那真是一段充实的时光。那是我了解到ajax技术 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/qian-duan-kai-fa-h5-reactnative.html">前端开发 H5 ReactNative </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
