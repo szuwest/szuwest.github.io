@@ -50,32 +50,6 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html"><h3 class="article-title">iOS持续集成记(iOS+Jenkins+Cocoapods+蒲公英)</h3></a>
-<h6 class="subheader" title="2016-07-18T00:00:00">2016-07-18
-</h6>
-
-
-<h2>iOS持续集成记（iOS+Jenkins+Cocoapods+蒲公英）</h2>
-<p>原来我们iOS项目是有持续集成环境的，但是有一次升级系统还是升级xcode后，Jenkins就打不出可用的安装包了。原来负责整个打包机的同事又离职了，有一段时间我们都是手动打包给QA同事安装测试，现在领导要求必须把持续集成环境弄好，我们花了大约两周才基本弄好整个持续集成环境，现在把我整个过程中遇到的坑记录一下。</p>
-<h2>重装系统</h2>
-<p>打包机自从某一次升级系统之后就变得非常慢，打个包需要1个小时左右，简直要命。所以新的环境必须要建立在重装后的系统上。因为要格式化硬盘，所以要制作系统启动盘，这个网上也有不少教程，这里有个需要注意的，下载macOS系统时，一定要从官方下载。我一开始是自己在百度云上下的，制作好安装盘后重启电脑，并且将硬盘格式化后安装系统，发现验证不通过，好在另外一个同事在官网下了一个，我在它的电脑上重新制作了一次安装盘。假设你只要一台Mac电脑，遇到这种情况你就悲剧了。</p>
-<h2>git拉取代码的坑</h2>
-<p>系统装好了，Jenkins也装好了，然后配置拉去代码，可是代码死活拉不下来，为此我的同事搞了差不多一天，试了各种方法，也搞不下来代码，都是在一半的时候失败了。后来我也去弄了半天，同样的错误。主要原因可能是代码量太大了，因为其他的小工程可以git clone 下来。我突然想到换一下拉取协议试试，不采用HTTP方式，而是采用git ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/jenkins-cocoapods-pu-gong-ying.html">Jenkins Cocoapods 蒲公英 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
                 <a href="http://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html"><h3 class="article-title">打印杨辉三角--编程算法系列之一</h3></a>
 <h6 class="subheader" title="2016-07-17T00:00:00">2016-07-17
 </h6>
@@ -305,6 +279,30 @@
 
 
 <p><a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html"><h3 class="article-title">Android开发中何时使用多进程？</h3></a>
+<h6 class="subheader" title="2015-03-10T00:00:00">2015-03-10
+</h6>
+
+
+<h1>问答-Android开发中何时使用多进程？</h1>
+<p>我在github上回答了一个问题：
+<code>Android开发中何时使用多进程？</code></p>
+<div class="highlight"><pre><span class="mf">1.</span><span class="err">要想知道如何使用多进程，先要知道</span><span class="n">Android</span><span class="err">里的多进程概念。一般情况下，一个应用程序就是一个进程，这个进程名称就是应用程序包名。我们知道进程是系统分配资源和调度的基本单位，所以每个进程都有自己独立的资源和内存空间，别的进程是不能任意访问其他进程的内存和资源的。那如何让自己的应用拥有多个进程？很简单，我们的四大组件在</span><span class="n">AndroidManifest</span><span class="err">文件中注册的时候，有个属性是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">，这里可以指定组件的所处的进程。默认就是应用的主进程。指定为别的进程之后，系统在启动这个组件的时候，就先创建（如果还没创建的话）这个进程，然后再创建该组件。你可以重载</span><span class="n">Application</span><span class="err">类的</span><span class="n">onCreate</span><span class="err">方法，打印出它的进程名称，就可以清楚的看见了。再设置</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">属性时候，有个地方需要注意：如果是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="o">=</span><span class="s">&quot;:deamon&quot;</span><span class="err">，以</span><span class="o">:</span><span class="err">开头的名字，则表示这是一个应用程序的私有进程，否则它是一个全局进程 ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ji-zhu-wen-da-github-jin-cheng.html">技术问答 github 进程 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
