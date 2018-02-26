@@ -1,5 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2018-02-06T00:00:00+08:00</updated><entry><title>浅谈ReactNative技术的优劣</title><link href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html" rel="alternate"></link><updated>2018-02-06T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2018-02-06:qian-tan-reactnativeji-zhu-de-you-lie.html</id><summary type="html">&lt;h1&gt;浅谈ReactNative技术的优劣&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2018-02-26T00:00:00+08:00</updated><entry><title>react-native框架源码学习(iOS)(上)</title><link href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html" rel="alternate"></link><updated>2018-02-26T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2018-02-26:react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html</id><summary type="html">&lt;h1&gt;react-native框架源码学习(iOS)(上)&lt;/h1&gt;
+&lt;h2&gt;注意事项&lt;/h2&gt;
+&lt;p&gt;要学习react-native框架iOS端源码，先要了解一下注意的事项。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一、 首先需要非常熟悉objective-c语言，对OC的runtime机制更是必不可少。源码里大量用了runtime特性。然后也要熟悉c++语言。除了OC语言，里面还有大量的c++代码，OC与c++混合代码。对c++的template和std库也要熟悉。我本人对c++也熟悉，但是不够深入，对一些高级特性不是很了解，所以相关的一些代码看起来很吃力。最后当然也熟悉js语言。我大学时学习过js，但是那还真是远古时代了，js近年来发展很快，我对很多新特性不是很了解，这也对我学习有一定的阻碍。另外还有要比较了解iOS的JavaScriptCore框架，这个是js与OC通信的基础。&lt;/li&gt;
+&lt;li&gt;二、 要对react-native的版本了解。查看网上的资料时也要注意他们所说的RN版本。现在网上很多研究资料，他们所研究的版本都是很早之前的版本。新的版本跟老版本有很多细节和流程改变了。如果你发现有些文章里说的东西跟你所看到的对不上，那就是研究的版本不一致。&lt;/li&gt;
+&lt;li&gt;三、如果看不懂，多看看别人的分析文章。如果对某种语言或者框架库不熟悉，建议先把该补的补上。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我所研究的RN版本是&lt;strong&gt;0.49&lt;/strong&gt;，而最新版是0.51. 最后我自己也不敢说自己完全看懂了源码，自己的理解完全正确，所以下面所说的也不一定完全正确。&lt;/p&gt;
+&lt;h2&gt;核心原理&lt;/h2&gt;
+&lt;p&gt;主要原理利用JavaScriptCore的通信机制来做一些基本的js和OC相互调用，但是RN还做了更多事情。
+OC会将所有要暴露给JS调用的方法和属性生成一个配置表，然后会将这个配置表写入到JS端。RN中OC和JS都分别有一个桥接对象，他们相互调用都是通过这个桥接对象进行。
+RN大致结构图：
+&lt;img alt="RN结构图" src="https://upload-images.jianshu.io/upload_images/1271831-7ba4d20000946a6b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" /&gt;&lt;/p&gt;
+&lt;h2&gt;启动流程&lt;/h2&gt;
+&lt;p&gt;研究源码当然得从启动流程开始。新建一个RN工程，它的AppDelagte入口方法代码大致如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;BOOL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;application:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UIApplication&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;application&lt;/span&gt; &lt;span class="nf"&gt;didFinishLaunchingWithOptions:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;launchOptions&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+
+  &lt;span class="n"&gt;NSURL&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;jsCodeLocation&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="n"&gt;jsCodeLocation&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;RCTBundleURLProvider&lt;/span&gt; &lt;span class="n"&gt;sharedSettings&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;jsBundleURLForBundleRoot&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;index.ios&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;fallbackResource&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+  &lt;span class="n"&gt;RCTRootView&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;rootView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;RCTRootView&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithBundleURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;jsCodeLocation&lt;/span&gt;
+                                                      &lt;span class="nl"&gt;moduleName:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;VprScene&amp;quot;&lt;/span&gt;
+                                               &lt;span class="nl"&gt;initialProperties:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt;
+                                                   &lt;span class="nl"&gt;launchOptions:&lt;/span&gt;&lt;span class="n"&gt;launchOptions&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="n"&gt;rootView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;backgroundColor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;UIColor&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithRed&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;0.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;255&lt;/span&gt; &lt;span class="n"&gt;green&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;0.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;255&lt;/span&gt; &lt;span class="n"&gt;blue&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mf"&gt;0.0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;255&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+  &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;UIWindow&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithFrame&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;UIScreen&lt;/span&gt; &lt;span class="n"&gt;mainScreen&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="n"&gt;bounds&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="n"&gt;UIViewController&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;rootViewController&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;UIViewController&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="n"&gt;rootViewController&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rootView&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rootViewController&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rootViewController&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;window&lt;/span&gt; &lt;span class="n"&gt;makeKeyAndVisible&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;YES&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最主要的代码就是初始化了RCTRootView，别的都是普通的代码。也就是说由RCTRootView来进行整个RN的初始化。&lt;/p&gt;
+&lt;p&gt;RCTRootView的initWithBundleURL:方法中初始化了一个RCTBridge，RCTBridge的初始化方法里调用了一个setUp方法，在这里又初始化了一个RCTCxxBridge（早期版本是RCTBatchedBridge，它们都是RCTBridge的子类）对象，然后调用了它的start方法。这是个关键方法。RCTBridge与RCTCxxBridge类似一个代理模式，RCTBridge提供了对外接口，实际上调用了RCTCxxBridge的实现。这样的好处是方便替换内部实现，而接口保持稳定。&lt;/p&gt;
+&lt;p&gt;RCTCxxBridge的start方法(为了方便理解，删掉了不必要的代码):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;start&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="p"&gt;......&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// Set up the JS thread early&lt;/span&gt;
+  &lt;span class="n"&gt;_jsThread&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;NSThread&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithTarget&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                                      &lt;span class="nl"&gt;selector:&lt;/span&gt;&lt;span class="k"&gt;@selector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;runRunLoop&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                                        &lt;span class="nl"&gt;object:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="n"&gt;_jsThread&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;RCTJSThreadName&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="n"&gt;_jsThread&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;qualityOfService&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;NSOperationQualityOfServiceUserInteractive&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_jsThread&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+  &lt;span class="kt"&gt;dispatch_group_t&lt;/span&gt; &lt;span class="n"&gt;prepareBridge&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dispatch_group_create&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;registerExtraModules&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="c1"&gt;// Initialize all native modules that cannot be loaded lazily&lt;/span&gt;
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;_initModules&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;RCTGetModuleClasses&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;withDispatchGroup&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;prepareBridge&lt;/span&gt; &lt;span class="n"&gt;lazilyDiscovered&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// This doesn&amp;#39;t really do anything.  The real work happens in initializeBridge.&lt;/span&gt;
+  &lt;span class="n"&gt;_reactInstance&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reset&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Instance&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+  &lt;span class="n"&gt;__weak&lt;/span&gt; &lt;span class="n"&gt;RCTCxxBridge&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;weakSelf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// Prepare executor factory (shared_ptr for copy into block)&lt;/span&gt;
+  &lt;span class="n"&gt;std&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shared_ptr&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;JSExecutorFactory&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;executorFactory&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;.....&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="n"&gt;executorFactory&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="kt"&gt;BOOL&lt;/span&gt; &lt;span class="n"&gt;useCustomJSC&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delegate&lt;/span&gt; &lt;span class="n"&gt;respondsToSelector&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="k"&gt;@selector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;shouldBridgeUseCustomJSC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delegate&lt;/span&gt; &lt;span class="n"&gt;shouldBridgeUseCustomJSC&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+      &lt;span class="c1"&gt;// The arg is a cache dir.  It&amp;#39;s not used with standard JSC.&lt;/span&gt;
+      &lt;span class="n"&gt;executorFactory&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reset&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;JSCExecutorFactory&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;folly&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;dynamic&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;
+        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;OwnerIdentity&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;ReactNative&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;UseCustomJSC&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;useCustomJSC&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+      &lt;span class="p"&gt;));&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;......&lt;/span&gt;
+  &lt;span class="c1"&gt;// Dispatch the instance initialization as soon as the initial module metadata has&lt;/span&gt;
+  &lt;span class="c1"&gt;// been collected (see initModules)&lt;/span&gt;
+  &lt;span class="n"&gt;dispatch_group_enter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prepareBridge&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;ensureOnJavaScriptThread&lt;/span&gt;&lt;span class="o"&gt;:^&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;weakSelf&lt;/span&gt; &lt;span class="n"&gt;_initializeBridge&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;executorFactory&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;dispatch_group_leave&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prepareBridge&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;}];&lt;/span&gt;
+
+    &lt;span class="p"&gt;.....&lt;/span&gt;
+    &lt;span class="c1"&gt;// Load the source asynchronously, then store it for later execution.&lt;/span&gt;
+    &lt;span class="n"&gt;dispatch_group_enter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prepareBridge&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;__block&lt;/span&gt; &lt;span class="n"&gt;NSData&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;sourceCode&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;loadSource&lt;/span&gt;&lt;span class="o"&gt;:^&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSError&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;RCTSource&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;weakSelf&lt;/span&gt; &lt;span class="n"&gt;handleError&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+
+      &lt;span class="n"&gt;sourceCode&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+      &lt;span class="n"&gt;dispatch_group_leave&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prepareBridge&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="n"&gt;onProgress&lt;/span&gt;&lt;span class="o"&gt;:^&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RCTLoadingProgress&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;progressData&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;.....&lt;/span&gt;
+    &lt;span class="p"&gt;}];&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// Wait for both the modules and source code to have finished loading&lt;/span&gt;
+    &lt;span class="n"&gt;dispatch_group_notify&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prepareBridge&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dispatch_get_global_queue&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;QOS_CLASS_USER_INTERACTIVE&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="n"&gt;RCTCxxBridge&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;strongSelf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;weakSelf&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+      &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sourceCode&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;strongSelf&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;loading&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;strongSelf&lt;/span&gt; &lt;span class="n"&gt;executeSourceCode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;sourceCode&lt;/span&gt; &lt;span class="n"&gt;sync&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;.....&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这个方法很复杂，主要做了以下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建并开启了一个js线程，绑定了一个runloop，也即是说js代码都是在这个线程里执行。&lt;/li&gt;
+&lt;li&gt;准备所有要暴露给js调用的OC类,ModuleClass，为每个类封装到RCTModuleData里，如果需要在主线程中是创建某些类的实例，则会在主线程中去创建它。这些RCTModuleData会分别存储在一个字典和数组里。&lt;/li&gt;
+&lt;li&gt;准备JS运行环境，初始化JSExecutorFactory，并在js线程中创建js的RCTMessageThread，初始化_reactInstance（Instance，这是native跟jsBridge的桥梁）和JSCExecutor&lt;/li&gt;
+&lt;li&gt;加载JS源码&lt;/li&gt;
+&lt;li&gt;以上全做完之后，执行JS源码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注意代码里用到一个叫prepareBridge的dispatch_group_t，dispatch_group_t主要是用来做异步代码同步用的。有很多初始化工作是异步并行的，运行源码肯定是在所有准备工作之后才能进行，所以用了dispatch_group_t和dispatch_group_notify机制来确保这个问题。接下来我们逐步去分析上面说的几个事情。&lt;/p&gt;
+&lt;h3&gt;JS线程&lt;/h3&gt;
+&lt;p&gt;大家常说JavaScript是单线程的，在RN里就是这样的。它创建了一个线程，然后绑定到了一个runloop，然后JS就是在这个线程里执行。在RCTCxxBridge里专门有个方法将block放在JS线程中执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt; * Ensure block is run on the JS thread. If we&amp;#39;re already on the JS thread, the block will execute synchronously.&lt;/span&gt;
+&lt;span class="cm"&gt; * If we&amp;#39;re not on the JS thread, the block is dispatched to that thread. Any errors encountered while executing&lt;/span&gt;
+&lt;span class="cm"&gt; * the block will go through handleError:&lt;/span&gt;
+&lt;span class="cm"&gt; */&lt;/span&gt;
+&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;ensureOnJavaScriptThread:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;dispatch_block_t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;block&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;RCTAssert&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;_jsThread&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;This method must not be called before the JS thread is created&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// This does not use _jsMessageThread because it may be called early before the runloop reference is captured&lt;/span&gt;
+  &lt;span class="c1"&gt;// and _jsMessageThread is valid. _jsMessageThread also doesn&amp;#39;t allow us to shortcut the dispatch if we&amp;#39;re&lt;/span&gt;
+  &lt;span class="c1"&gt;// already on the correct thread.&lt;/span&gt;
+
+  &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;NSThread&lt;/span&gt; &lt;span class="n"&gt;currentThread&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;_jsThread&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;_tryAndHandleError&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;performSelector&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="k"&gt;@selector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;_tryAndHandleError&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+          &lt;span class="nl"&gt;onThread:&lt;/span&gt;&lt;span class="n"&gt;_jsThread&lt;/span&gt;
+          &lt;span class="nl"&gt;withObject:&lt;/span&gt;&lt;span class="n"&gt;block&lt;/span&gt;
+          &lt;span class="nl"&gt;waitUntilDone:&lt;/span&gt;&lt;span class="nb"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;除此之外还有个RCTMessageThread类，专门用于在js线程中执行c++的同步和异步函数。&lt;/p&gt;
+&lt;h3&gt;获取ModuleClass&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;[self _initModules:RCTGetModuleClasses() withDispatchGroup:prepareBridge lazilyDiscovered:NO]&lt;/strong&gt;方法就是获取所有要暴露的类并做相应初始化。首先了解一下要将一个类暴露给JS需要怎么做。我们已RN里已经有的一个粘贴板类来看一下。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//RCTClipboard.h&lt;/span&gt;
+&lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;RCTClipboard&lt;/span&gt; : &lt;span class="nc"&gt;NSObject&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RCTBridgeModule&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span class="k"&gt;@end&lt;/span&gt;
+
+&lt;span class="c1"&gt;//RCTClipboard.m&lt;/span&gt;
+&lt;span class="k"&gt;@implementation&lt;/span&gt; &lt;span class="nc"&gt;RCTClipboard&lt;/span&gt;
+
+&lt;span class="n"&gt;RCT_EXPORT_MODULE&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;dispatch_queue_t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;methodQueue&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;dispatch_get_main_queue&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+
+&lt;span class="n"&gt;RCT_EXPORT_METHOD&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;setString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;UIPasteboard&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;clipboard&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;UIPasteboard&lt;/span&gt; &lt;span class="n"&gt;generalPasteboard&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="n"&gt;clipboard&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="n"&gt;RCT_EXPORT_METHOD&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;getString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RCTPromiseResolveBlock&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;resolve&lt;/span&gt;
+                  &lt;span class="nl"&gt;rejecter:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__unused&lt;/span&gt; &lt;span class="n"&gt;RCTPromiseRejectBlock&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;reject&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;UIPasteboard&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;clipboard&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;UIPasteboard&lt;/span&gt; &lt;span class="n"&gt;generalPasteboard&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="n"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;clipboard&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其实主要关键点就是类需要实现协议RCTBridgeModule，并在implementation里加RCT_EXPORT_MODULE()。在要暴露的方法在其前面加宏RCT_EXPORT_METHOD修饰。注意这里不支持有返回值的方法，还有也可以暴露一些属性的，但是这里不展开说明。&lt;/p&gt;
+&lt;p&gt;RCTBridgeModule协议定义了+ (NSString *)moduleName这个必须实现的方法，还有其他可选方法和属性。
+看一下RCT_EXPORT_MODULE()宏到底干了什么&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt; * Place this macro in your class implementation to automatically register&lt;/span&gt;
+&lt;span class="cm"&gt; * your module with the bridge when it loads. The optional js_name argument&lt;/span&gt;
+&lt;span class="cm"&gt; * will be used as the JS module name. If omitted, the JS module name will&lt;/span&gt;
+&lt;span class="cm"&gt; * match the Objective-C class name.&lt;/span&gt;
+&lt;span class="cm"&gt; */&lt;/span&gt;
+&lt;span class="p"&gt;#&lt;/span&gt;&lt;span class="n"&gt;define&lt;/span&gt; &lt;span class="no"&gt;RCT_EXPORT_MODULE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;js_name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; \
+&lt;span class="no"&gt;RCT_EXTERN&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="n"&gt;RCTRegisterModule&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Class&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; \
+&lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;moduleName&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;@#&lt;/span&gt;&lt;span class="n"&gt;js_name&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt; \
+&lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;RCTRegisterModule&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这个宏里实现moduleName方法，定义了RCT_EXTERN void RCTRegisterModule(Class)，还有实现了load方法，在load方法里调用了RCTRegisterModule方法。RCTRegisterModule实现是在RCTBridge.m里面。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;NSMutableArray&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="kt"&gt;Class&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;RCTModuleClasses&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;NSArray&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="kt"&gt;Class&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;RCTGetModuleClasses&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;RCTModuleClasses&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="cm"&gt;/**&lt;/span&gt;
+&lt;span class="cm"&gt; * Register the given class as a bridge module. All modules must be registered&lt;/span&gt;
+&lt;span class="cm"&gt; * prior to the first bridge initialization.&lt;/span&gt;
+&lt;span class="cm"&gt; */&lt;/span&gt;
+&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;RCTRegisterModule&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;Class&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;RCTRegisterModule&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;Class&lt;/span&gt; &lt;span class="n"&gt;moduleClass&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="kt"&gt;dispatch_once_t&lt;/span&gt; &lt;span class="n"&gt;onceToken&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="n"&gt;dispatch_once&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;onceToken&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;RCTModuleClasses&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSMutableArray&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+
+  &lt;span class="n"&gt;RCTAssert&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;moduleClass&lt;/span&gt; &lt;span class="n"&gt;conformsToProtocol&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;protocol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;RCTBridgeModule&lt;/span&gt;&lt;span class="p"&gt;)],&lt;/span&gt;
+            &lt;span class="s"&gt;@&amp;quot;%@ does not conform to the RCTBridgeModule protocol&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="n"&gt;moduleClass&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+  &lt;span class="c1"&gt;// Register module&lt;/span&gt;
+  &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;RCTModuleClasses&lt;/span&gt; &lt;span class="n"&gt;addObject&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;moduleClass&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;实际上就是讲Class对象加入到全局唯一的一个数组里。也就是说，当系统在加载这个类的时候，就将这个类对象加入到了一个数组里，后面只要从这个数组里取所有要暴露给JS的类就可以了。&lt;/p&gt;
+&lt;p&gt;再来看看怎么暴露方法。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;#define RCT_EXPORT_METHOD(method) \&lt;/span&gt;
+&lt;span class="cp"&gt;  RCT_REMAP_METHOD(, method)&lt;/span&gt;
+
+
+&lt;span class="cp"&gt;#define RCT_REMAP_METHOD(js_name, method) \&lt;/span&gt;
+&lt;span class="cp"&gt;  _RCT_EXTERN_REMAP_METHOD(js_name, method, NO) \&lt;/span&gt;
+&lt;span class="cp"&gt;  - (void)method;&lt;/span&gt;
+
+
+&lt;span class="cp"&gt;#define _RCT_EXTERN_REMAP_METHOD(js_name, method, is_blocking_synchronous_method) \&lt;/span&gt;
+&lt;span class="cp"&gt;  + (const RCTMethodInfo *)RCT_CONCAT(__rct_export__, RCT_CONCAT(js_name, RCT_CONCAT(__LINE__, __COUNTER__))) { \&lt;/span&gt;
+&lt;span class="cp"&gt;    static RCTMethodInfo config = {#js_name, #method, is_blocking_synchronous_method}; \&lt;/span&gt;
+&lt;span class="cp"&gt;    return &amp;amp;config; \&lt;/span&gt;
+&lt;span class="cp"&gt;  }&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这里的宏嵌套得让人眼花缭乱，在整个RN源码中运用了大量的宏，而且大多是高级用法，这个给阅读理解造成一定的困难。如果看不懂，最好先找专门的讲宏文章先看一看。这里主要作用就是声明了返回值为void的method方法，并且生成了一个以__rct_export__开头，包含了类名，行号等信息的为类名，返回值为RCTMethodInfo的类方法。这个方法主要是为后面生成配置信息用的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;[self _initModules:RCTGetModuleClasses() withDispatchGroup:prepareBridge lazilyDiscovered:NO]&lt;/strong&gt;主要代码是&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;_initModules:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSArray&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RCTBridgeModule&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;modules&lt;/span&gt;
+   &lt;span class="nl"&gt;withDispatchGroup:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;dispatch_group_t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;dispatchGroup&lt;/span&gt;
+    &lt;span class="nl"&gt;lazilyDiscovered:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;BOOL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;lazilyDiscovered&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="p"&gt;....&lt;/span&gt;
+&lt;span class="c1"&gt;// Set up moduleData for automatically-exported modules&lt;/span&gt;
+  &lt;span class="n"&gt;NSArray&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RCTModuleData&lt;/span&gt; &lt;span class="o"&gt;*&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;moduleDataById&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;registerModulesForClasses&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;modules&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="p"&gt;......&lt;/span&gt;
+   &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;_prepareModulesWithDispatchGroup&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;dispatchGroup&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;registerModulesForClasses:方法主要是遍历RCTModuleClasses，为每个class生成一个RCTModuleData并在一个字典和数组里存起来后面使用。_prepareModulesWithDispatchGroup:就是检查每个RCTModuleData是否需要在主线程中创建实例，是的话，就创建实例存起来。&lt;/p&gt;
+&lt;h3&gt;准备JS相关类（JSCExecutor）&lt;/h3&gt;
+&lt;p&gt;在start方法里面，它实例化了Instance(_reactInstance)和一个JSExecutorFactory，然后在js线程中调用了_initializeBridge:方法。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;_initializeBridge:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;std&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;shared_ptr&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;JSExecutorFactory&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;executorFactory&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="p"&gt;.....&lt;/span&gt;
+&lt;span class="n"&gt;__weak&lt;/span&gt; &lt;span class="n"&gt;RCTCxxBridge&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;weakSelf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="n"&gt;_jsMessageThread&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;std&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;make_shared&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RCTMessageThread&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;NSRunLoop&lt;/span&gt; &lt;span class="n"&gt;currentRunLoop&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSError&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;weakSelf&lt;/span&gt; &lt;span class="n"&gt;handleError&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="p"&gt;.....&lt;/span&gt;
+  &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;_reactInstance&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// This is async, but any calls into JS are blocked by the m_syncReady CV in Instance&lt;/span&gt;
+    &lt;span class="n"&gt;_reactInstance&lt;/span&gt;&lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;initializeBridge&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="n"&gt;std&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;make_unique&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RCTInstanceCallback&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+      &lt;span class="n"&gt;executorFactory&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="n"&gt;_jsMessageThread&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;_buildModuleRegistry&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+      &lt;span class="p"&gt;......&lt;/span&gt;
+   &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;可以看到这里主要创建了一个RCTMessageThread，并将相关属性传给_reactInstance进行初始化。_reactInstance的初始化需要一个ModuleRegistry，ModuleRegistry里面有包含了所有的RCTNativeModule，而每个RCTNativeModule里又包含了一个RCTModuleData.即将前面生成的所有RCTModuleData传给了_reactInstance。&lt;/p&gt;
+&lt;p&gt;在Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。JSCExecutor是一个相当重要的类，走到这里很不容易，跳转了很多层。这一块也是最不好理解的，基本上c++和OC互调，而且使用了很多c++11的特性，我很不熟悉。然后也使用了folly库，这个库也不是很好理解。所以我准备把剩下的东西放到下一篇文章来讲。&lt;/p&gt;
+&lt;h2&gt;参考资料&lt;/h2&gt;
+&lt;p&gt;&lt;a href="http://www.cocoachina.com/ios/20170720/19958.html"&gt;深入浅出 JavaScriptCore&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/1004875"&gt;JavaScriptCore全面解析 （上篇）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/1004876"&gt;JavaScriptCore全面解析 （下篇）
+&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.jianshu.com/p/931367388a8d?utm_campaign=maleskine&amp;amp;utm_content=note&amp;amp;utm_medium=seo_notes&amp;amp;utm_source=recommendation"&gt;理解React-Native(0.46) 中native和js通信原理(iOS)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://blog.cnbang.net/tech/2698/"&gt;React Native通信机制详解&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+&lt;img alt="打赏" src="https://thumbnail0.baidupcs.com/thumbnail/2240a19cfdd74eaf4336b9135e9b58ae?fid=2199618804-250528-202867532336457&amp;amp;time=1519200000&amp;amp;rt=sh&amp;amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-bRRYVx1ok%2F1d5hW640dcK6Sd714%3D&amp;amp;expires=8h&amp;amp;chkv=0&amp;amp;chkbd=0&amp;amp;chkpc=&amp;amp;dp-logid=1198971133580912478&amp;amp;dp-callid=0&amp;amp;size=c710_u400&amp;amp;quality=100&amp;amp;vuk=-&amp;amp;ft=video" /&gt;&lt;/p&gt;</summary><category term="ReactNative 源码 iOS"></category></entry><entry><title>浅谈ReactNative技术的优劣</title><link href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html" rel="alternate"></link><updated>2018-02-06T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2018-02-06:qian-tan-reactnativeji-zhu-de-you-lie.html</id><summary type="html">&lt;h1&gt;浅谈ReactNative技术的优劣&lt;/h1&gt;
 &lt;p&gt;去年大概10月份开始使用ReactNative技术来开发项目，现在也已经有几个月时间了。也上线了三个ReactNative开发的项目。一直想谈谈使用ReactNative的开发感受。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;使用react-native确实可以提高界面开发效率，因为两个平台，只需要编写一套代码。react-native在这方面做了很多工作，让界面开发跟web开发基本一致。web开发人员可以很方便的写react-native界面，不需要二次学习。而且在react-native里面的像素是逻辑像素，可以比较好的适配界面。&lt;/li&gt;

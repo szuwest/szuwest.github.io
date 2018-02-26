@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog</title>
+    <title>react-native框架源码学习(iOS)(上)</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -45,16 +45,17 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
-        
-        
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html" rel="bookmark"
+        title="Permalink to react-native框架源码学习(iOS)(上)">react-native框架源码学习(iOS)(上)</a></h3>
+    </header>
 
-            <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
 <h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
 </h6>
 
 
-<h1>react-native框架源码学习(iOS)(上)</h1>
+    <h1>react-native框架源码学习(iOS)(上)</h1>
 <h2>注意事项</h2>
 <p>要学习react-native框架iOS端源码，先要了解一下注意的事项。</p>
 <ul>
@@ -356,7 +357,8 @@ RN大致结构图：
 <p><a href="https://www.jianshu.com/p/931367388a8d?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">理解React-Native(0.46) 中native和js通信原理(iOS)</a></p>
 <p><a href="http://blog.cnbang.net/tech/2698/">React Native通信机制详解</a></p>
 <p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
-<img alt="打赏" src="https://thumbnail0.baidupcs.com/thumbnail/2240a19cfdd74eaf4336b9135e9b58ae?fid=2199618804-250528-202867532336457&amp;time=1519200000&amp;rt=sh&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-bRRYVx1ok%2F1d5hW640dcK6Sd714%3D&amp;expires=8h&amp;chkv=0&amp;chkbd=0&amp;chkpc=&amp;dp-logid=1198971133580912478&amp;dp-callid=0&amp;size=c710_u400&amp;quality=100&amp;vuk=-&amp;ft=video" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<img alt="打赏" src="https://thumbnail0.baidupcs.com/thumbnail/2240a19cfdd74eaf4336b9135e9b58ae?fid=2199618804-250528-202867532336457&amp;time=1519200000&amp;rt=sh&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-bRRYVx1ok%2F1d5hW640dcK6Sd714%3D&amp;expires=8h&amp;chkv=0&amp;chkbd=0&amp;chkpc=&amp;dp-logid=1198971133580912478&amp;dp-callid=0&amp;size=c710_u400&amp;quality=100&amp;vuk=-&amp;ft=video" /></p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
@@ -364,320 +366,22 @@ RN大致结构图：
 
 
 
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html#disqus_thread">comments</a></p>            </article>
 
-
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html"><h3 class="article-title">浅谈ReactNative技术的优劣</h3></a>
-<h6 class="subheader" title="2018-02-06T00:00:00">2018-02-06
-</h6>
-
-
-<h1>浅谈ReactNative技术的优劣</h1>
-<p>去年大概10月份开始使用ReactNative技术来开发项目，现在也已经有几个月时间了。也上线了三个ReactNative开发的项目。一直想谈谈使用ReactNative的开发感受。</p>
-<ul>
-<li>使用react-native确实可以提高界面开发效率，因为两个平台，只需要编写一套代码。react-native在这方面做了很多工作，让界面开发跟web开发基本一致。web开发人员可以很方便的写react-native界面，不需要二次学习。而且在react-native里面的像素是逻辑像素，可以比较好的适配界面。</li>
-<li>react-native界面开发方式跟web开发是基本一致的，这跟native开发界面有很大不同。react-native界面开发是声明式开发，而且是继承于react框架，而纯native开发人员根本不了解这个框架，需要学习成本。它的View布局层次跟原生的布局层次不太一样。我自己也搞了挺久才搞清楚。</li>
-<li>react-native很适合那些纯http数据交互的应用。即那些数据和内容都是从服务器拉取，APP只是展示和消费的场景应用。这样不但界面可以react-native来写，HTTP请求也可以很方便的用ReactNative来写。</li>
-<li>react-native不适合用于那些需要复杂的通信方式的应用，也不适用于那些强多媒体资源的应用，例如要做相册，音视频播放的应用。因为react-native上不方便用socket的那些通信方法，需要自己封装。然后内存问题也不太好把控。对于相册，多媒体播放，ReactNative也没有封装。</li>
-<li>react-native对于web转native开发是很有用，对纯native开发转react-native开发不是很友好，主要是思维方式发生比较大的变化。</li>
-<li>react-native不能隔绝native开发的知识。要做APP开发，最终还是需懂得native开发的一些知识，react-native并不能完全屏蔽这些。一个纯web开发想要转react-native开发，还是需要懂native开发的人来帮助和指导，或者自己需要先学习native相关知识。</li>
-</ul>
-<h1>react-native开发会是未来的方向吗</h1>
-<p>这个我也不敢说。不过ReactNative开发未来会代替掉一些native发 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/react-native.html">react-native </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/code-reviewfang-an.html"><h3 class="article-title">Code Review方案</h3></a>
-<h6 class="subheader" title="2018-01-10T00:00:00">2018-01-10
-</h6>
-
-
-<h1>Code Review方案</h1>
-<h2>定义</h2>
-<p>Code Review代码评审是指在软件开发过程中，通过对源代码进行系统性检查的过程。通常的目的是查找各种缺陷，包括代码缺陷、功能实现问题、编码合理性、性能优化等；保证软件总体质量和提高开发者自身水平</p>
-<h2>code review 的好处</h2>
-<ul>
-<li>
-<ol>
-<li>提高代码质量。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>及早发现潜在缺陷，降低修改/弥补缺陷的成本。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>促进团队内部知识共享，提高团队整体水平。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>评审过程对于评审人员来说，也是一种思路重构的过程。帮助更多的人理解系统。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>是一个传递知识的手段，可以让其它并不熟悉代码的人知道作者的意图和想法，从而可以在以后轻松维护代码。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>鼓励程序员们相互学习对方的长处和优点。 </li>
-</ol>
-</li>
-<li>
-<ol>
-<li>可以被用来确认自己的设计和实现是一个清楚和简单的。</li>
-</ol>
-</li>
-</ul>
-<h2>code review形式</h2>
-<p>一般code review有两种形式，一种是代码评审会议，我称之为Code Review Meeting，就是将团队成员都组织起来开会，让代码Owner上去讲自己代码的实现和思路，其它人发表意见和进行讨论，也有把这种叫做team review。另外一种是一对一评审，我称之为Single Review，就是项目owner提交代码之后，让reviewer在空闲的时候帮忙评审代码，并且写出批注，owner收到批注后，进行修改或者回复 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/codereview.html">codereview </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/code-reviewfang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/code-reviewfang-an.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html"><h3 class="article-title">Android so库加固加壳方案</h3></a>
-<h6 class="subheader" title="2018-01-06T00:00:00">2018-01-06
-</h6>
-
-
-<h1>Android so库加固加壳方案</h1>
-<p>Android应用主要包含资源文件和代码，而代码一般包括Java代码和C/C++代码。Java代码编译后会生成dex文件，而C/C++编译后会生成so文件。Android应用的保护，主要对编译后的dex文件和so文件来保护，防止被别人反编译查看到里面的核心代码和逻辑。</p>
-<p>对于Java代码，一般在编译时做代码混淆，编译后的文件名，函数名和变量名会变成一些无意义的名字，这个即使代码被反编译出来，也很难读懂。不过由于调用关系和逻辑都还在，花些时间还是有可能读懂。所以就有了一些防止反编译的方法出现。这就包括了dex加壳或者加密方法。对dex文件保护的方法现在有不少成熟的方案，有不少第三方公司免费提供加固方案。</p>
-<p>对于C/C++代码的保护方案，会比Java代码的更麻烦一下。C/C++经过编译后生成so文件，这个so文件同样会能被反编译。由于我们的主要算法都采用C/C++来实现，并生成so文件提供给合作方使用，我们重点说的是C/C++代码和so文件的保护。</p>
-<p>对于so文件的保护，可分为有so源代码和无so源码的情况。</p>
-<h2>有源码保护</h2>
-<p>针对有源代码的情况，可以大致分为代码混淆，Section或者函数加密。</p>
-<h3>代码混淆</h3>
-<p>代码混淆最简单的方法就是利用宏定义混淆函数名。例如通过一个宏定义把一个有意义的函数名变为一个无意义的字母组合，在编译后有意义的函数名就被替换为无意义的字母组合 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/dong-hua-jia-gu-jia-ke.html">动画 加固 加壳 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/2017nian-zong-jie-he-2018nian-zhan-wang.html"><h3 class="article-title">2017年总结和2018年展望</h3></a>
-<h6 class="subheader" title="2017-12-31T00:00:00">2017-12-31
-</h6>
-
-
-<h1>2017年总结和2018年展望</h1>
-<p>已经过去的2017年发生了很多事，我想从工作，生活和投资三个角度去总结一下。</p>
-<h2>工作</h2>
-<p>我离开了工作3年多的迅雷，这是我第二次离开迅雷。这可以说是一个好的选择，也可以说是不好的选择。实际上我的离开不是说已经在迅雷呆够了，而是因为我的领导挖我过去他们公司。好的方面，当然工资涨了，跨入了AI行业，有老大罩着。不好的方面是创业公司，风险高很多，很有可能坐不起来或者倒闭，浪费时间。还有一个比较遗憾的是，离开了自己一直看好的产品项目，玩客云即将要发布了，自己却离开了。曾家自己很看好这个项目，也投入了不少精力，真心希望能成功的产品，却在黎明前离开了，有点遗憾。有得必有失，这个选择是好是坏还要待时间来验证。</p>
-<p>今年来到新公司，倒是学到了一点新技术：ReactNative。以前它出来的时候，自己也去看了一下，没机会试试。现在在项目里用起来了。这个技术看起来也没那么神，但是也确实有不少好处。这些年感觉自己的技术进步慢了，终于年纪也来了，比不上刚毕业的年轻人了。我自己也担心自己未来路怎么走。我现在也没有答案，我知道自己需要不断探索和思考。自己要减少浪费一些无所谓的时间，多点时间花在家庭和工作上。</p>
-<p>另外一点是进入了AI行业，发现这个行业泡沫确实巨大。现在的创业感觉跟4年前的创业完全不一样 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/zong-jie.html">总结 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/2017nian-zong-jie-he-2018nian-zhan-wang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/2017nian-zong-jie-he-2018nian-zhan-wang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html"><h3 class="article-title">玩客云的前世与出生</h3></a>
-<h6 class="subheader" title="2017-12-24T00:00:00">2017-12-24
-</h6>
-
-
-<h1>玩客云的前世与出生</h1>
-<p>迅雷最近的股价波动很大，股价从最低点附近4美元到现在13美元附近，涨了3倍多，最高点甚至到27美元。只是短短几个月的时间，涨幅这么大，主要是因为玩客云和玩客币（现在叫链克）。对于玩客币，我自己不想说太多，但是对于玩客云这个产品，我是很有感情的。这个产品是我从头就开始参与开发，虽然我已经离开玩客云团队一段时间了，但是我还是想说说这个产品。知道这个产品前世与今生的人，其实真的不是很多。我想说一说这个产品，也算是对自己的一段总结。</p>
-<p>不过我说的所有观点都是我个人观点，跟玩客云团队无关，特此声明。</p>
-<h2>玩客云的出生</h2>
-<p>玩客云是有网心科技出品的一款智能硬件产品，主打个人云盘功能，充当CDN节点功能，后来也又加入玩客币功能。玩客云这个项目最初的时候并不叫玩客云，内部我们叫赚钱宝3代。它是迅雷下载宝和赚钱宝的合并的一个产品。实际上 玩客云=迅雷下载宝+赚钱宝+玩客币 这样的一个产品。所以在做玩客云的时候，下载宝和赚钱宝这两个项目已经停了，然后团队合并成新的团队：玩客云团队。而这个团队的绝大部分人，都是下载宝团队的人，下载宝整个项目就是这样从迅雷总部并入网心科技的。玩客云的前身就是迅雷下载宝。</p>
-<p>玩客云的最初立项是在3，4月份，从一开始老板就非常重视整个项目。我们内部叫赚钱宝3代，但是我们一直在想给他一个新的名字 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/chan-pin.html">产品</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/xun-lei-wang-xin-chao-ji-ying-pan-xun-lei-xia-zai-bao-zhuan-qian-bao-wan-ke-yun.html">迅雷 网心 超级硬盘 迅雷下载宝 赚钱宝 玩客云 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html"><h3 class="article-title">手机局域网内（包括热点）发现和组网通讯实现</h3></a>
-<h6 class="subheader" title="2017-11-05T00:00:00">2017-11-05
-</h6>
-
-
-<h1>手机局域网内（包括热点）组网通讯实现</h1>
-<p>最近在做一个应用，需要多个手机一起组网，一个充当主机，其他多个手机充当从机。主机跟每个从机之间可以相互通信，发送消息和文件。这不就是个CS（client-server）模式吗，只不过server不是在云端，只是在同一个局域网的手机上罢了。</p>
-<p>这里面有两个关键的地方，一个是如何发现同一个局域网内的手机客户端，包括自建的热点，一个是知道各个手机的Ip地址后，用什么方式来建立通信。这里说一下热点，手机开启热点之后，别的手机连上这个特点，其实也是一个小型局域网，只不过这个局域网稍微有点不一样（Ip地址），其他的都一样。</p>
-<h2>局域网发现</h2>
-<p>局域网发现主要难点在于如何得到对方Ip地址。我们的做法是发送UDP包。UDP协议是无面向连接的，也就是不需要像TCP协议那样提前建立连接。所以我们向局域网内某一个特定的端口广播UDP包，接收到这个包的人，发送回包，那么我们就知道彼此的存在和地址。</p>
-<p>那么关键地方是</p>
-<ul>
-<li>有人一直在监听一个端口X，接收UDP包</li>
-<li>有人在一直往这个端口X发送UDP包</li>
-</ul>
-<p>监听端的人收到了UDP包后，就知道了发送者的Ip地址。但这时发送者是不知道接收者的，因为这是UDP包，无连接的状态的。那怎么做才让发送者也知道了。其实只要发过来再做一次就行。发送者同时也是监听者，这就行了。不过发送者A监听的是另一个端口Y，接收者B接收到包后 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ju-yu-wang-re-dian-tong-xun-yan-bo-websocket.html">局域网 热点 通讯 广播 WebSocket </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/sheng-wen-shi-bie-zhi-androidshou-ji-lu-yin-cai-ji-tan-tao.html"><h3 class="article-title">声纹识别之Android手机录音采集探讨</h3></a>
-<h6 class="subheader" title="2017-10-08T00:00:00">2017-10-08
-</h6>
-
-
-<h1>声纹识别之Android手机录音采集探讨</h1>
-<p>声纹识别是人工智能语音方向的一个重要分支。最近人工智能的兴起也带动了声纹识别这一领域的发展。声纹识别也越来越准确。不过在声音采集方面，特别是手机端的声音采集，是一个很讲究的问题。我加入人工智能声纹识别公司也有两个多月了，对手机端的语音采集也有了一定的了解，准备整理一下做成文章，跟大家探讨。今天重点说Android手机的录音采集方面的东西。</p>
-<h2>语音采集的一些基础指标</h2>
-<p>首先要搞清楚的一点是我们的人声是一些声波，是模拟信号，我们计算机的采集是将这些模拟信号转化为数字信号存储起来。我们播放语音文件的时候，是将数字信号转化为模拟信号。说实话，这一块的知识我大学也学得不好，模电我们软件工程的学生没有专门的课程，数电倒是有。不过数电模电的转化这个概念这倒不难理解。这里面就涉及到了采样率和采样位数这两个指标。</p>
-<ul>
-<li>采样率，或者叫采样频率，指每秒钟取得声音样本的次数。采样率越高，数据越精确。我们也需要了解常用的采样率是多少：8k(8000），16k, 44.1k,48k。8k是电话所用的采样率，对于我们人说的声音的频率，基本在这个采样率之内。所以电话就才采用这个频率采样。48k采样率是CD，DVD所采用的。超过这个频率人耳是分辨不出来的了。</li>
-<li>采样位数，说的是每个采样数据占的位数。每个采样数据记录的是振幅, 采样精度取决于采样位数的大小。常用的位数是8位，也就是一个字节。还有16位或者32位 ...</li></ul><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/sheng-wen-shi-bie-ren-gong-zhi-neng-lu-yin-android.html">声纹识别 人工智能 录音 Android </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/sheng-wen-shi-bie-zhi-androidshou-ji-lu-yin-cai-ji-tan-tao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-wen-shi-bie-zhi-androidshou-ji-lu-yin-cai-ji-tan-tao.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html"><h3 class="article-title">适配iOS11与iPhone X需要注意事项</h3></a>
-<h6 class="subheader" title="2017-09-26T00:00:00">2017-09-26
-</h6>
-
-
-<h1>适配iOS11与iPhone X需要注意的事项</h1>
-<p>最近苹果发布了iOS11和iPhone X，我之前开发的一个应用界面出现了问题，然后需要适配。记录一下需要注意的事项。</p>
-<h2>适配iOS11</h2>
-<p>第一个问题是iOS11导航栏改变了。除了加入largeTitle这种特性以外，还改变了很多东西，可以说是完全重写了导航栏。我遇到的问题是导航栏返回按钮图片变得很大，巨丑无比，所以得看看什么原因。</p>
-<ul>
-<li>我看了下我导航栏的设置代码，还做了挺多事，而且做了很多hack。第一是通过 <strong>[UINavigationBar appearance].backIndicatorImage</strong> 和 <strong>[UINavigationBar appearance].backIndicatorTransitionMaskImage</strong>设置了返回按钮图片，还有 </li>
-</ul>
-<div class="highlight"><pre><span class="p">[[</span><span class="n">UIBarButtonItem</span> <span class="n">appearance</span><span class="p">]</span> <span class="n">setBackButtonTitlePositionAdjustment</span><span class="o">:</span><span class="n">UIOffsetMake</span><span class="p">(</span><span class="n">NSIntegerMin</span><span class="p">,</span> <span class="n">NSIntegerMin</span><span class="p">)</span> <span class="n">forBarMetrics</span><span class="o">:</span><span class="n">UIBarMetricsDefault</span><span class="p">];</span>
-</pre></div>
-
-
-<p>设置了把返回按钮右边的文字隐藏掉。还有通过hack 方式找到 _UINavigationBarBackIndicatorView把它的frame给改了。</p>
-<p>因为iOS11的导航栏变化很大，_UINavigationBarBackIndicatorView这个类找不到了，所以frame修改就失败了。然后因为我发现我设置的返回按钮的那种图片本来是很大，因为设置了frame把它缩小了。而现在frame已经设置不了，所以就按图片原本的大小显示了。最后解决办法就是把图片大小设置成符合导航栏的大小。</p>
-<p>图片大小是正常了，但是还是有别问题 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ios11-iphonex.html">iOS11 iPhoneX </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
-<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
-</h6>
-
-
-<h1>Coturn在iOS端应用和libevent的编译</h1>
-<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
-<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
-<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
-<p>下面是libevent的编译脚本主要内容</p>
-<div class="highlight"><pre>###########################################################################
-# Choose your libevent version and your currently-installed iOS SDK version:
-#
-VERSION=&quot;2.1.8-stable&quot;
-USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-            <!-- /#posts-list -->
-<div class="pagination-centered">
-<h6 class="subheader">Page 1 of 5</h6>
-
-<p>
-
-        <a href="http://szuwest.github.io/index2.html">Next &raquo;</a>
-</p>
-</div>
-
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html";
+        var disqus_url = "http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html";
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
     </div>
     <!-- End Main Content -->
 
