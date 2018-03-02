@@ -4,7 +4,7 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>West's blog - ReactNative 源码 iOS</title>
+    <title>react-native框架源码学习(iOS)(下)</title>
 
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
     <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
@@ -45,16 +45,17 @@
 
     <!-- Main Blog Content -->
     <div class="large-9 columns">
-        
-        
+<article>
+    <header>
+        <h3 class="article-title"><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html" rel="bookmark"
+        title="Permalink to react-native框架源码学习(iOS)(下)">react-native框架源码学习(iOS)(下)</a></h3>
+    </header>
 
-            <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
 <h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
 </h6>
 
 
-<h1>react-native框架源码学习(iOS)(下)</h1>
+    <h1>react-native框架源码学习(iOS)(下)</h1>
 <p>如果没有看过上篇，请先看<a href="">react-native框架源码学习(iOS)(上)</a>。</p>
 <h3>JSCExecutor相关初始化</h3>
 <p>在上篇中说到Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。NativeToJsBridge的构造函数还包含更多的东西。</p>
@@ -438,7 +439,8 @@ void JSCExecutor::initOnJSVMThread() throw(JSException) {
 <p><a href="https://www.jianshu.com/p/931367388a8d?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">理解React-Native(0.46) 中native和js通信原理(iOS)</a></p>
 <p><a href="http://blog.cnbang.net/tech/2698/">React Native通信机制详解</a></p>
 <p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
-<img alt="打赏" src="https://thumbnail0.baidupcs.com/thumbnail/2240a19cfdd74eaf4336b9135e9b58ae?fid=2199618804-250528-202867532336457&amp;time=1519200000&amp;rt=sh&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-bRRYVx1ok%2F1d5hW640dcK6Sd714%3D&amp;expires=8h&amp;chkv=0&amp;chkbd=0&amp;chkpc=&amp;dp-logid=1198971133580912478&amp;dp-callid=0&amp;size=c710_u400&amp;quality=100&amp;vuk=-&amp;ft=video" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<img alt="打赏" src="https://thumbnail0.baidupcs.com/thumbnail/2240a19cfdd74eaf4336b9135e9b58ae?fid=2199618804-250528-202867532336457&amp;time=1519200000&amp;rt=sh&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-bRRYVx1ok%2F1d5hW640dcK6Sd714%3D&amp;expires=8h&amp;chkv=0&amp;chkbd=0&amp;chkpc=&amp;dp-logid=1198971133580912478&amp;dp-callid=0&amp;size=c710_u400&amp;quality=100&amp;vuk=-&amp;ft=video" /></p>
+<p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
@@ -446,50 +448,22 @@ void JSCExecutor::initOnJSVMThread() throw(JSException) {
 
 
 
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>            </article>
 
+	<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'westblog'
+        var disqus_identifier = "react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html";
+        var disqus_url = "http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html";
 
-                <hr  class="gradient"/>
-
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
-<h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
-</h6>
-
-
-<h1>react-native框架源码学习(iOS)(上)</h1>
-<h2>注意事项</h2>
-<p>要学习react-native框架iOS端源码，先要了解一下注意的事项。</p>
-<ul>
-<li>一、 首先需要非常熟悉objective-c语言，对OC的runtime机制更是必不可少。源码里大量用了runtime特性。然后也要熟悉c++语言。除了OC语言，里面还有大量的c++代码，OC与c++混合代码。对c++的template和std库也要熟悉。我本人对c++也熟悉，但是不够深入，对一些高级特性不是很了解，所以相关的一些代码看起来很吃力。最后当然也熟悉js语言。我大学时学习过js，但是那还真是远古时代了，js近年来发展很快，我对很多新特性不是很了解，这也对我学习有一定的阻碍。另外还有要比较了解iOS的JavaScriptCore框架，这个是js与OC通信的基础。</li>
-<li>二、 要对react-native的版本了解。查看网上的资料时也要注意他们所说的RN版本。现在网上很多研究资料，他们所研究的版本都是很早之前的版本。新的版本跟老版本有很多细节和流程改变了。如果你发现有些文章里说的东西跟你所看到的对不上，那就是研究的版本不一致。</li>
-<li>三、如果看不懂，多看看别人的分析文章。如果对某种语言或者框架库不熟悉，建议先把该补的补上。</li>
-</ul>
-<p>我所研究的RN版本是<strong>0.49</strong>，而最新版是0.51 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-            <!-- /#posts-list -->
-<div class="pagination-centered">
-<h6 class="subheader">Page 1 of 1</h6>
-
-<p>
-
-</p>
-</div>
-
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</article>
     </div>
     <!-- End Main Content -->
 

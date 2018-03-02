@@ -49,305 +49,387 @@
         
 
             <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
-<h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
+                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
+<h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
 </h6>
 
 
-<h1>react-native框架源码学习(iOS)(上)</h1>
-<h2>注意事项</h2>
-<p>要学习react-native框架iOS端源码，先要了解一下注意的事项。</p>
-<ul>
-<li>一、 首先需要非常熟悉objective-c语言，对OC的runtime机制更是必不可少。源码里大量用了runtime特性。然后也要熟悉c++语言。除了OC语言，里面还有大量的c++代码，OC与c++混合代码。对c++的template和std库也要熟悉。我本人对c++也熟悉，但是不够深入，对一些高级特性不是很了解，所以相关的一些代码看起来很吃力。最后当然也熟悉js语言。我大学时学习过js，但是那还真是远古时代了，js近年来发展很快，我对很多新特性不是很了解，这也对我学习有一定的阻碍。另外还有要比较了解iOS的JavaScriptCore框架，这个是js与OC通信的基础。</li>
-<li>二、 要对react-native的版本了解。查看网上的资料时也要注意他们所说的RN版本。现在网上很多研究资料，他们所研究的版本都是很早之前的版本。新的版本跟老版本有很多细节和流程改变了。如果你发现有些文章里说的东西跟你所看到的对不上，那就是研究的版本不一致。</li>
-<li>三、如果看不懂，多看看别人的分析文章。如果对某种语言或者框架库不熟悉，建议先把该补的补上。</li>
-</ul>
-<p>我所研究的RN版本是<strong>0.49</strong>，而最新版是0.51. 最后我自己也不敢说自己完全看懂了源码，自己的理解完全正确，所以下面所说的也不一定完全正确。</p>
-<h2>核心原理</h2>
-<p>主要原理利用JavaScriptCore的通信机制来做一些基本的js和OC相互调用，但是RN还做了更多事情。
-OC会将所有要暴露给JS调用的方法和属性生成一个配置表，然后会将这个配置表写入到JS端。RN中OC和JS都分别有一个桥接对象，他们相互调用都是通过这个桥接对象进行。
-RN大致结构图：
-<img alt="RN结构图" src="https://upload-images.jianshu.io/upload_images/1271831-7ba4d20000946a6b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" /></p>
-<h2>启动流程</h2>
-<p>研究源码当然得从启动流程开始。新建一个RN工程，它的AppDelagte入口方法代码大致如下：</p>
-<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span>
-<span class="p">{</span>
-
-  <span class="n">NSURL</span> <span class="o">*</span><span class="n">jsCodeLocation</span><span class="p">;</span>
-
-  <span class="n">jsCodeLocation</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RCTBundleURLProvider</span> <span class="n">sharedSettings</span><span class="p">]</span> <span class="n">jsBundleURLForBundleRoot</span><span class="o">:</span><span class="s">@&quot;index.ios&quot;</span> <span class="n">fallbackResource</span><span class="o">:</span><span class="nb">nil</span><span class="p">];</span>
-
-  <span class="n">RCTRootView</span> <span class="o">*</span><span class="n">rootView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RCTRootView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithBundleURL</span><span class="o">:</span><span class="n">jsCodeLocation</span>
-                                                      <span class="nl">moduleName:</span><span class="s">@&quot;VprScene&quot;</span>
-                                               <span class="nl">initialProperties:</span><span class="nb">nil</span>
-                                                   <span class="nl">launchOptions:</span><span class="n">launchOptions</span><span class="p">];</span>
-  <span class="n">rootView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIColor</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithRed</span><span class="o">:</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">255</span> <span class="n">green</span><span class="o">:</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">255</span> <span class="n">blue</span><span class="o">:</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">255</span> <span class="n">alpha</span><span class="o">:</span><span class="mi">1</span><span class="p">];</span>
-
-  <span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithFrame</span><span class="o">:</span><span class="p">[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">];</span>
-  <span class="n">UIViewController</span> <span class="o">*</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIViewController</span> <span class="n">new</span><span class="p">];</span>
-  <span class="n">rootViewController</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">rootView</span><span class="p">;</span>
-  <span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="n">rootViewController</span><span class="p">;</span>
-  <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="n">makeKeyAndVisible</span><span class="p">];</span>
-
-  <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
-<span class="p">}</span>
+<h1>react-native框架源码学习(iOS)(下)</h1>
+<p>如果没有看过上篇，请先看<a href="">react-native框架源码学习(iOS)(上)</a>。</p>
+<h3>JSCExecutor相关初始化</h3>
+<p>在上篇中说到Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。NativeToJsBridge的构造函数还包含更多的东西。</p>
+<div class="highlight"><pre><span class="n">NativeToJsBridge</span><span class="o">::</span><span class="n">NativeToJsBridge</span><span class="p">(</span>
+    <span class="n">JSExecutorFactory</span><span class="o">*</span> <span class="n">jsExecutorFactory</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ModuleRegistry</span><span class="o">&gt;</span> <span class="n">registry</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MessageQueueThread</span><span class="o">&gt;</span> <span class="n">jsQueue</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">InstanceCallback</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">m_destroyed</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_delegate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">JsToNativeBridge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">callback</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_executor</span><span class="p">(</span><span class="n">jsExecutorFactory</span><span class="o">-&gt;</span><span class="n">createJSExecutor</span><span class="p">(</span><span class="n">m_delegate</span><span class="p">,</span> <span class="n">jsQueue</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_executorMessageQueueThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">jsQueue</span><span class="p">))</span> <span class="p">{}</span>
 </pre></div>
 
 
-<p>最主要的代码就是初始化了RCTRootView，别的都是普通的代码。也就是说由RCTRootView来进行整个RN的初始化。</p>
-<p>RCTRootView的initWithBundleURL:方法中初始化了一个RCTBridge，RCTBridge的初始化方法里调用了一个setUp方法，在这里又初始化了一个RCTCxxBridge（早期版本是RCTBatchedBridge，它们都是RCTBridge的子类）对象，然后调用了它的start方法。这是个关键方法。RCTBridge与RCTCxxBridge类似一个代理模式，RCTBridge提供了对外接口，实际上调用了RCTCxxBridge的实现。这样的好处是方便替换内部实现，而接口保持稳定。</p>
-<p>RCTCxxBridge的start方法(为了方便理解，删掉了不必要的代码):</p>
-<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">start</span>
-<span class="p">{</span>
-  <span class="p">......</span>
+<p>NativeToJsBridge的成员变量包括了一个m_delegate(JsToNativeBridge)，一个m_executorMessageQueueThread（MessageQueueThread）和m_executor（JSCExecutor），在它的构造函数里，将JsToNativeBridge创建了然后又传给jsExecutorFactory来创建JSCExecutor，JsToNativeBridge实际上是给JSCExecutor使用的。</p>
+<div class="highlight"><pre>JSCExecutor::JSCExecutor(std::shared_ptr<span class="nt">&lt;ExecutorDelegate&gt;</span> delegate,
+                         std::shared_ptr<span class="nt">&lt;MessageQueueThread&gt;</span> messageQueueThread,
+                         const folly::dynamic<span class="err">&amp;</span> jscConfig) throw(JSException) :
+    m_delegate(delegate),
+    m_messageQueueThread(messageQueueThread),
+    m_nativeModules(delegate ? delegate-&gt;getModuleRegistry() : nullptr),
+    m_jscConfig(jscConfig) {
+  initOnJSVMThread();
 
-  <span class="c1">// Set up the JS thread early</span>
-  <span class="n">_jsThread</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSThread</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithTarget</span><span class="o">:</span><span class="p">[</span><span class="n">self</span> <span class="n">class</span><span class="p">]</span>
-                                      <span class="nl">selector:</span><span class="k">@selector</span><span class="p">(</span><span class="n">runRunLoop</span><span class="p">)</span>
-                                        <span class="nl">object:</span><span class="nb">nil</span><span class="p">];</span>
-  <span class="n">_jsThread</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">RCTJSThreadName</span><span class="p">;</span>
-  <span class="n">_jsThread</span><span class="p">.</span><span class="n">qualityOfService</span> <span class="o">=</span> <span class="n">NSOperationQualityOfServiceUserInteractive</span><span class="p">;</span>
-  <span class="p">[</span><span class="n">_jsThread</span> <span class="n">start</span><span class="p">];</span>
+  {
+    SystraceSection s(&quot;nativeModuleProxy object&quot;);
+    installGlobalProxy(m_context, &quot;nativeModuleProxy&quot;,
+                       exceptionWrapMethod<span class="err">&lt;</span><span class="ni">&amp;JSCExecutor::getNativeModule&gt;());</span>
+  }
+}
 
-  <span class="kt">dispatch_group_t</span> <span class="n">prepareBridge</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
+void JSCExecutor::initOnJSVMThread() throw(JSException) {
+    ......
+    m_context = JSC_JSGlobalContextCreateInGroup(useCustomJSC, nullptr, globalClass);
+    .....
+    installNativeHook<span class="err">&lt;</span><span class="ni">&amp;JSCExecutor::nativeFlushQueueImmediate&gt;(&quot;nativeFlushQueueImmediate&quot;);</span>
+  installNativeHook<span class="err">&lt;</span><span class="ni">&amp;JSCExecutor::nativeCallSyncHook&gt;(&quot;nativeCallSyncHook&quot;);</span>
+  ......
+}
+</pre></div>
 
-  <span class="p">[</span><span class="n">self</span> <span class="n">registerExtraModules</span><span class="p">];</span>
-  <span class="c1">// Initialize all native modules that cannot be loaded lazily</span>
-  <span class="p">[</span><span class="n">self</span> <span class="n">_initModules</span><span class="o">:</span><span class="n">RCTGetModuleClasses</span><span class="p">()</span> <span class="n">withDispatchGroup</span><span class="o">:</span><span class="n">prepareBridge</span> <span class="n">lazilyDiscovered</span><span class="o">:</span><span class="nb">NO</span><span class="p">];</span>
 
-  <span class="c1">// This doesn&#39;t really do anything.  The real work happens in initializeBridge.</span>
-  <span class="n">_reactInstance</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">new</span> <span class="n">Instance</span><span class="p">);</span>
+<p>在initOnJSVMThread中，先创建了全局的JSGlobalContext,然后给这个context注册了nativeFlushQueueImmediate和nativeCallSyncHook回调函数，这两个函数专门给JS调用。这两个函数都将会在MessageQueue.js中被调用。到这里终于有看到JS相关的调用，这里说明一下核心的JS源码存放目录。在工程目录/node_modules/react-native/Libraries/BatchedBridge目录下，主要有BatchedBridge.js,MessageQueue.js,NativeModules.js三个文件。</p>
+<p>在创建context的时候，使用了宏，最终会调用JavaScriptCore的代码。这个全局的context很重要，OC中要运行js代码就是靠他。而js代码中的global对象对应就是OC中的这个context。而nativeFlushQueueImmediate这个方法主要是将js传过来的队列里面的需要调用的方法一起调用了。nativeCallSyncHook这个方式主要是给JS直接同步调用OC方法来用的。为什么这么做后面再说，我们现在只需知道在创建context之后，就已经将OC的这两个方法注入到js的global对象中。</p>
+<p>initOnJSVMThread()执行之后，往m_context中注册了nativeModuleProxy的JS对象，将这个对象绑定到了getNativeModule这个函数。</p>
+<div class="highlight"><pre>installGlobalProxy(m_context, &quot;nativeModuleProxy&quot;,
+                       exceptionWrapMethod<span class="err">&lt;</span><span class="ni">&amp;JSCExecutor::getNativeModule&gt;());</span>
+</pre></div>
 
-  <span class="n">__weak</span> <span class="n">RCTCxxBridge</span> <span class="o">*</span><span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
 
-  <span class="c1">// Prepare executor factory (shared_ptr for copy into block)</span>
-  <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">JSExecutorFactory</span><span class="o">&gt;</span> <span class="n">executorFactory</span><span class="p">;</span>
-  <span class="p">.....</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">executorFactory</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kt">BOOL</span> <span class="n">useCustomJSC</span> <span class="o">=</span>
-        <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">delegate</span> <span class="n">respondsToSelector</span><span class="o">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">shouldBridgeUseCustomJSC</span><span class="o">:</span><span class="p">)]</span> <span class="o">&amp;&amp;</span>
-        <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">delegate</span> <span class="n">shouldBridgeUseCustomJSC</span><span class="o">:</span><span class="n">self</span><span class="p">];</span>
-      <span class="c1">// The arg is a cache dir.  It&#39;s not used with standard JSC.</span>
-      <span class="n">executorFactory</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">new</span> <span class="n">JSCExecutorFactory</span><span class="p">(</span><span class="n">folly</span><span class="o">::</span><span class="n">dynamic</span><span class="o">::</span><span class="n">object</span>
-        <span class="p">(</span><span class="s">&quot;OwnerIdentity&quot;</span><span class="p">,</span> <span class="s">&quot;ReactNative&quot;</span><span class="p">)</span>
-        <span class="p">(</span><span class="s">&quot;UseCustomJSC&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="n">useCustomJSC</span><span class="p">)</span>
-      <span class="p">));</span>
-    <span class="p">}</span>
-  <span class="p">......</span>
-  <span class="c1">// Dispatch the instance initialization as soon as the initial module metadata has</span>
-  <span class="c1">// been collected (see initModules)</span>
-  <span class="n">dispatch_group_enter</span><span class="p">(</span><span class="n">prepareBridge</span><span class="p">);</span>
-  <span class="p">[</span><span class="n">self</span> <span class="n">ensureOnJavaScriptThread</span><span class="o">:^</span><span class="p">{</span>
-    <span class="p">[</span><span class="n">weakSelf</span> <span class="n">_initializeBridge</span><span class="o">:</span><span class="n">executorFactory</span><span class="p">];</span>
-    <span class="n">dispatch_group_leave</span><span class="p">(</span><span class="n">prepareBridge</span><span class="p">);</span>
-  <span class="p">}];</span>
+<p>那么nativeModuleProxy在JS中到底是什么东西？这个定义在NativeModules.js中。</p>
+<div class="highlight"><pre><span class="kd">let</span> <span class="nx">NativeModules</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">moduleName</span><span class="o">:</span> <span class="nx">string</span><span class="p">]</span><span class="o">:</span> <span class="nb">Object</span><span class="p">}</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">nativeModuleProxy</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">NativeModules</span> <span class="o">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">nativeModuleProxy</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="err">·······</span>
+<span class="p">}</span>
 
-    <span class="p">.....</span>
-    <span class="c1">// Load the source asynchronously, then store it for later execution.</span>
-    <span class="n">dispatch_group_enter</span><span class="p">(</span><span class="n">prepareBridge</span><span class="p">);</span>
-    <span class="n">__block</span> <span class="n">NSData</span> <span class="o">*</span><span class="n">sourceCode</span><span class="p">;</span>
-    <span class="p">[</span><span class="n">self</span> <span class="n">loadSource</span><span class="o">:^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">,</span> <span class="n">RCTSource</span> <span class="o">*</span><span class="n">source</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-        <span class="p">[</span><span class="n">weakSelf</span> <span class="n">handleError</span><span class="o">:</span><span class="n">error</span><span class="p">];</span>
-      <span class="p">}</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">NativeModules</span><span class="p">;</span>
+</pre></div>
 
-      <span class="n">sourceCode</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
-      <span class="n">dispatch_group_leave</span><span class="p">(</span><span class="n">prepareBridge</span><span class="p">);</span>
-    <span class="p">}</span> <span class="n">onProgress</span><span class="o">:^</span><span class="p">(</span><span class="n">RCTLoadingProgress</span> <span class="o">*</span><span class="n">progressData</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">.....</span>
-    <span class="p">}];</span>
 
-    <span class="c1">// Wait for both the modules and source code to have finished loading</span>
-    <span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">prepareBridge</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">QOS_CLASS_USER_INTERACTIVE</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
-      <span class="n">RCTCxxBridge</span> <span class="o">*</span><span class="n">strongSelf</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">sourceCode</span> <span class="o">&amp;&amp;</span> <span class="n">strongSelf</span><span class="p">.</span><span class="n">loading</span><span class="p">)</span> <span class="p">{</span>
-        <span class="p">[</span><span class="n">strongSelf</span> <span class="n">executeSourceCode</span><span class="o">:</span><span class="n">sourceCode</span> <span class="n">sync</span><span class="o">:</span><span class="nb">NO</span><span class="p">];</span>
-      <span class="p">}</span>
-    <span class="p">});</span>
+<p>我们可以看到NativeModules就是指向了nativeModuleProxy，即就是OC的代理。我们要调用OC某个类的方法，就是通过NativeModules来调用的。例如我们已经定义好另一个对JS暴露的录音类AudioRecorder,那么在JS中要调用这个类的方法，就可以 let AudioRecorder = NativeModules.AudioRecorder; AudioRecorder.record();这样调用。那么我们知道它其实是调用到了OC的JSCExecutor中的getNativeModule方法，getNativeModule方法其实主要作用根据传入的模块名字生成对应的模块配置，具体实现后面再说。这里说一下JS代码里有个else分支，这是NativeModules生成的另一种做法：把所有的OC要暴露的类和方法都存在remoteModuleConfig里，然后他们注入到NativeModules里（在OC里对应的代码在RCTObjcExecutor的构造函数里）。</p>
+<p>到这里JSCExecutor的初始化完成。我们重新回到RCTCxxBridge的start方法。跟JSCExecutor同时进行的是加载js源码，jsBundle的加载是通过RCTJavaScriptLoader进行的，这里不进行讨论。当初始化和js源码加载完成后，就会执行js源码。</p>
+<h3>js源码执行</h3>
+<p>在初始化过程中我们已经创建好全局的JavaScriptCore context，并在这个context中注入了nativeFlushQueueImmediate，nativeCallSyncHook，getNativeModule三个回调方法。现在将执行已加载的JS源码。它是执行链是这样的</p>
+<ul>
+<li>[RCTCxxBridge executeSourceCode: ]</li>
+<li>[RCTCxxBridge enqueueApplicationScript:]</li>
+<li>void Instance::loadScriptFromString()</li>
+<li>void NativeToJsBridge::loadApplication()<ul>
+<li>void JSCExecutor::loadApplicationScript()</li>
+<li>void JSCExecutor::flush()</li>
+<li>void JSCExecutor::bindBridge()</li>
+</ul>
+</li>
+</ul>
+<p>在 void JSCExecutor::loadApplicationScript方法最重要的代码如下</p>
+<div class="highlight"><pre><span class="p">......</span>
+<span class="n">evaluateScript</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span> <span class="n">jsScript</span><span class="p">,</span> <span class="n">jsSourceURL</span><span class="p">);</span>
 <span class="p">.....</span>
-<span class="p">}</span>
+<span class="n">flush</span><span class="p">();</span>
 </pre></div>
 
 
-<p>这个方法很复杂，主要做了以下内容：</p>
-<ul>
-<li>创建并开启了一个js线程，绑定了一个runloop，也即是说js代码都是在这个线程里执行。</li>
-<li>准备所有要暴露给js调用的OC类,ModuleClass，为每个类封装到RCTModuleData里，如果需要在主线程中是创建某些类的实例，则会在主线程中去创建它。这些RCTModuleData会分别存储在一个字典和数组里。</li>
-<li>准备JS运行环境，初始化JSExecutorFactory，并在js线程中创建js的RCTMessageThread，初始化_reactInstance（Instance，这是native跟jsBridge的桥梁）和JSCExecutor</li>
-<li>加载JS源码</li>
-<li>以上全做完之后，执行JS源码</li>
-</ul>
-<p>注意代码里用到一个叫prepareBridge的dispatch_group_t，dispatch_group_t主要是用来做异步代码同步用的。有很多初始化工作是异步并行的，运行源码肯定是在所有准备工作之后才能进行，所以用了dispatch_group_t和dispatch_group_notify机制来确保这个问题。接下来我们逐步去分析上面说的几个事情。</p>
-<h3>JS线程</h3>
-<p>大家常说JavaScript是单线程的，在RN里就是这样的。它创建了一个线程，然后绑定到了一个runloop，然后JS就是在这个线程里执行。在RCTCxxBridge里专门有个方法将block放在JS线程中执行</p>
-<div class="highlight"><pre><span class="cm">/**</span>
-<span class="cm"> * Ensure block is run on the JS thread. If we&#39;re already on the JS thread, the block will execute synchronously.</span>
-<span class="cm"> * If we&#39;re not on the JS thread, the block is dispatched to that thread. Any errors encountered while executing</span>
-<span class="cm"> * the block will go through handleError:</span>
-<span class="cm"> */</span>
-<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">ensureOnJavaScriptThread:</span><span class="p">(</span><span class="kt">dispatch_block_t</span><span class="p">)</span><span class="nv">block</span>
-<span class="p">{</span>
-  <span class="n">RCTAssert</span><span class="p">(</span><span class="n">_jsThread</span><span class="p">,</span> <span class="s">@&quot;This method must not be called before the JS thread is created&quot;</span><span class="p">);</span>
+<p>执行在context中执行JS源码，会初始化JS环境，BatchedBridge.js,NativeModules.js中的初始化代码也会执行。在BatchedBridge.js中，创建了一个名为BatchedBridge的MessageQueue，并设置到global的__fbBatchedBridge属性里，这个属性后面会用到。在初始化JS环境的时候，会加载到某些NativeModule，这些module才会被初始化，即调用到OC的getNativeModule方法。例如我打断点捕获到最开始初始化的一个NativeModule是PlatformConstants,它对应的OC类是RCTPlatform。当相关的Module都加载完之后，evaluateScript方法执行完，JS环境初始化完毕。然后就到执行flush方法。</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="n">JSCExecutor</span><span class="o">::</span><span class="n">flush</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">SystraceSection</span> <span class="n">s</span><span class="p">(</span><span class="s">&quot;JSCExecutor::flush&quot;</span><span class="p">);</span>
 
-  <span class="c1">// This does not use _jsMessageThread because it may be called early before the runloop reference is captured</span>
-  <span class="c1">// and _jsMessageThread is valid. _jsMessageThread also doesn&#39;t allow us to shortcut the dispatch if we&#39;re</span>
-  <span class="c1">// already on the correct thread.</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">m_flushedQueueJS</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">callNativeModules</span><span class="p">(</span><span class="n">m_flushedQueueJS</span><span class="o">-&gt;</span><span class="n">callAsFunction</span><span class="p">({}));</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
 
-  <span class="k">if</span> <span class="p">([</span><span class="n">NSThread</span> <span class="n">currentThread</span><span class="p">]</span> <span class="o">==</span> <span class="n">_jsThread</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">[</span><span class="n">self</span> <span class="n">_tryAndHandleError</span><span class="o">:</span><span class="n">block</span><span class="p">];</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="p">[</span><span class="n">self</span> <span class="n">performSelector</span><span class="o">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">_tryAndHandleError</span><span class="o">:</span><span class="p">)</span>
-          <span class="nl">onThread:</span><span class="n">_jsThread</span>
-          <span class="nl">withObject:</span><span class="n">block</span>
-          <span class="nl">waitUntilDone:</span><span class="nb">NO</span><span class="p">];</span>
+  <span class="c1">// When a native module is called from JS, BatchedBridge.enqueueNativeCall()</span>
+  <span class="c1">// is invoked.  For that to work, require(&#39;BatchedBridge&#39;) has to be called,</span>
+  <span class="c1">// and when that happens, __fbBatchedBridge is set as a side effect.</span>
+  <span class="k">auto</span> <span class="n">global</span> <span class="o">=</span> <span class="n">Object</span><span class="o">::</span><span class="n">getGlobalObject</span><span class="p">(</span><span class="n">m_context</span><span class="p">);</span>
+  <span class="k">auto</span> <span class="n">batchedBridgeValue</span> <span class="o">=</span> <span class="n">global</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;__fbBatchedBridge&quot;</span><span class="p">);</span>
+  <span class="c1">// So here, if __fbBatchedBridge doesn&#39;t exist, then we know no native calls</span>
+  <span class="c1">// have happened, and we were able to determine this without forcing</span>
+  <span class="c1">// BatchedBridge to be loaded as a side effect.</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">batchedBridgeValue</span><span class="p">.</span><span class="n">isUndefined</span><span class="p">())</span> <span class="p">{</span>
+    <span class="c1">// If calls were made, we bind to the JS bridge methods, and use them to</span>
+    <span class="c1">// get the pending queue of native calls.</span>
+    <span class="n">bindBridge</span><span class="p">();</span>
+    <span class="n">callNativeModules</span><span class="p">(</span><span class="n">m_flushedQueueJS</span><span class="o">-&gt;</span><span class="n">callAsFunction</span><span class="p">({}));</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_delegate</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// If we have a delegate, we need to call it; we pass a null list to</span>
+    <span class="c1">// callNativeModules, since we know there are no native calls, without</span>
+    <span class="c1">// calling into JS again.  If no calls were made and there&#39;s no delegate,</span>
+    <span class="c1">// nothing happens, which is correct.</span>
+    <span class="n">callNativeModules</span><span class="p">(</span><span class="n">Value</span><span class="o">::</span><span class="n">makeNull</span><span class="p">(</span><span class="n">m_context</span><span class="p">));</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 
 
-<p>除此之外还有个RCTMessageThread类，专门用于在js线程中执行c++的同步和异步函数。</p>
-<h3>获取ModuleClass</h3>
-<p><strong>[self _initModules:RCTGetModuleClasses() withDispatchGroup:prepareBridge lazilyDiscovered:NO]</strong>方法就是获取所有要暴露的类并做相应初始化。首先了解一下要将一个类暴露给JS需要怎么做。我们已RN里已经有的一个粘贴板类来看一下。</p>
-<div class="highlight"><pre><span class="c1">//RCTClipboard.h</span>
-<span class="k">@interface</span> <span class="nc">RCTClipboard</span> : <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">RCTBridgeModule</span><span class="o">&gt;</span>
-
-<span class="k">@end</span>
-
-<span class="c1">//RCTClipboard.m</span>
-<span class="k">@implementation</span> <span class="nc">RCTClipboard</span>
-
-<span class="n">RCT_EXPORT_MODULE</span><span class="p">()</span>
-
-<span class="o">-</span> <span class="p">(</span><span class="kt">dispatch_queue_t</span><span class="p">)</span><span class="n">methodQueue</span>
-<span class="p">{</span>
-  <span class="k">return</span> <span class="n">dispatch_get_main_queue</span><span class="p">();</span>
-<span class="p">}</span>
-
-
-<span class="n">RCT_EXPORT_METHOD</span><span class="p">(</span><span class="n">setString</span><span class="o">:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">content</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">UIPasteboard</span> <span class="o">*</span><span class="n">clipboard</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIPasteboard</span> <span class="n">generalPasteboard</span><span class="p">];</span>
-  <span class="n">clipboard</span><span class="p">.</span><span class="n">string</span> <span class="o">=</span> <span class="p">(</span><span class="n">content</span> <span class="o">?</span> <span class="o">:</span> <span class="s">@&quot;&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">RCT_EXPORT_METHOD</span><span class="p">(</span><span class="n">getString</span><span class="o">:</span><span class="p">(</span><span class="n">RCTPromiseResolveBlock</span><span class="p">)</span><span class="n">resolve</span>
-                  <span class="nl">rejecter:</span><span class="p">(</span><span class="n">__unused</span> <span class="n">RCTPromiseRejectBlock</span><span class="p">)</span><span class="n">reject</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">UIPasteboard</span> <span class="o">*</span><span class="n">clipboard</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIPasteboard</span> <span class="n">generalPasteboard</span><span class="p">];</span>
-  <span class="n">resolve</span><span class="p">((</span><span class="n">clipboard</span><span class="p">.</span><span class="n">string</span> <span class="o">?</span> <span class="o">:</span> <span class="s">@&quot;&quot;</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="k">@end</span>
-</pre></div>
-
-
-<p>其实主要关键点就是类需要实现协议RCTBridgeModule，并在implementation里加RCT_EXPORT_MODULE()。在要暴露的方法在其前面加宏RCT_EXPORT_METHOD修饰。注意这里不支持有返回值的方法，还有也可以暴露一些属性的，但是这里不展开说明。</p>
-<p>RCTBridgeModule协议定义了+ (NSString *)moduleName这个必须实现的方法，还有其他可选方法和属性。
-看一下RCT_EXPORT_MODULE()宏到底干了什么</p>
-<div class="highlight"><pre><span class="cm">/**</span>
-<span class="cm"> * Place this macro in your class implementation to automatically register</span>
-<span class="cm"> * your module with the bridge when it loads. The optional js_name argument</span>
-<span class="cm"> * will be used as the JS module name. If omitted, the JS module name will</span>
-<span class="cm"> * match the Objective-C class name.</span>
-<span class="cm"> */</span>
-<span class="p">#</span><span class="n">define</span> <span class="no">RCT_EXPORT_MODULE</span><span class="p">(</span><span class="n">js_name</span><span class="p">)</span> \
-<span class="no">RCT_EXTERN</span> <span class="k">void</span> <span class="n">RCTRegisterModule</span><span class="p">(</span><span class="n">Class</span><span class="p">);</span> \
-<span class="o">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">moduleName</span> <span class="p">{</span> <span class="k">return</span> <span class="p">@#</span><span class="n">js_name</span><span class="p">;</span> <span class="p">}</span> \
-<span class="o">+</span> <span class="p">(</span><span class="k">void</span><span class="p">)</span><span class="n">load</span> <span class="p">{</span> <span class="n">RCTRegisterModule</span><span class="p">(</span><span class="n">self</span><span class="p">);</span> <span class="p">}</span>
-</pre></div>
-
-
-<p>这个宏里实现moduleName方法，定义了RCT_EXTERN void RCTRegisterModule(Class)，还有实现了load方法，在load方法里调用了RCTRegisterModule方法。RCTRegisterModule实现是在RCTBridge.m里面。</p>
-<div class="highlight"><pre><span class="k">static</span> <span class="n">NSMutableArray</span><span class="o">&lt;</span><span class="kt">Class</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">RCTModuleClasses</span><span class="p">;</span>
-<span class="n">NSArray</span><span class="o">&lt;</span><span class="kt">Class</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">RCTGetModuleClasses</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">return</span> <span class="n">RCTModuleClasses</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="cm">/**</span>
-<span class="cm"> * Register the given class as a bridge module. All modules must be registered</span>
-<span class="cm"> * prior to the first bridge initialization.</span>
-<span class="cm"> */</span>
-<span class="kt">void</span> <span class="n">RCTRegisterModule</span><span class="p">(</span><span class="kt">Class</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">RCTRegisterModule</span><span class="p">(</span><span class="kt">Class</span> <span class="n">moduleClass</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
-  <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
-    <span class="n">RCTModuleClasses</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableArray</span> <span class="n">new</span><span class="p">];</span>
-  <span class="p">});</span>
-
-  <span class="n">RCTAssert</span><span class="p">([</span><span class="n">moduleClass</span> <span class="n">conformsToProtocol</span><span class="o">:</span><span class="err">@</span><span class="n">protocol</span><span class="p">(</span><span class="n">RCTBridgeModule</span><span class="p">)],</span>
-            <span class="s">@&quot;%@ does not conform to the RCTBridgeModule protocol&quot;</span><span class="p">,</span>
-            <span class="n">moduleClass</span><span class="p">);</span>
-
-  <span class="c1">// Register module</span>
-  <span class="p">[</span><span class="n">RCTModuleClasses</span> <span class="n">addObject</span><span class="o">:</span><span class="n">moduleClass</span><span class="p">];</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>实际上就是讲Class对象加入到全局唯一的一个数组里。也就是说，当系统在加载这个类的时候，就将这个类对象加入到了一个数组里，后面只要从这个数组里取所有要暴露给JS的类就可以了。</p>
-<p>再来看看怎么暴露方法。</p>
-<div class="highlight"><pre><span class="cp">#define RCT_EXPORT_METHOD(method) \</span>
-<span class="cp">  RCT_REMAP_METHOD(, method)</span>
-
-
-<span class="cp">#define RCT_REMAP_METHOD(js_name, method) \</span>
-<span class="cp">  _RCT_EXTERN_REMAP_METHOD(js_name, method, NO) \</span>
-<span class="cp">  - (void)method;</span>
-
-
-<span class="cp">#define _RCT_EXTERN_REMAP_METHOD(js_name, method, is_blocking_synchronous_method) \</span>
-<span class="cp">  + (const RCTMethodInfo *)RCT_CONCAT(__rct_export__, RCT_CONCAT(js_name, RCT_CONCAT(__LINE__, __COUNTER__))) { \</span>
-<span class="cp">    static RCTMethodInfo config = {#js_name, #method, is_blocking_synchronous_method}; \</span>
-<span class="cp">    return &amp;config; \</span>
-<span class="cp">  }</span>
-</pre></div>
-
-
-<p>这里的宏嵌套得让人眼花缭乱，在整个RN源码中运用了大量的宏，而且大多是高级用法，这个给阅读理解造成一定的困难。如果看不懂，最好先找专门的讲宏文章先看一看。这里主要作用就是声明了返回值为void的method方法，并且生成了一个以__rct_export__开头，包含了类名，行号等信息的为类名，返回值为RCTMethodInfo的类方法。这个方法主要是为后面生成配置信息用的。</p>
-<p><strong>[self _initModules:RCTGetModuleClasses() withDispatchGroup:prepareBridge lazilyDiscovered:NO]</strong>主要代码是</p>
-<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">_initModules:</span><span class="p">(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="kt">id</span><span class="o">&lt;</span><span class="n">RCTBridgeModule</span><span class="o">&gt;&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">modules</span>
-   <span class="nl">withDispatchGroup:</span><span class="p">(</span><span class="kt">dispatch_group_t</span><span class="p">)</span><span class="nv">dispatchGroup</span>
-    <span class="nl">lazilyDiscovered:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">lazilyDiscovered</span>
-<span class="p">{</span>
-<span class="p">....</span>
-<span class="c1">// Set up moduleData for automatically-exported modules</span>
-  <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">RCTModuleData</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="n">moduleDataById</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">registerModulesForClasses</span><span class="o">:</span><span class="n">modules</span><span class="p">];</span>
-  <span class="p">......</span>
-   <span class="p">[</span><span class="n">self</span> <span class="n">_prepareModulesWithDispatchGroup</span><span class="o">:</span><span class="n">dispatchGroup</span><span class="p">];</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>registerModulesForClasses:方法主要是遍历RCTModuleClasses，为每个class生成一个RCTModuleData并在一个字典和数组里存起来后面使用。_prepareModulesWithDispatchGroup:就是检查每个RCTModuleData是否需要在主线程中创建实例，是的话，就创建实例存起来。</p>
-<h3>准备JS相关类（JSCExecutor）</h3>
-<p>在start方法里面，它实例化了Instance(_reactInstance)和一个JSExecutorFactory，然后在js线程中调用了_initializeBridge:方法。</p>
-<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">_initializeBridge:</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">JSExecutorFactory</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">executorFactory</span>
-<span class="p">{</span>
-<span class="p">.....</span>
-<span class="n">__weak</span> <span class="n">RCTCxxBridge</span> <span class="o">*</span><span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
-  <span class="n">_jsMessageThread</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RCTMessageThread</span><span class="o">&gt;</span><span class="p">([</span><span class="n">NSRunLoop</span> <span class="n">currentRunLoop</span><span class="p">],</span> <span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-      <span class="p">[</span><span class="n">weakSelf</span> <span class="n">handleError</span><span class="o">:</span><span class="n">error</span><span class="p">];</span>
+<p>这是flush方法被第一次执行，所以m_flushedQueueJS为空，然后取到JS中的global对象中的__fbBatchedBridge对象。我们知道在JS初始化的时候，这个值已经被填上MessageQueue，所以这里会进入bindBridge()方法。</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="n">JSCExecutor</span><span class="o">::</span><span class="n">bindBridge</span><span class="p">()</span> <span class="n">throw</span><span class="p">(</span><span class="n">JSException</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">SystraceSection</span> <span class="n">s</span><span class="p">(</span><span class="s">&quot;JSCExecutor::bindBridge&quot;</span><span class="p">);</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">call_once</span><span class="p">(</span><span class="n">m_bindFlag</span><span class="p">,</span> <span class="p">[</span><span class="n">this</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">global</span> <span class="o">=</span> <span class="n">Object</span><span class="o">::</span><span class="n">getGlobalObject</span><span class="p">(</span><span class="n">m_context</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">batchedBridgeValue</span> <span class="o">=</span> <span class="n">global</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;__fbBatchedBridge&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">batchedBridgeValue</span><span class="p">.</span><span class="n">isUndefined</span><span class="p">())</span> <span class="p">{</span>
+      <span class="k">auto</span> <span class="n">requireBatchedBridge</span> <span class="o">=</span> <span class="n">global</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;__fbRequireBatchedBridge&quot;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">requireBatchedBridge</span><span class="p">.</span><span class="n">isUndefined</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">batchedBridgeValue</span> <span class="o">=</span> <span class="n">requireBatchedBridge</span><span class="p">.</span><span class="n">asObject</span><span class="p">().</span><span class="n">callAsFunction</span><span class="p">({});</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">batchedBridgeValue</span><span class="p">.</span><span class="n">isUndefined</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">throw</span> <span class="n">JSException</span><span class="p">(</span><span class="s">&quot;Could not get BatchedBridge, make sure your bundle is packaged correctly&quot;</span><span class="p">);</span>
+      <span class="p">}</span>
     <span class="p">}</span>
+
+    <span class="k">auto</span> <span class="n">batchedBridge</span> <span class="o">=</span> <span class="n">batchedBridgeValue</span><span class="p">.</span><span class="n">asObject</span><span class="p">();</span>
+    <span class="n">m_callFunctionReturnFlushedQueueJS</span> <span class="o">=</span> <span class="n">batchedBridge</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;callFunctionReturnFlushedQueue&quot;</span><span class="p">).</span><span class="n">asObject</span><span class="p">();</span>
+    <span class="n">m_invokeCallbackAndReturnFlushedQueueJS</span> <span class="o">=</span> <span class="n">batchedBridge</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;invokeCallbackAndReturnFlushedQueue&quot;</span><span class="p">).</span><span class="n">asObject</span><span class="p">();</span>
+    <span class="n">m_flushedQueueJS</span> <span class="o">=</span> <span class="n">batchedBridge</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;flushedQueue&quot;</span><span class="p">).</span><span class="n">asObject</span><span class="p">();</span>
+    <span class="n">m_callFunctionReturnResultAndFlushedQueueJS</span> <span class="o">=</span> <span class="n">batchedBridge</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&quot;callFunctionReturnResultAndFlushedQueue&quot;</span><span class="p">).</span><span class="n">asObject</span><span class="p">();</span>
   <span class="p">});</span>
-  <span class="p">.....</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">_reactInstance</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// This is async, but any calls into JS are blocked by the m_syncReady CV in Instance</span>
-    <span class="n">_reactInstance</span><span class="o">-&gt;</span><span class="n">initializeBridge</span><span class="p">(</span>
-      <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">RCTInstanceCallback</span><span class="o">&gt;</span><span class="p">(</span><span class="n">self</span><span class="p">),</span>
-      <span class="n">executorFactory</span><span class="p">,</span>
-      <span class="n">_jsMessageThread</span><span class="p">,</span>
-      <span class="p">[</span><span class="n">self</span> <span class="n">_buildModuleRegistry</span><span class="p">]);</span>
-      <span class="p">......</span>
-   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 
 
-<p>可以看到这里主要创建了一个RCTMessageThread，并将相关属性传给_reactInstance进行初始化。_reactInstance的初始化需要一个ModuleRegistry，ModuleRegistry里面有包含了所有的RCTNativeModule，而每个RCTNativeModule里又包含了一个RCTModuleData.即将前面生成的所有RCTModuleData传给了_reactInstance。</p>
-<p>在Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。JSCExecutor是一个相当重要的类，走到这里很不容易，跳转了很多层。这一块也是最不好理解的，基本上c++和OC互调，而且使用了很多c++11的特性，我很不熟悉。然后也使用了folly库，这个库也不是很好理解。所以我准备把剩下的东西放到下一篇文章来讲。</p>
+<p>从代码可以看出，它从__fbBatchedBridge（也即是MessageQueue）中将几个函数转成了OC对象，这个几个方法将在后面在需要的时候调用。这几个方法都定义在MessageQueue.js中。MessageQueue这个JS类很重要，代码也比较多，这里就不贴了。callFunctionReturnFlushedQueue这个函数主要就是执行传入JS中的模块和方法，并把JS中的queue返回。这个queue存储了JS要调用的OC模块的类和方法和相关参数。OC中获取到这个queue后，就会解析这个queue中的内容，得到相关模块的配置和参数，并进行动态调用。m_flushedQueueJS这个对象对应的JS函数是flushedQueue，这个函数就是将queue返回，然后清空。在bindBridge()执行完之后，立马执行了callNativeModules(m_flushedQueueJS-&gt;callAsFunction({}))。这里就是将js中的queue拿过来进行调用。</p>
+<p>为了更好的理解OC与JS是如何相互调用的，还是要先说说是怎么生成模块配置的。JS如何调用到OC。</p>
+<h3>JS调用OC</h3>
+<p>当JS要加载某个module的之后，会调用到JSCExecutor中的getNativeModule方法，然后它会找该module，如果第一次加载该module，就会去创建该module的配置，然后存起来，下次再取时就直接返回已将建好的。下面是涉及的方法调用。</p>
+<ul>
+<li>JSCExecutor::getNativeModule()</li>
+<li>JSCNativeModules::getModule()</li>
+<li>JSCNativeModules::createModule()<ul>
+<li>ModuleRegistry::getConfig()<ul>
+<li>RCTNativeModule::getMethods()<ul>
+<li>[RCTModuleData methods]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>这里看一下关键方法JSCNativeModules::createModule方法</p>
+<div class="highlight"><pre><span class="nx">folly</span><span class="p">::</span><span class="nl">Optional</span><span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span> <span class="nx">JSCNativeModules</span><span class="p">::</span><span class="nl">createModule</span><span class="p">(</span><span class="nx">const</span> <span class="nx">std</span><span class="p">::</span><span class="nl">string</span><span class="o">&amp;</span> <span class="nb">name</span><span class="p">,</span> <span class="nx">JSContextRef</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ReactMarker</span><span class="p">::</span><span class="nl">logTaggedMarker</span><span class="p">(</span><span class="nx">ReactMarker</span><span class="p">::</span><span class="nl">NATIVE_MODULE_SETUP_START</span><span class="p">,</span> <span class="nx">name.c_str</span><span class="p">());</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">m_genNativeModuleJS</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">auto</span> <span class="bp">global</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">::</span><span class="nl">getGlobalObject</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span>
+    <span class="n">m_genNativeModuleJS</span> <span class="o">=</span> <span class="bp">global.</span><span class="nb">getProperty</span><span class="p">(</span><span class="s2">&quot;__fbGenNativeModule&quot;</span><span class="p">)</span><span class="bp">.</span><span class="nx">asObject</span><span class="p">();</span>
+    <span class="nx">m_genNativeModuleJS</span><span class="o">-&gt;</span><span class="nx">makeProtected</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="nx">m_moduleRegistry</span><span class="o">-&gt;</span><span class="nx">getConfig</span><span class="p">(</span><span class="nb">name</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">result.hasValue</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">nullptr</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nb">Value</span> <span class="n">moduleInfo</span> <span class="o">=</span> <span class="nx">m_genNativeModuleJS</span><span class="o">-&gt;</span><span class="nx">callAsFunction</span><span class="p">({</span>
+    <span class="nb">Value</span><span class="p">::</span><span class="nl">fromDynamic</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nb">result</span><span class="o">-&gt;</span><span class="nx">config</span><span class="p">),</span>
+    <span class="nb">Value</span><span class="p">::</span><span class="nl">makeNumber</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nb">result</span><span class="o">-&gt;</span><span class="nb">index</span><span class="p">)</span>
+  <span class="p">});</span>
+  <span class="nx">CHECK</span><span class="p">(</span><span class="o">!</span><span class="nx">moduleInfo.isNull</span><span class="p">())</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Module returned from genNativeModule is null&quot;</span><span class="p">;</span>
+
+  <span class="nx">folly</span><span class="p">::</span><span class="nl">Optional</span><span class="o">&lt;</span><span class="nb">Object</span><span class="o">&gt;</span> <span class="nx">module</span><span class="p">(</span><span class="nx">moduleInfo.asObject</span><span class="p">()</span><span class="bp">.</span><span class="nb">getProperty</span><span class="p">(</span><span class="s2">&quot;module&quot;</span><span class="p">)</span><span class="bp">.</span><span class="nx">asObject</span><span class="p">());</span>
+
+  <span class="nx">ReactMarker</span><span class="p">::</span><span class="nl">logTaggedMarker</span><span class="p">(</span><span class="nx">ReactMarker</span><span class="p">::</span><span class="nl">NATIVE_MODULE_SETUP_STOP</span><span class="p">,</span> <span class="nx">name.c_str</span><span class="p">());</span>
+
+  <span class="k">return</span> <span class="nx">module</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这可以看到取了JS中global对象的__fbGenNativeModule属性，存到了m_genNativeModuleJS。而__fbGenNativeModule定义在NativeModules.js中，它对应的是genModule函数。OC中将调用这个函数，把OC的Module生成JS的module，返回给JS，并最终OC中也会把它存在m_objects（map）中。genModule函数需要一个config参数，这个config主要是由m_moduleRegistry-&gt;getConfig生成。这个config里只要包含了像JS暴露的constants,methods。我们这里主要看看它是怎么收集到我们要暴露的方法的。</p>
+<p>关键代码在[RCTModuleData methods]中</p>
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="kt">id</span><span class="o">&lt;</span><span class="n">RCTBridgeMethod</span><span class="o">&gt;&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nf">methods</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_methods</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSMutableArray</span><span class="o">&lt;</span><span class="kt">id</span><span class="o">&lt;</span><span class="n">RCTBridgeMethod</span><span class="o">&gt;&gt;</span> <span class="o">*</span><span class="n">moduleMethods</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableArray</span> <span class="n">new</span><span class="p">];</span>
+
+    <span class="k">if</span> <span class="p">([</span><span class="n">_moduleClass</span> <span class="n">instancesRespondToSelector</span><span class="o">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">methodsToExport</span><span class="p">)])</span> <span class="p">{</span>
+      <span class="p">[</span><span class="n">moduleMethods</span> <span class="n">addObjectsFromArray</span><span class="o">:</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">instance</span> <span class="n">methodsToExport</span><span class="p">]];</span>
+    <span class="p">}</span>
+
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">methodCount</span><span class="p">;</span>
+    <span class="kt">Class</span> <span class="n">cls</span> <span class="o">=</span> <span class="n">_moduleClass</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cls</span> <span class="o">&amp;&amp;</span> <span class="n">cls</span> <span class="o">!=</span> <span class="p">[</span><span class="n">NSObject</span> <span class="n">class</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">cls</span> <span class="o">!=</span> <span class="p">[</span><span class="n">NSProxy</span> <span class="n">class</span><span class="p">])</span> <span class="p">{</span>
+      <span class="n">Method</span> <span class="o">*</span><span class="n">methods</span> <span class="o">=</span> <span class="n">class_copyMethodList</span><span class="p">(</span><span class="n">object_getClass</span><span class="p">(</span><span class="n">cls</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">methodCount</span><span class="p">);</span><span class="c1">//注意这里取的是类方法</span>
+
+      <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">methodCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Method</span> <span class="n">method</span> <span class="o">=</span> <span class="n">methods</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="kt">SEL</span> <span class="n">selector</span> <span class="o">=</span> <span class="n">method_getName</span><span class="p">(</span><span class="n">method</span><span class="p">);</span>
+        <span class="c1">//主要这个前缀__rct_export__</span>
+        <span class="k">if</span> <span class="p">([</span><span class="n">NSStringFromSelector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="n">hasPrefix</span><span class="o">:</span><span class="s">@&quot;__rct_export__&quot;</span><span class="p">])</span> <span class="p">{</span>
+          <span class="kt">IMP</span> <span class="n">imp</span> <span class="o">=</span> <span class="n">method_getImplementation</span><span class="p">(</span><span class="n">method</span><span class="p">);</span>
+          <span class="k">auto</span> <span class="n">exportedMethod</span> <span class="o">=</span> <span class="p">((</span><span class="k">const</span> <span class="n">RCTMethodInfo</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">id</span><span class="p">,</span> <span class="kt">SEL</span><span class="p">))</span><span class="n">imp</span><span class="p">)(</span><span class="n">_moduleClass</span><span class="p">,</span> <span class="n">selector</span><span class="p">);</span>
+          <span class="kt">id</span><span class="o">&lt;</span><span class="n">RCTBridgeMethod</span><span class="o">&gt;</span> <span class="n">moduleMethod</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RCTModuleMethod</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithExportedMethod</span><span class="o">:</span><span class="n">exportedMethod</span>
+                                                                                 <span class="nl">moduleClass:</span><span class="n">_moduleClass</span><span class="p">];</span>
+          <span class="p">[</span><span class="n">moduleMethods</span> <span class="n">addObject</span><span class="o">:</span><span class="n">moduleMethod</span><span class="p">];</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="n">free</span><span class="p">(</span><span class="n">methods</span><span class="p">);</span>
+      <span class="n">cls</span> <span class="o">=</span> <span class="n">class_getSuperclass</span><span class="p">(</span><span class="n">cls</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">_methods</span> <span class="o">=</span> <span class="p">[</span><span class="n">moduleMethods</span> <span class="n">copy</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">_methods</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这里代码主要意思是先拿到所有类方法（或者叫静态方法），然后如果是特定前缀__rct_export__的方法，则是我们之前通过宏RCT_REMAP_METHOD（RCT_EXPORT_METHOD）定义生成的方法，然后获取这个方法的实现，并执行得到结果RCTMethodInfo。这个RCTMethodInfo里包含真正我们要暴露给JS调用的方法，用它来创建一个RCTModuleMethod。将所有需要的方法都生成之后，就保存了起来。这里RN的开发者很巧妙生成了一个静态方法，通过这个方法将真正需要的方法信息生成。为什么将这个特定方法定义为静态方法呢，我估计是静态方法比较少，查找的时候比查找实例方法快。</p>
+<p>当配置信息都生成好之后，调用genModule方法生成JS的module。这里要特别说明一下genModule这个方法会调用到genMethod函数，genMethod函数会生成另外一个函数，而生成函数里，将module的方法调用放到了MessageQueue的队列中，等待OC被调用。这里特别说明一下在JS的代码中，传递的参数都是moduleId, methodId是数字类型，moduleId它代表的是该module在OC的modules数组中的下标，methodId代表的是该method在methodNames数组里的下标。相关函数都是挺复杂的，理解起来有点绕，可以多看看genModule和genMethod函数的实现。</p>
+<p>所以，假设我们已有一个注册模块AudioRecord和暴露方法record.</p>
+<div class="highlight"><pre> <span class="n">let</span> <span class="n">AudioRecorder</span> <span class="o">=</span> <span class="n">NativeModules</span><span class="p">.</span><span class="n">AudioRecorder</span><span class="p">;</span> 
+ <span class="n">AudioRecorder</span><span class="p">.</span><span class="n">record</span><span class="p">();</span>
+</pre></div>
+
+
+<p>两句代码会发生：去OC中getNativeModule(AudioRecorder)寻找JS的module，现在m_objects字段中查找，如果没有找到则会走创建流程，先到m_moduleRegistry生成改类的配置信息，然后将配置信息传给JS的genModule函数生成名为AudioRecorder的js对象，调用genMethod生成名为record对应的JS函数，赋值给AudioRecorder对象,并保存在OC的一个字典（m_objects）中和返回这个JS对象。在JS中拿到这个对象后调用record函数，在record函数里，BatchedBridge.enqueueNativeCall就会被调用，moduleID，moduleID等信息就传入MessageQueue。我们看看enqueueNativeCall函数实现。</p>
+<div class="highlight"><pre><span class="nx">enqueueNativeCall</span><span class="p">(</span>
+    <span class="nx">moduleID</span><span class="p">:</span> <span class="nx">number</span><span class="p">,</span>
+    <span class="nx">methodID</span><span class="p">:</span> <span class="nx">number</span><span class="p">,</span>
+    <span class="k">params</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="nb">any</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nx">onFail</span><span class="p">:</span> <span class="o">?</span><span class="nx">Function</span><span class="p">,</span>
+    <span class="nx">onSucc</span><span class="p">:</span> <span class="o">?</span><span class="nx">Function</span><span class="p">,</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">onFail</span> <span class="o">||</span> <span class="nx">onSucc</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">......</span>
+      <span class="c1">// Encode callIDs into pairs of callback identifiers by shifting left and using the rightmost bit</span>
+      <span class="c1">// to indicate fail (0) or success (1)</span>
+      <span class="nx">onFail</span> <span class="o">&amp;&amp;</span> <span class="k">params</span><span class="bp">.</span><span class="nb">push</span><span class="p">(</span><span class="nx">this._callID</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="nx">onSucc</span> <span class="o">&amp;&amp;</span> <span class="k">params</span><span class="bp">.</span><span class="nb">push</span><span class="p">((</span><span class="nx">this._callID</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="nx">this._successCallbacks</span><span class="err">[</span><span class="nx">this._callID</span><span class="cp">]</span> = onSucc;
+      this._failureCallbacks<span class="cp">[</span><span class="nx">this._callID</span><span class="cp">]</span> = onFail;
+    }
+
+    ......
+    this._callID++;
+
+    this._queue<span class="cp">[</span><span class="nx">MODULE_IDS</span><span class="cp">]</span>.push(moduleID);
+    this._queue<span class="cp">[</span><span class="nx">METHOD_IDS</span><span class="cp">]</span>.push(methodID);
+
+    ......
+    this._queue<span class="cp">[</span><span class="k">PARAMS</span><span class="cp">]</span>.push(params);
+
+    const now = new Date().getTime();
+    if (
+      global.nativeFlushQueueImmediate <span class="err">&amp;&amp;</span>
+      (now - this._lastFlush &gt;= MIN_TIME_BETWEEN_FLUSHES_MS ||
+        this._inCall === 0)
+    ) {
+      var queue = this._queue;
+      this._queue = <span class="cp">[</span><span class="err">[</span><span class="cp">]</span>, <span class="cp">[]</span>, <span class="cp">[]</span>, this._callID];
+      this._lastFlush = now;
+      global.nativeFlushQueueImmediate(queue);
+    }
+    Systrace.counterEvent(&#39;pending_js_to_native_queue&#39;, this._queue<span class="cp">[</span><span class="mi">0</span><span class="cp">]</span>.length);
+    //
+    if (this.__spy) {
+      this.__spyNativeCall(moduleID, methodID, params, {
+        failCbId: onFail ? params<span class="cp">[</span><span class="k">params</span><span class="bp">.</span><span class="nb">length</span> <span class="o">-</span> <span class="mi">2</span><span class="cp">]</span> : -1,
+        successCbId: onSucc ? params<span class="cp">[</span><span class="k">params</span><span class="bp">.</span><span class="nb">length</span> <span class="o">-</span> <span class="mi">1</span><span class="cp">]</span> : -1,
+      });
+    }
+  }
+</pre></div>
+
+
+<p>JS所有异步调用OC方法都会走到这里（同步方法走的是callSyncHook），我们可以看到先把回调存到数组里，然后把要调用的模块类，方法和参数都存在了queue中，当然还有回调函数对应的_callID（这里很巧妙地用一个数字代表了两个回调函数）。这里还有个判断，如果距离上次OC主动来调用JS超过了5毫秒，就会主动调用OC一开始就注入的nativeFlushQueueImmediate回调函数。在nativeFlushQueueImmediate这个方法里，OC会把传过来的queue里面需要调用的方法全部调用。</p>
+<ul>
+<li>JSCExecutor::nativeFlushQueueImmediate</li>
+<li>JSCExecutor::flushQueueImmediate</li>
+<li>JsToNativeBridge::callNativeModules<ul>
+<li>ModuleRegistry::callNativeMethod<ul>
+<li>RCTNativeModule::invoke<ul>
+<li>RCTNativeModule::invokeInne<ul>
+<li>[RCTModuleMethod invokeWithBridge:module:arguments:]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>这里调用链条也很长，我们知道最终会到RCTModuleMethod类中，它是通过NSInvocation来实现动态调用的。</p>
+<p>没有超过5毫秒的话，JS不主动调用OC的module，那OC到底什么时候会主动调用JS？</p>
+<h3>OC调用JS</h3>
+<p>在RCTCxxBridge中的start方法里，执行完JS源码后，会发送一个通知。在RCTRootView中监听了这个通知，执行了runApplication方法，这个方法里主动调用了JS。</p>
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">runApplication:</span><span class="p">(</span><span class="n">RCTBridge</span> <span class="o">*</span><span class="p">)</span><span class="nv">bridge</span>
+<span class="p">{</span>
+  <span class="n">NSString</span> <span class="o">*</span><span class="n">moduleName</span> <span class="o">=</span> <span class="n">_moduleName</span> <span class="o">?:</span> <span class="s">@&quot;&quot;</span><span class="p">;</span>
+  <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">appParameters</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span>
+    <span class="s">@&quot;rootTag&quot;</span><span class="o">:</span> <span class="n">_contentView</span><span class="p">.</span><span class="n">reactTag</span><span class="p">,</span>
+    <span class="s">@&quot;initialProps&quot;</span><span class="o">:</span> <span class="n">_appProperties</span> <span class="o">?:</span> <span class="err">@</span><span class="p">{},</span>
+  <span class="p">};</span>
+
+  <span class="n">RCTLogInfo</span><span class="p">(</span><span class="s">@&quot;Running application %@ (%@)&quot;</span><span class="p">,</span> <span class="n">moduleName</span><span class="p">,</span> <span class="n">appParameters</span><span class="p">);</span>
+  <span class="p">[</span><span class="n">bridge</span> <span class="n">enqueueJSCall</span><span class="o">:</span><span class="s">@&quot;AppRegistry&quot;</span>
+                 <span class="nl">method:</span><span class="s">@&quot;runApplication&quot;</span>
+                   <span class="nl">args:</span><span class="err">@</span><span class="p">[</span><span class="n">moduleName</span><span class="p">,</span> <span class="n">appParameters</span><span class="p">]</span>
+             <span class="nl">completion:</span><span class="nb">NULL</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这里是JS的程序入口，之后会创建视图之类的。我们看看OC是怎么调用JS的。</p>
+<ul>
+<li>RCTBridge:: enqueueJSCall()</li>
+<li>RCTCxxBridge:: enqueueJSCall()<ul>
+<li>Instance::callJSFunction()<ul>
+<li>NativeToJsBridge::callFunction()<ul>
+<li>JSCExecutor::callFunction()</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>我们看看JSCExecutor是如何调用JS的。</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="n">JSCExecutor</span><span class="o">::</span><span class="n">callFunction</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">moduleId</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">methodId</span><span class="p">,</span> <span class="k">const</span> <span class="n">folly</span><span class="o">::</span><span class="n">dynamic</span><span class="o">&amp;</span> <span class="n">arguments</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">SystraceSection</span> <span class="n">s</span><span class="p">(</span><span class="s">&quot;JSCExecutor::callFunction&quot;</span><span class="p">);</span>
+  <span class="c1">// This weird pattern is because Value is not default constructible.</span>
+  <span class="c1">// The lambda is inlined, so there&#39;s no overhead.</span>
+  <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">{</span>
+    <span class="n">JSContextLock</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_context</span><span class="p">);</span>
+    <span class="n">try</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_callFunctionReturnResultAndFlushedQueueJS</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">bindBridge</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="n">m_callFunctionReturnFlushedQueueJS</span><span class="o">-&gt;</span><span class="n">callAsFunction</span><span class="p">({</span>
+        <span class="n">Value</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span> <span class="n">String</span><span class="o">::</span><span class="n">createExpectingAscii</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span> <span class="n">moduleId</span><span class="p">)),</span>
+        <span class="n">Value</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span> <span class="n">String</span><span class="o">::</span><span class="n">createExpectingAscii</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span> <span class="n">methodId</span><span class="p">)),</span>
+        <span class="n">Value</span><span class="o">::</span><span class="n">fromDynamic</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">arguments</span><span class="p">))</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="n">catch</span> <span class="p">(...)</span> <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">throw_with_nested</span><span class="p">(</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;Error calling &quot;</span> <span class="o">+</span> <span class="n">moduleId</span> <span class="o">+</span> <span class="s">&quot;.&quot;</span> <span class="o">+</span> <span class="n">methodId</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}();</span>
+  <span class="n">callNativeModules</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">result</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>OC调用JS是通过bindBridge()里取到的JS定义的函数callFunctionReturnFlushedQueue来调用的。这函数需要的参数就是moduleName,methodName和method调用需要的参数。JS中拿到这些参数会在_lazyCallableModules里找到对应的JS module来进行对应的方法调用。_lazyCallableModules存的是需要给OC调用的JS module。AppRegistry模块在执行JS源码的之后就注册到这个_lazyCallableModules里。callFunctionReturnFlushedQueue函数不但执行了OC要调用的JS模块，最后还把queue传回到了OC，我们知道这个queue里存的都是JS要调用的OC模块信息，所以OC拿到这个queue之后就执行了调用callNativeModules。RN的机制就是OC在调用JS模块之后，也把JS中待调用的OC模块一起执行了。</p>
+<p>还有什么情况，OC会主动调用JS呢。通过在xcode中搜索enqueueJSCall方法的调用，可以看到主要是在RCTEventDispatcher，RCTEventEmitter和RCTTiming。从此可以知道主要是跟事件触发和定时器相关。这也很合理，因为在移动操作系统是基于事件触发机制。大部分事件都是空转，只有事件触发后才会进行相关调用。</p>
+<h2>总结</h2>
+<p>大致总结一下RN APP的启动流程：在APPDelegate的启动方法中创建了一个RCTRootView，然后在RCTRootView中创建了RCTBridge，RCTBridge中创建了RCTCxxBridge，并调用了start方法。在start方法里先创建了一个专门用来运行JS代码的Thread，这个Thread绑定到了一个runloop。然后将所有注册的module生成RCTModuleData，并根据需要调用他们的初始化方法。然后一边在JS线程中执行Intance的初始化方法，一边异步进行js源码的加载。在Intance的初始化方法里最终会创建一个JSCExecutor,在JSCExecutor里创建了一个全局的js context,并注入了几个OC的回调方法，包括NativeModuleProxy对应的getNativeModule方法。当JS源码都加载完，其他初始化也完成，就会在JS context中执行JS源码，建立JS环境和JS的初始化。这时候一些被JS调用到的OC module就会初始化，会调用之前注入JS中的getNativeModule方法，这个方法会把module的配置信息生成，并交给JS的genModule方法来生成JS的对象，并在OC中存起来。JS源码执行完之后，OC会调用flush方法，然后会调用到bindBridge方法，将MessageQueue.js中定义的几个方法存在OC中以备调用。然后将MessageQueue存储的OC待调用方法进行调用。到这里，JS源码执行完毕，会发一个通知，RCTRootView会收到这个通知，然后就调用了js中的AppRegistry的runApplication方法，到这里，JS的入口就被调用，界面就会渲染出来。</p>
+<p>总结起来，JS和OC的相互通信是经过JavaScriptCore机制来进行的。OC将要暴露给JS的放类和方法生成配置信息，然后交个JS生成JS对象和方法，但是JS中对应的对象和方法并不是直接调用OC的方法，而且先放入一个队列中，交由OC来调用。OC拿到对应的配置信息然后进行动态调用。OC调用JS的对象和方法，是直接调用，JS中存储了要暴露的对象module.</p>
 <h2>参考资料</h2>
 <p><a href="http://www.cocoachina.com/ios/20170720/19958.html">深入浅出 JavaScriptCore</a></p>
 <p><a href="https://cloud.tencent.com/developer/article/1004875">JavaScriptCore全面解析 （上篇）</a></p>
@@ -364,11 +446,40 @@ RN大致结构图：
 
 
 
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html#disqus_thread">comments</a></p>            </article>
+<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>            </article>
 
 
                 <hr  class="gradient"/>
 
+
+        
+
+
+            <article>
+                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
+<h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
+</h6>
+
+
+<h1>react-native框架源码学习(iOS)(上)</h1>
+<h2>注意事项</h2>
+<p>要学习react-native框架iOS端源码，先要了解一下注意的事项。</p>
+<ul>
+<li>一、 首先需要非常熟悉objective-c语言，对OC的runtime机制更是必不可少。源码里大量用了runtime特性。然后也要熟悉c++语言。除了OC语言，里面还有大量的c++代码，OC与c++混合代码。对c++的template和std库也要熟悉。我本人对c++也熟悉，但是不够深入，对一些高级特性不是很了解，所以相关的一些代码看起来很吃力。最后当然也熟悉js语言。我大学时学习过js，但是那还真是远古时代了，js近年来发展很快，我对很多新特性不是很了解，这也对我学习有一定的阻碍。另外还有要比较了解iOS的JavaScriptCore框架，这个是js与OC通信的基础。</li>
+<li>二、 要对react-native的版本了解。查看网上的资料时也要注意他们所说的RN版本。现在网上很多研究资料，他们所研究的版本都是很早之前的版本。新的版本跟老版本有很多细节和流程改变了。如果你发现有些文章里说的东西跟你所看到的对不上，那就是研究的版本不一致。</li>
+<li>三、如果看不懂，多看看别人的分析文章。如果对某种语言或者框架库不熟悉，建议先把该补的补上。</li>
+</ul>
+<p>我所研究的RN版本是<strong>0.49</strong>，而最新版是0.51 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
 
         
 
@@ -635,36 +746,6 @@ RN大致结构图：
 
 
 <p><a href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
-<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
-</h6>
-
-
-<h1>Coturn在iOS端应用和libevent的编译</h1>
-<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
-<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
-<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
-<p>下面是libevent的编译脚本主要内容</p>
-<div class="highlight"><pre>###########################################################################
-# Choose your libevent version and your currently-installed iOS SDK version:
-#
-VERSION=&quot;2.1.8-stable&quot;
-USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
