@@ -3,7 +3,7 @@
 &lt;p&gt;这次我想在谈谈Jenkins自动打包的问题。针对react-native项目。&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://github.com/szuwest/rn_build_ios_sh"&gt;ios打包脚本地址&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
-&lt;img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /&gt;&lt;/p&gt;</summary><category term="ReactNative 源码 iOS"></category></entry><entry><title>react-native框架源码学习(iOS)(下)</title><link href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html" rel="alternate"></link><updated>2018-03-02T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2018-03-02:react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html</id><summary type="html">&lt;h1&gt;react-native框架源码学习(iOS)(下)&lt;/h1&gt;
+&lt;img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /&gt;&lt;/p&gt;</summary><category term="ReactNative Jenkins iOS"></category></entry><entry><title>react-native框架源码学习(iOS)(下)</title><link href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html" rel="alternate"></link><updated>2018-03-02T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2018-03-02:react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html</id><summary type="html">&lt;h1&gt;react-native框架源码学习(iOS)(下)&lt;/h1&gt;
 &lt;p&gt;如果没有看过上篇，请先看&lt;a href=""&gt;react-native框架源码学习(iOS)(上)&lt;/a&gt;。&lt;/p&gt;
 &lt;h3&gt;JSCExecutor相关初始化&lt;/h3&gt;
 &lt;p&gt;在上篇中说到Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。NativeToJsBridge的构造函数还包含更多的东西。&lt;/p&gt;
