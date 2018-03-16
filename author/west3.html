@@ -50,6 +50,34 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html"><h3 class="article-title">升级Xcode8后Jenkins打包问题</h3></a>
+<h6 class="subheader" title="2016-09-29T00:00:00">2016-09-29
+</h6>
+
+
+<h2>升级Xcode8后Jenkins打包问题</h2>
+<p>上次说升级Xcode8之后，Jenkins自动打包就不行了，今天终于弄好了。前前后后话的时间有一天的时间才搞好，不容易。尝试了30多次才成功了，说多了都是泪。。现在记录一下。</p>
+<h3>我们的需求</h3>
+<p>说一下我们的需求。我们开发人员采用的是正式签名，正式的BundleID，但是我们Jenkins自动打包出来的是企业版，用的是企业版BundleID。代码是同一份，但是Jenkins打包企业版时时要先修改BundleID和相关版本号之类的。在Xcode7时代，我已经将Jenkins配置好，可以正常打出企业版的安装包。但是升级到Xcode8之后，Jenkins打包会报错，即原来的配置已经不能打出企业包来了。</p>
+<h3>解决方法</h3>
+<p>先说不能打包的原因，主要是签名方式冲突。Jenkins的配置是指定签名，而我们Xcode8采用的是自动签名。我们开发时采用自动签名，而且打企业版安装采用的签名文件跟我们开发时的签名文件时不一样的。所以Jenkins打包肯定得采用手动签名方式。</p>
+<p>报错如下：</p>
+<div class="highlight"><pre><span class="n">xxxxx</span> <span class="n">has</span> <span class="n">conflicting</span> <span class="n">provisioning</span> <span class="n">settings</span><span class="p">.</span> <span class="n">xxxxx</span> <span class="n">is</span> <span class="n">automatically</span> <span class="kt">signed</span><span class="p">,</span> <span class="n">but</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">xxxxxxxxxxxxx</span> <span class="n">has</span> <span class="n">been</span> <span class="n">manually</span> <span class="n">specified ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10-framework.html">Jenkins Xcode8 iOS10 framework </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html"><h3 class="article-title">升级Xcode8后需要注意的事项</h3></a>
 <h6 class="subheader" title="2016-09-24T00:00:00">2016-09-24
 </h6>
@@ -282,32 +310,6 @@
 
 
 <p><a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/androidxia-zai-qi-kai-fa.html"><h3 class="article-title">Android下载器开发</h3></a>
-<h6 class="subheader" title="2015-07-18T00:00:00">2015-07-18
-</h6>
-
-
-<h1>Android下载器开发</h1>
-<p>最近因为项目需要，我开发了一个Android下载管理器，我觉得很有必要记录一下，谈谈我是怎么开发的，遇到了什么问题以及如何解决的。算是一个总结吧。</p>
-<h2>需求分析</h2>
-<p>我们项目包含了一个功能：将文件下载手机上，并且要支持断点下载，因为我们下载的文件主要是图片和视频，其中视频基本上都是大文件，然后下载可能随时会被中断，所以首要一点就是要支持断点续传，然后要支持任务管理，例如暂停下载和继续下载，再然后就是要下载速度尽量快。不过这最后一点估计所有人都会这样要求。</p>
-<h2>为什么要自己开发</h2>
-<p>需求已经较清楚了，然后再看怎么实现。一般来说，像下载这么通用的功能，因为很多开源库可用才对。不过在开始之前我要说明一下，这个功能一开始不是我做的，是另外一个同事负责的，但是他离职了，我来接手。问题在于他离职之前这个功能算是实现了，但是很多问题，例如断点续传有问题，任务管理有问题，下载速度很慢。我接手之后，我特意去网上查找了有没有可用的较好的开源库。经过一轮搜索之后，我发现，很多博客上介绍的下载都是同一下载，就是黎活明老师的下载，估计这个下载是他讲课的案例，主要特点是多线程断点下载。而我们之前那个同事的实现就是把网上的例子弄来的。他这个下载确实还可以，支持断点下载，还支持多线程分片下载来提高下载速度。不足之处就是不支持任务管理，还有数据库很容易出现多线程问题。也就是说核心的东西它有了 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/android-download.html">Android Download </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/androidxia-zai-qi-kai-fa.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidxia-zai-qi-kai-fa.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
