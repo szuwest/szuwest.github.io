@@ -50,6 +50,36 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
+<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
+</h6>
+
+
+<h1>Coturn在iOS端应用和libevent的编译</h1>
+<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
+<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
+<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
+<p>下面是libevent的编译脚本主要内容</p>
+<div class="highlight"><pre>###########################################################################
+# Choose your libevent version and your currently-installed iOS SDK version:
+#
+VERSION=&quot;2.1.8-stable&quot;
+USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html"><h3 class="article-title">事件循环机制之于Android的Looper和iOS的NSRunLoop</h3></a>
 <h6 class="subheader" title="2016-12-04T00:00:00">2016-12-04
 </h6>
