@@ -74,7 +74,10 @@
 <p>一开始人脸识别node插件并不是我开发的。他们采用的做法是JS中每次传身份证照片和拍照的照片去比对，返回结果。前端是定时通过摄像头拍照，将拍的照片转为bmp格式的照片，连同身份证照片（也是bmp格式）一起传入node插件来比对。这个比对接口要耗费7，8百毫秒的时间。</p>
 <p>这里明显有个可以优化的地方，因为身份证照片是不变的，不必每次都去生成人脸特征，只需生成一次即可，后台就只需处理拍照的照片就行。这样图片处理时间就可以减少接近一半的时间了。</p>
 <p>另外采用electron开发不好的一个地方就是，你不好直接处理视频流。视频流要传给video标签来显示预览图，然后它却没有提供从视频流里截取一帧数据接口。我们JS开发的同事的做法是在在界面上放置一个canvas，然后把video放到这个画布上，然后画一帧图像出来，然后把这帧图像拿出来。这数据是RGBA格式的数据，他将这个数据转为bmp格式的数据后，再传给node插件。这一步转换很耗时，要花费300多毫秒。实际上这一步转换是没有必要的，直接把RGBA的数据传给node插件，由node插件来转成人脸算法需要的数据格式。在c++中，可以OpenCV的方法来转换，很方便快捷。这里说一个我犯过的错误。Mat里的rows对应的是图片的高，cols对应的是图片的宽，别搞错了，我就是因为弄反了调试了一晚上。。。做了这个优化之后，人脸识别就比之前快很多了，有了质的区别。不多话说回来，它的性能还是比纯c++写的要差。。。所以鱼和熊掌不可兼得。。。</p>
-<p>通过这次开发体验，感觉国内的人脸算法，还是没有到很靠谱的地步。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<p>通过这次开发体验，感觉国内的人脸算法，还是没有到很靠谱的地步。</p>
+<hr />
+<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/ren-lian-jian-ce-ren-zheng-bi-dui-dlib-electron.html">人脸检测 人证比对 dlib electron </a>
