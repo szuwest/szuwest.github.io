@@ -49,6 +49,272 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/tan-tan-gui-bing-pai-xu-suan-fa.html"><h3 class="article-title">谈谈归并排序算法</h3></a>
+<h6 class="subheader" title="2018-08-06T00:00:00">2018-08-06
+</h6>
+
+
+<h2>谈谈归并排序算法</h2>
+<p>归并排序算法是一个很重要的算法。在排序算法中，算是非常重要的一个算法。我们常说的数组归并排序，是指二路归并排序算法，时间复杂度是O(nlog(n)),空间负责度是O(n).核心的思想就是对两个有序数组合并成一个有序数组。对于一个未排序的数组怎么产生两个已排序的数组呢？其实就是对数组不断的分割，分割成多个只有一个元素的数组。只有一个元素的数组，当然这个数组就是有序的了。然后再将这些数组进行两两合并，合并后的数组还是有序数组，这样再次进行两两合并，最终可以合并成一个有序数组，这样排序就完成了。</p>
+<p>归并排序的算法看起来不是很复杂，但是实现起来我觉得不是那么简单。首先它需要额外的空间，这个额外的空间怎么分配跟算法实现方式有关。然后算法的实现方式有递归方式和迭代方式两种。网上流行的都是递归方式。</p>
+<h3>递归方式</h3>
+<p>递归方式采用典型算法：分治法来进行。</p>
+<ul>
+<li>1.将数组分为两半，前一半和后一半。</li>
+<li>2.将这两半进行有序数组合并</li>
+<li>3.继续进行第1步，直到数组不能在分为止</li>
+</ul>
+<p>这里明显采用了递归定义，递归定义其实不是那么好理解，也不是那么难理解。简单来说就是不断的将一个数组进行对半分，一直分到不能分为止，这样最终就会分得很多个元素个数为1的数组，然后再将这些数组进行两两合并。注意子数组可能是奇数个，但是这也没关系，没得合并的就暂时放在原位，下一次合并的时候总会用到，最终一个会合并成一个数组。</p>
+<p>伪代码：</p>
+<div class="highlight"><pre><span class="n">MergeSort</span><span class="p">(</span><span class="n">arr</span><span class="p">[],</span> <span class="n">l</span><span class="p">,</span>  <span class="n">r</span><span class="p">)</span>
+<span class="n">If</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">l</span>
+     <span class="mf">1.</span> <span class="n">Find</span> <span class="n">the</span> <span class="n">middle</span> <span class="n">point</span> <span class="n">to</span> <span class="n">divide</span> <span class="n">the</span> <span class="n">array</span> <span class="n">into</span> <span class="n">two</span> <span class="n">halves</span><span class="o">:</span>  
+             <span class="n">middle</span> <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+     <span class="mf">2.</span> <span class="n">Call</span> <span class="n">mergeSort</span> <span class="k">for</span> <span class="n">first</span> <span class="n">half</span><span class="o">:</span>   
+             <span class="n">Call</span> <span class="n">mergeSort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+     <span class="mf">3.</span> <span class="n">Call</span> <span class="n">mergeSort</span> <span class="k">for</span> <span class="n">second</span> <span class="n">half</span><span class="o">:</span>
+             <span class="n">Call</span> <span class="n">mergeSort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+     <span class="mf">4.</span> <span class="n">Merge</span> <span class="n">the</span> <span class="n">two</span> <span class="n">halves</span> <span class="n">sorted</span> <span class="n">in</span> <span class="n">step</span> <span class="mi">2</span> <span class="n">and</span> <span class="mi">3</span><span class="o">:</span>
+             <span class="n">Call</span> <span class="n">merge</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+
+
+<p>伪代码来源：<a href="https://www.geeksforgeeks.org/merge-sort/">geeksforgeeks</a></p>
+<p>这里特意提一下geeksforgeeks这个网址，这里专门讲算法的网站，很多算法有解析和实现，而且基本都有c和Java的实现，甚至Python。非常有用的网站。</p>
+<p>我的实现代码：</p>
+<div class="highlight"><pre><span class="cp">#include &lt;stdlib.h&gt;</span>
+
+<span class="kt">void</span> <span class="nf">_sorted_merge</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">len_l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">len_r</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">mid</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">arr_l</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">len_l</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">arr_r</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">len_r</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">len_l</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">arr_l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">len_r</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">arr_r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">len_l</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">len_r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">arr_l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">arr_r</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_l</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_r</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">len_l</span><span class="p">)</span> <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_l</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">len_r</span><span class="p">)</span> <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_r</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">arr_l</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">arr_r</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">_recursive_merge_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">_recursive_merge_sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">mid</span><span class="p">);</span>
+        <span class="n">_recursive_merge_sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">);</span>
+        <span class="n">_sorted_merge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">end</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">recursive_merge_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="n">_recursive_merge_sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这里整个完整的实现是用了3个方法。暴露给外界使用的方法是 <strong>void recursive_merge_sort(int a[], int n)</strong>这个。递归分割数组是<strong>void _recursive_merge_sort(int a[], int start, int end)</strong>这个方法。注意方法参数是数组指针，要分割的开始坐标，要结束分割的坐标。另外核心的合并方法有序数组的方法是<strong>void _sorted_merge(int a[], int start, int mid, int end)</strong>。注意这里并不是传了两个数组进去，而是一个数组，给定了起始，中间分割，结束的坐标。中间分割坐标是归并在前一部分的。这些都是细节，没有搞清楚，程序就会出错。</p>
+<p>在<strong>_sorted_merge</strong>这个方法内，新建了两个数组，将两半的元素拷贝到这两个数组中，然后合并到原始数组中。归并排序需要的额外空间是在这里花费的。这个算法实现完全是采用的是<strong>自顶向下</strong>的思维方式。一层一层的从顶往下分割，分割到最后在合并。</p>
+<p>还有一种方式就是<strong>自底向上</strong>的思维方式。我们知道数组是可以随机访问的，因为坐标可以随时利用。如果一开始我们就只针对一个个的元素，那么这些元素就已经是独立的，换句话说就是已经分别好的。我们就针对每一个个体，直接跟它傍边的元素进行两两合并就好了。</p>
+<h3>迭代方式</h3>
+<p>迭代的方式就是把上面的<strong>void _recursive_merge_sort(int a[], int start, int end)</strong>这个方法换成循环迭代来实现。</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="nf">iteractive_merge_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">step</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mid</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="n">step</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">end</span> <span class="o">&gt;</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">end</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">_sorted_merge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">end</span><span class="p">);</span>
+            <span class="n">start</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">*</span><span class="n">step</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">step</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>迭代方式定义了一个step,这个是需要合并的子数组的长度，初始化为1，这样就不能分割数组，直接合并就好。步长每次翻倍，最终步长超出数组长度就退出。这里也有很多细节要注意，定了步长之后，要对整个数组按照这个步长分成多个子数组来合并，这里要注意最后一个子数组的元素个数可能个数不够，不能超过数组总长。</p>
+<h3>另一种迭代方式</h3>
+<p>我们这里的有序数组合并都是在在<strong>_sorted_merge</strong>这个方法内实现的，空间分配也在这。这个方法会被频繁调用。空间会被进行很多次分配和释放。在我大学的数据结构的课本里，归并排序采用的并不是上面的方法，而是采用了另外一种迭代方法来实现。</p>
+<p>先上代码：</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="nf">_merge_array</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">step</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">start1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">end1</span><span class="p">,</span> <span class="n">start2</span><span class="p">,</span> <span class="n">end2</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">end1</span> <span class="o">=</span> <span class="n">start1</span> <span class="o">+</span> <span class="n">step</span><span class="p">;</span>
+        <span class="n">start2</span> <span class="o">=</span> <span class="n">end1</span><span class="p">;</span>
+        <span class="n">end2</span> <span class="o">=</span> <span class="n">start2</span> <span class="o">+</span> <span class="n">step</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">end2</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)</span> <span class="n">end2</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">start1</span> <span class="o">&lt;</span> <span class="n">end1</span> <span class="o">&amp;&amp;</span> <span class="n">start2</span> <span class="o">&lt;</span> <span class="n">end2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">start1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">start2</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">start1</span><span class="o">++</span><span class="p">];</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">start2</span><span class="o">++</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">start1</span> <span class="o">&lt;</span> <span class="n">end1</span><span class="p">)</span> <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">start1</span><span class="o">++</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">start2</span> <span class="o">&lt;</span> <span class="n">end2</span><span class="p">)</span> <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">start2</span><span class="o">++</span><span class="p">];</span>
+
+        <span class="n">start1</span> <span class="o">=</span> <span class="n">end2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">iteractive_merge_sort2</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="o">*</span><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_merge_array</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">_merge_array</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">flag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>在<strong>void iteractive_merge_sort2(int a[], int n)</strong>这个方法中，直接申请了一个跟原始数组一样大小的空间，然后后面的数组的合并算法就在这两个数组之间进行。当然最后如果最终结果被合并到了b数组中的话，就把它拷贝到原始的a数组中。而核心的数组合并在<strong>void _merge_array(int a[], int b[], int n, int step)</strong>这个方法中。它接收两个数组，第一位原始数组，第二个为合并后的数组。他们的数组大小一样，还有一个关键参数是步长。这个步长就是分割好的已有序数组的元素个数。里面的实现细节还是数组的下标，不能超过总数组长度。
+这个方法的特别之处就是它是一次性分配内存的。这个说是好还是不好呢，我也不太敢确定。但是感觉他的效率要高些，因为不用频繁分配和释放内存。</p>
+<h3>链表的排序</h3>
+<p>大家都很清楚数组的排序有很多种，方法各异，但是不知道你想过没有，链表是怎么排序的。链表因为只能顺序访问，不能想数组那样随机访问，所以基本上数组的排序算法很难直接用到链表上。但是这里有个算法天然的可以用在链表上，就是<strong>归并排序算法</strong></p>
+<p>归并算法的核心就是分割组和合并有序组。这个是可以用在链表上的。对两个有序链表的合并可以说比有序数组的合并还简单。而对链表的分割也有好办法。</p>
+<p>链表的分割用到了链表的常用算法：快慢指针法
+先看链表定义：</p>
+<div class="highlight"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_Node</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">_Node</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span><span class="n">Node</span><span class="p">,</span> <span class="o">*</span><span class="n">PNode</span><span class="p">;</span>
+</pre></div>
+
+
+<p>再看链表分割法，我们分割肯定也是按照中间分割，那么关键点就是找到中间链表节点</p>
+<div class="highlight"><pre><span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &quot;CNode.h&quot;</span>
+
+<span class="n">PNode</span> <span class="nf">_getMiddleNode</span><span class="p">(</span><span class="n">PNode</span> <span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">head</span> <span class="o">==</span>  <span class="nb">NULL</span> <span class="o">||</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">fast</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="o">*</span><span class="n">slow</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">fast</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fast</span> <span class="o">=</span> <span class="n">fast</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fast</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fast</span> <span class="o">=</span> <span class="n">fast</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="n">slow</span> <span class="o">=</span> <span class="n">slow</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">slow</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这个方法里的快指针的速度是慢指针的两倍，所有快指针到达终点的时候，慢指针刚好走了一半。这里需要注意的数快指针的初始位置是比慢指针多一步的。然后按照中间分割点的话，慢指针是算在前一半里面的。</p>
+<p>再看一下我们是如何用这个方法将链表进行分割的。</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="nf">sortSingleList</span><span class="p">(</span><span class="n">Node</span>  <span class="o">**</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">head</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">head</span><span class="p">)</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="p">(</span><span class="o">*</span><span class="n">head</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">midNode</span> <span class="o">=</span> <span class="n">_getMiddleNode</span><span class="p">(</span><span class="o">*</span><span class="n">head</span><span class="p">);</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">restNode</span> <span class="o">=</span> <span class="n">midNode</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="n">midNode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">sortSingleList</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
+    <span class="n">sortSingleList</span><span class="p">(</span><span class="o">&amp;</span><span class="n">restNode</span><span class="p">);</span>
+    <span class="o">*</span><span class="n">head</span> <span class="o">=</span> <span class="n">_mergeSortedList</span><span class="p">(</span><span class="o">*</span><span class="n">head</span><span class="p">,</span> <span class="n">restNode</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这里可以看到，分割方法和数组的递归分割法是一样的，都是递归调用，只不过这里多了一步计算链表中间节点的步骤。</p>
+<p>再来看核心算法归并算法：</p>
+<div class="highlight"><pre><span class="n">PNode</span> <span class="nf">_mergeSortedList</span><span class="p">(</span><span class="n">PNode</span> <span class="n">head1</span><span class="p">,</span> <span class="n">PNode</span> <span class="n">head2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">head1</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">head2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">head2</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">head1</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">newHead</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="n">head1</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="n">head2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">head1</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">head2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">newHead</span> <span class="o">=</span> <span class="n">head2</span><span class="p">;</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="n">head2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">newHead</span> <span class="o">=</span> <span class="n">head1</span><span class="p">;</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">head1</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">newHead</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">p1</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">p2</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p1</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p2</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="n">cur</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">newHead</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>这里我采用的是非递归算法，要点是先把头节点确定，接下来的跟数组的合并算法差不多，注意最后元素合并跟数组不一样，只连接next节点，不需要while循环。
+当然还有递归方式来实现<strong>_mergeSortedList</strong>方法，链表天生适合递归。这里就不说了，有兴趣的可以到我的github上看，那里有各种实现。</p>
+<h3>归并排序的其他应用</h3>
+<p>这里我只讲一种场景。就是外部排序。如果我们的要排序的数据量很大，而内存有比较小，我们该如何排序呢？这个也是经典面试题目。这里肯定是要用到归并排序，而且是多路归并排序，因为你需要将数据分为N份来拿到内存中排序，然后对着N份进行归并排序。这里面整体算法就复杂了，也不是这里可以说的明白的。有兴趣可以到网上查查资料。</p>
+<p>好了，就到这。这篇文章历时两个月终于写完了。。。。有兴趣可以看
+<strong><a href="https://github.com/szuwest/AlgorithmTest">我写的各种算法github工程</a></strong></p>
+<hr />
+<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/suan-fa.html">算法</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/suan-fa-gui-bing-pai-xu.html">算法 归并排序 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/tan-tan-gui-bing-pai-xu-suan-fa.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html"><h3 class="article-title">打印杨辉三角--编程算法系列之一</h3></a>
 <h6 class="subheader" title="2016-07-17T00:00:00">2016-07-17
 </h6>
@@ -63,78 +329,7 @@
                          <span class="mi">1</span>   <span class="mi">1</span>   
                        <span class="mi">1</span>   <span class="mi">2</span>   <span class="mi">1</span>   
                      <span class="mi">1</span>   <span class="mi">3</span>   <span class="mi">3</span>   <span class="mi">1</span>   
-                   <span class="mi">1</span>   <span class="mi">4</span>   <span class="mi">6</span>   <span class="mi">4</span>   <span class="mi">1</span>   
-                 <span class="mi">1</span>   <span class="mi">5</span>   <span class="mi">10</span>  <span class="mi">10</span>  <span class="mi">5</span>   <span class="mi">1</span>   
-               <span class="mi">1</span>   <span class="mi">6</span>   <span class="mi">15</span>  <span class="mi">20</span>  <span class="mi">15</span>  <span class="mi">6</span>   <span class="mi">1</span>   
-             <span class="mi">1</span>   <span class="mi">7</span>   <span class="mi">21</span>  <span class="mi">35</span>  <span class="mi">35</span>  <span class="mi">21</span>  <span class="mi">7</span>   <span class="mi">1</span>   
-           <span class="mi">1</span>   <span class="mi">8</span>   <span class="mi">28</span>  <span class="mi">56</span>  <span class="mi">70</span>  <span class="mi">56</span>  <span class="mi">28</span>  <span class="mi">8</span>   <span class="mi">1</span>   
-         <span class="mi">1</span>   <span class="mi">9</span>   <span class="mi">36</span>  <span class="mi">84</span>  <span class="mi">126</span> <span class="mi">126</span> <span class="mi">84</span>  <span class="mi">36</span>  <span class="mi">9</span>   <span class="mi">1</span>   
-       <span class="mi">1</span>   <span class="mi">10</span>  <span class="mi">45</span>  <span class="mi">120</span> <span class="mi">210</span> <span class="mi">252</span> <span class="mi">210</span> <span class="mi">120</span> <span class="mi">45</span>  <span class="mi">10</span>  <span class="mi">1</span>   
-     <span class="mi">1</span>   <span class="mi">11</span>  <span class="mi">55</span>  <span class="mi">165</span> <span class="mi">330</span> <span class="mi">462</span> <span class="mi">462</span> <span class="mi">330</span> <span class="mi">165</span> <span class="mi">55</span>  <span class="mi">11</span>  <span class="mi">1</span>    
-   <span class="mi">1</span>   <span class="mi">12</span>  <span class="mi">66</span>  <span class="mi">220</span> <span class="mi">495</span> <span class="mi">792</span> <span class="mi">924</span> <span class="mi">792</span> <span class="mi">495</span> <span class="mi">220</span> <span class="mi">66</span>  <span class="mi">12</span>  <span class="mi">1</span>   
-</pre></div>
-
-
-<p>面试时我很容易紧张，人在紧张情况下貌似是很难转起来的，这是我的一大弊端。
-当时面试官只在纸上画了前5行，只告诉了我杨辉三角的特点就是每个数字都是它左上角的那个数字和右上角的那个数字相加得来，第一个数字是1。我当时只得出运用递归算法来解这道题会比较容易理解。但是该怎么写我写不出来。后来很长一段时间我并没有忘记这道题，但是我没有去查怎么解决，我偶尔会想一下该怎么做。最近这一两周我对解决这个到题的欲望越来越强烈，所以我开始在记事本上动手写代码解决。后来我发现了杨辉三角的一些规律，这些规律帮助我将代码写了出来。<br/></p>
-<ul>
-<li>1.杨辉三角第n行有n个数字</li>
-<li>2.每个数字都是它左上角的那个数字和右上角的那个数字相加得来，更具体一点这个数字是a(i,j),那么它是a(i-1,j-1)和a(i-1, j)相加得来的</li>
-<li>3.第1个数字是1.如果这个数字的左上角或右上角的那个数字不存在，那么就当做0</li>
-</ul>
-<h3>我的分析过程</h3>
-<p>说实话，现在看起来这些规律显而易见，但是我还是在编写代码的过程中带才找到的。<br/>
-我这个人在面试中真的无法做到像平时那样思考，这让我在面试中感觉自己是个无思考能力的人。还有我发现自己一定要先进入编程状态才能进行思考。所以我决定要解决这个问题时，我就打开一文本，开始写一些我已经想到的代码，直到现在，这个文本也还没有关闭过。<br/></p>
-<p>第3点很浅显，它是基础，如果用递归实现的话这是递归的出口。第1点让我写出了两个for循环，但是循环体内是怎么实现，我纠结了很久。最开始我想用最简单的方法，把已计算出的数字放入一个数组，然后就把数组中的数字相加得出所需数字。但是我发现这个数组也不太用，我不想用二维数组。后来我才想清楚，直接在循环体内用一个递归函数就这个数字的值，然后把它打印出来，这个是行得通的。然后关键是这个递归函数怎么实现。<br/></p>
-<p>一开始我把递归函数的参数设为n，发现怎么实现都不太对，后来发现其实应该是把参数设置为i,j，这样就跟循环体的下标对应起来，就很好解决了。最终要解决的就是递归的出口问题，这个也不是我一开始想的那么简单。我把下标设置成是以1开始的，i&lt;1的话，它的值就是0，1的话就是1. 而对应j,为1的话，它是0，而且j是不能大于i的，大于i它的值也为0。
-所以程序的最终实现是：</p>
-<h3>代码实现</h3>
-<div class="highlight"><pre><span class="err">\#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
-
-<span class="kt">int</span> <span class="n">yangHuiTriangle</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">yangHuiTriangle</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">j</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">&gt;</span><span class="n">i</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">else</span> <span class="n">b</span> <span class="o">=</span> <span class="n">yangHuiTriangle</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="n">pringYangHuiTriangle</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;=</span><span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">yangHuiTriangle</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d   &quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>当我第一次写完代码时，并没有完全写对，j&gt;i的情况没有处理好。我自己对照着杨辉三角的数字来检验的时候，发现了问题，然后改了过来，然后我就把代码拷贝到一个工程里运行，结果出来了，是对的！</p>
-<h3>打印结果</h3>
-<div class="highlight"><pre><span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">2</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">3</span>   <span class="mi">3</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">4</span>   <span class="mi">6</span>   <span class="mi">4</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">5</span>   <span class="mi">10</span>   <span class="mi">10</span>   <span class="mi">5</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">6</span>   <span class="mi">15</span>   <span class="mi">20</span>   <span class="mi">15</span>   <span class="mi">6</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">7</span>   <span class="mi">21</span>   <span class="mi">35</span>   <span class="mi">35</span>   <span class="mi">21</span>   <span class="mi">7</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">8</span>   <span class="mi">28</span>   <span class="mi">56</span>   <span class="mi">70</span>   <span class="mi">56</span>   <span class="mi">28</span>   <span class="mi">8</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">9</span>   <span class="mi">36</span>   <span class="mi">84</span>   <span class="mi">126</span>   <span class="mi">126</span>   <span class="mi">84</span>   <span class="mi">36</span>   <span class="mi">9</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">10</span>   <span class="mi">45</span>   <span class="mi">120</span>   <span class="mi">210</span>   <span class="mi">252</span>   <span class="mi">210</span>   <span class="mi">120</span>   <span class="mi">45</span>   <span class="mi">10</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">11</span>   <span class="mi">55</span>   <span class="mi">165</span>   <span class="mi">330</span>   <span class="mi">462</span>   <span class="mi">462</span>   <span class="mi">330</span>   <span class="mi">165</span>   <span class="mi">55</span>   <span class="mi">11</span>   <span class="mi">1</span>   
-<span class="mi">1</span>   <span class="mi">12</span>   <span class="mi">66</span>   <span class="mi">220</span>   <span class="mi">495</span>   <span class="mi">792</span>   <span class="mi">924</span>   <span class="mi">792</span>   <span class="mi">495</span>   <span class="mi">220</span>   <span class="mi">66</span>   <span class="mi">12</span>   <span class="mi">1</span>  
-</pre></div>
-
-
-<p>虽然这个打印出来的结果不是金字塔形状，但是它的数字都是对的。对于打印成金字塔形状，以后再研究吧。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/suan-fa.html">算法</a>
+                   <span class="mi">1</span>   <span class="mi">4</span>   <span class="mi">6</span>   <span class="mi">4</span>   <span class="mi">1 ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/suan-fa.html">算法</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/suan-fa-yang-hui-san-jiao.html">算法 杨辉三角 </a>
@@ -142,8 +337,11 @@
 
 
 
-<p><a href="http://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html#disqus_thread">comments</a></p>            </article>
+<p><a href="http://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
 
+            <!-- /#posts-list -->
 <div class="pagination-centered">
 <h6 class="subheader">Page 1 of 1</h6>
 
@@ -151,10 +349,6 @@
 
 </p>
 </div>
-
-
-
-            <!-- /#posts-list -->
 
     </div>
     <!-- End Main Content -->

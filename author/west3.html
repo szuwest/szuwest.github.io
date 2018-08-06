@@ -50,6 +50,32 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html"><h3 class="article-title">iOS直接上传系统照片和视频（ALAsset）</h3></a>
+<h6 class="subheader" title="2016-12-01T00:00:00">2016-12-01
+</h6>
+
+
+<h2>iOS直接上传系统照片和视频（ALAsset）</h2>
+<p>我之前有一篇文章里讲过上传系统照片和视频的事（<a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html">iOS系统相册上传不得不说的那些事儿</a>），需要将ALAsset从系统相册里导出到沙盒文件里，然后再将这个文件上传。这里需要无端端写一次文件的时间就不说了，最要命的是还要占据额外的磁盘空间。我们的用户一般要备份相片视频的时候，往往是手机空间不足的时候。这个时候存储空间很紧张，你备份还需要额外的空间。如果一个视频很大，例如2G，那么手机上需要有空闲的2G空间才能导出视频，才能备份。真是硬伤。</p>
+<p>这个问题一直在我心头，卡了我很久，之前我有网上找解决方法，没有找到，很多都是说将ALAsset导出文件到沙盒的事。我自己也有想过要怎么解决。我想过从ALAsset中读取一段一段的NSData数据，然后分别将这些数据上传。这样也许是可以的，但貌似需要服务器那边能将这些包组合起来。另外客户端这些做起来也挺复杂。还有一种方法是我不使用AFN库，自己直接用NSURLConnection来写，跟服务器建立连接后不断的从ALAsset中读取数据写入跟服务器建立的连接。这个是参考Java的写法。可是我又不知从何动手。并且之前都很忙，没有时间想这么多。</p>
+<p>最近我比较闲了，我想正好有时间来解决这个问题。这是我心中的一块石头，我要把它拿掉。</p>
+<p>这次我直接在github上找，说不定能找到一些有用的代码。果真让我找到了 <a href="https://github.com/formal-method/FMAssetStream">FMAssetStream</a>这个库,这个库的做法很简单，定义了一个子类来扩展<strong>NSInputStream</strong>，重载了一个最重要的方法 :</p>
+<div class="highlight"><pre><span class="o">-</span> <span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="n">read ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/shang-chuan-alasset-nsinputstream.html">上传 ALAsset NSInputStream </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html"><h3 class="article-title">iOS应用2017年强制应用HTTPS问题</h3></a>
 <h6 class="subheader" title="2016-10-18T00:00:00">2016-10-18
 </h6>
@@ -293,33 +319,6 @@
 
 
 <p><a href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-h5he-yi-dong-ke-hu-duan-kai-fa-de-wei-lai.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/sheng-huo-suo-shi.html"><h3 class="article-title">生活琐事</h3></a>
-<h6 class="subheader" title="2016-05-13T00:00:00">2016-05-13
-</h6>
-
-
-<h2>生活杂谈</h2>
-<p>最近好长时间没有写博客了，貌似差不多一年了。竟然想不到是那么久没有写过东西。</p>
-<p>去年年底买了车，现在也差不多要领结婚证了，时间的脚步根本停不下来，一眨眼该来的基本上都要来了。</p>
-<p>技术上没有太大的长进，也还有没得到有效的晋升，不过心没有太大的彷徨，因为已经麻木了吗？</p>
-<p>不过我还是一直想提升能力的，不管是技术上的，还是工作上的，生活上的。人的生活不单单是工作和技术，还有很多以外的东西。要在这个世界上好好的生活，需要掌握很多方面的能力，要接触很多的东西。</p>
-<p>我们要抱以开放的心态 接受和学习 生活中的方方面面，去掉浮躁，最终才能成功。
-技术也一样。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/za-tan.html">杂谈 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/sheng-huo-suo-shi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-huo-suo-shi.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
