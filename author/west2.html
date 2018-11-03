@@ -50,6 +50,35 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html"><h3 class="article-title">Android so库加固加壳方案</h3></a>
+<h6 class="subheader" title="2018-01-06T00:00:00">2018-01-06
+</h6>
+
+
+<h1>Android so库加固加壳方案</h1>
+<p>Android应用主要包含资源文件和代码，而代码一般包括Java代码和C/C++代码。Java代码编译后会生成dex文件，而C/C++编译后会生成so文件。Android应用的保护，主要对编译后的dex文件和so文件来保护，防止被别人反编译查看到里面的核心代码和逻辑。</p>
+<p>对于Java代码，一般在编译时做代码混淆，编译后的文件名，函数名和变量名会变成一些无意义的名字，这个即使代码被反编译出来，也很难读懂。不过由于调用关系和逻辑都还在，花些时间还是有可能读懂。所以就有了一些防止反编译的方法出现。这就包括了dex加壳或者加密方法。对dex文件保护的方法现在有不少成熟的方案，有不少第三方公司免费提供加固方案。</p>
+<p>对于C/C++代码的保护方案，会比Java代码的更麻烦一下。C/C++经过编译后生成so文件，这个so文件同样会能被反编译。由于我们的主要算法都采用C/C++来实现，并生成so文件提供给合作方使用，我们重点说的是C/C++代码和so文件的保护。</p>
+<p>对于so文件的保护，可分为有so源代码和无so源码的情况。</p>
+<h2>有源码保护</h2>
+<p>针对有源代码的情况，可以大致分为代码混淆，Section或者函数加密。</p>
+<h3>代码混淆</h3>
+<p>代码混淆最简单的方法就是利用宏定义混淆函数名。例如通过一个宏定义把一个有意义的函数名变为一个无意义的字母组合，在编译后有意义的函数名就被替换为无意义的字母组合 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/dong-hua-jia-gu-jia-ke.html">动画 加固 加壳 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/2017nian-zong-jie-he-2018nian-zhan-wang.html"><h3 class="article-title">2017年总结和2018年展望</h3></a>
 <h6 class="subheader" title="2017-12-31T00:00:00">2017-12-31
 </h6>
@@ -306,42 +335,6 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
 
 
 <p><a href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html"><h3 class="article-title">事件循环机制之于Android的Looper和iOS的NSRunLoop</h3></a>
-<h6 class="subheader" title="2016-12-04T00:00:00">2016-12-04
-</h6>
-
-
-<h2>事件循环机制之于Android的Looper和iOS的NSRunLoop</h2>
-<p>Android和iOS同为手机操作系统，有很多相同之处。有很多设计几乎是一样的，统一种设计模式，不同的实现。例如事件模型，它大体逻辑是这样的：</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">loop</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">initialize</span><span class="p">();</span>
-    <span class="k">do</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">get_next_message</span><span class="p">();</span>
-        <span class="nx">process_message</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nx">message</span> <span class="o">!=</span> <span class="nx">quit</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>对于这样的一种模式, Android系统和iOS系统是一样的，只不过是不同的平台不同的实现方式。应该说很多平台或者框架都是采用这一种模式。Android系统对应的就是Looper机制，iOS对应的就是NSRunLoop机制。你看名字都是loop，这是它的核心。</p>
-<p>对于移动开发者来说，理解平台是怎么实现这个事件循环机制，或者叫消息机制，是很重要的。因为在你的开发工作当中，无时无刻不在用着这种机制。不理解它的机制，充其量也只能算个初级程序员，无法深入理解系统。如果我们能了解不同平台对这一机制的实现，可以加深理解，可以提高自己。我既做过Android开发，也研究过它Looper机制。现在做iOS开发都有一段时间了，最近开研究它的NSRunLoop机制。我发现他们整体的设计思想确实一致的，但是不同的平台却也有很多差异性。</p>
-<h2>共同的设计点</h2>
-<p>首先loop跟线程是一一对应的，这是基础。然后iOS或者Android都是一个应用一个进程 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/android-ios-looper-nsrunloop.html">Android iOS Looper NSRunLoop </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
