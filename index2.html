@@ -50,6 +50,69 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/code-reviewfang-an.html"><h3 class="article-title">Code Review方案</h3></a>
+<h6 class="subheader" title="2018-01-10T00:00:00">2018-01-10
+</h6>
+
+
+<h1>Code Review方案</h1>
+<h2>定义</h2>
+<p>Code Review代码评审是指在软件开发过程中，通过对源代码进行系统性检查的过程。通常的目的是查找各种缺陷，包括代码缺陷、功能实现问题、编码合理性、性能优化等；保证软件总体质量和提高开发者自身水平</p>
+<h2>code review 的好处</h2>
+<ul>
+<li>
+<ol>
+<li>提高代码质量。</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>及早发现潜在缺陷，降低修改/弥补缺陷的成本。</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>促进团队内部知识共享，提高团队整体水平。</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>评审过程对于评审人员来说，也是一种思路重构的过程。帮助更多的人理解系统。</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>是一个传递知识的手段，可以让其它并不熟悉代码的人知道作者的意图和想法，从而可以在以后轻松维护代码。</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>鼓励程序员们相互学习对方的长处和优点。 </li>
+</ol>
+</li>
+<li>
+<ol>
+<li>可以被用来确认自己的设计和实现是一个清楚和简单的。</li>
+</ol>
+</li>
+</ul>
+<h2>code review形式</h2>
+<p>一般code review有两种形式，一种是代码评审会议，我称之为Code Review Meeting，就是将团队成员都组织起来开会，让代码Owner上去讲自己代码的实现和思路，其它人发表意见和进行讨论，也有把这种叫做team review。另外一种是一对一评审，我称之为Single Review，就是项目owner提交代码之后，让reviewer在空闲的时候帮忙评审代码，并且写出批注，owner收到批注后，进行修改或者回复 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/codereview.html">codereview </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/code-reviewfang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/code-reviewfang-an.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/android-soku-jia-gu-jia-ke-fang-an.html"><h3 class="article-title">Android so库加固加壳方案</h3></a>
 <h6 class="subheader" title="2018-01-06T00:00:00">2018-01-06
 </h6>
@@ -301,40 +364,6 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
 
 
 <p><a href="http://szuwest.github.io/2016nian-zong-jie.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/2016nian-zong-jie.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html"><h3 class="article-title">iOS后台下载和断点续传</h3></a>
-<h6 class="subheader" title="2016-12-08T00:00:00">2016-12-08
-</h6>
-
-
-<h2>iOS后台下载和断点续传</h2>
-<p>最近在重新整理我们项目里的iOS的后台下载，因为原来方法（ASIHTTPRequest方式）无法做到后台一直下载，这个问题被我老婆吐槽了好几次。所以我重新整理一下，用NSURLSession来下载，达到了比较好的效果。现在总结自己的一些经验。</p>
-<h3>背景</h3>
-<p>项目最开始我们是用了NSURLSession来做后台下载的。但是有两个严重的问题</p>
-<ul>
-<li>有时候偶现的不能下载，就是一启动下载就失败。一旦出现这种情况，无法恢复，怎么样都无法下载，所有任务都一样</li>
-<li>下载速度很慢，只有几十到几百KB/S，网络正常，Android端同一个文件下载速度飞快</li>
-<li>程序杀掉之后无法重新继续下载</li>
-</ul>
-<p>按道理这些问题都不应该出现，可是我们的应用就是出现了这些问题，而且难以调试，同事调试了很久都没有结果。最后我也没认真研究，但是我发现ASIHTTPRequest可以很好地解决上面的几个问题，然后我就在原来的基础上加了ASIHTTPRequest的下载方式。</p>
-<p>ASIHTTPRequest方式的下载不错，速度很快，也能很好的断点续传，但是跟Android的还是慢了一点，不过我觉得这可能是系统不同的原因。ASIHTTPRequest还有一个比较致命的弱点，就是不能后台下载，这对于下载大文件来说是必须的。在iOS平台要做后台下载，最好的方式还是使用NSURLSession。</p>
-<p>所以我决定好好研究一下NSURLSession，并且改用这种方式。</p>
-<h3>NSURLSession后台下载</h3>
-<p>实际上NSURLSession的后台下载真的很强大，苹果真做了件很好的事。当你创建一个后台下载任务的时候，实际上你就把这个下载交给系统来接管了。所以即使你把APP杀掉 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/nsurlsession-asihttprequest-hou-tai-xia-zai.html">NSURLSession ASIHTTPRequest 后台下载 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

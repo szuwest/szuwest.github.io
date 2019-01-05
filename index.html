@@ -49,6 +49,55 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html"><h3 class="article-title">iOS开发如何做外部测试</h3></a>
+<h6 class="subheader" title="2019-01-05T00:00:00">2019-01-05
+</h6>
+
+
+<h2>iOS开发如何做外部测试</h2>
+<p>我们做APP开发的，开发出来的APP还未上线，又要想给别人用一下，该怎么做？实际上这是我们每个做APP开发的人都会遇到的，但是并不是每个人都清楚怎么做，有哪些方式。今天我们就来讲一讲。</p>
+<p>在将iOS的APP如何给别人使用和测试前，先说一下安卓APP开发是怎么做的。安卓端是很简单的，你只要先生成一个证书文件keystone，然后用这个文件给apk签名，就可以将apk发给任意一个人安装使用了。这很简单，也很方便。可是iOS的就没那么容易了。我们还是从最简单的开发人员如何用真机测试开始说起。</p>
+<h3>真机调试</h3>
+<p>我们有了一个想法，并开始写代码，模拟器调试很方便，要在iPhone上看效果怎么办了。你直接将iPhone连上电脑是不行的。现在的情况至少你需要一个Apple ID，在Xcode上登录你的账号，在调试前Xcode会自动帮你初始化一些东西，然后就可以将APP安装到你的iPhone上了。在以前，你这个AppleID不能是普通的账号，必须是付了前的开发者账号才行。现在苹果放宽限制了。</p>
+<p>这种方式的做法是你的手机必须连上你的电脑，在Xcode上选择你的iPhone来调试，Xcode会自动帮你注册设备的UDID。如果你没办法把iPhone连接到电脑上呢？或者不方便把iPhone连接到电脑上，毕竟如果是老板的手机的话，不方便那种做的。那我们需要一种把安装包提供给别人安装，或者一个地址给别人安装的方式。</p>
+<h3>adhoc 方式</h3>
+<p>我们将项目archive后，在导出（现在Xcode叫distribution）的时候，有个选项是adhoc，就是专门来做这个的。我们可以将APP导出成一个IPA，然后把这个IPA丢给别人，对方可以通过将iPhone连接到电脑，打开iTunes，通过iTunes来安装这个IPA到手机上。这还是有点麻烦，普遍做法都是放到一个网页上，别人通过这个网页来安装这个IPA。我一般都是借助第三方来做这步，例如蒲公英网站就是专门做种业务的。把你的IPA上传到蒲公英上，还会生成网址二维码，很方便分发。</p>
+<p>但是这个IPA并不是每个人都可以安装的，能安装的前提是他/她的手机必须先注册过，即他/她的手机的UDID必须先注册到苹果的网站上，最终在打包IPA的时候苹果会把这些UDID写入证书里，只有注册过的手机才能安装成功。</p>
+<p>如何注册手机UDID呢？最简单的方法是将手机连接到开发电脑，Xcode会自动帮你注册这个设备。但是并这很不方便，因为别人的手机你不能预先拿到的。当然还有别的方法，例如你放手机拥有这连接电脑，在iTunes上可以看到那部手机的UDID，让他把UDID发给你。这样的操作成本也很高。还是借助别人第三方来做这个事情比较好。蒲公英在这方面做得不错，他们专门做了个网站来帮你获取UDID。网站地址是：https://www.pgyer.com/udid。我一般都是把这个网址发给对方，对方按照网址的做法就可以获取到他手机的UDID，通过微信发给我。然后我到itunesconnect网站上，把这个UDID注册好。有一点特别需要的是，你注册好UDID后，要重新导出IPA。之前已经导出的IPA还是不能装的，要重新打包和导出IPA。并且要特别注意，在导出IPA之前，要把本地的profiles文件先删掉，让Xcode去苹果服务器同步最新的已注册设备列表。profiles文件一般是存放在 /Users/用户名/Library/MobileDevice/Provisioning Profiles  这个目录下。将这个目录下的文件都删掉，在下次打包导出的时候，会自动重新下载最新的。</p>
+<p>adhoc方式还是有UDID这个前提，还是不是很方便，有没有不需要任何登记，直接给个安装地址，就能安装的呢？还是有的，下面介绍。</p>
+<h3>Enterprise（企业级证书）方式</h3>
+<p>有一种证书叫企业级开发证书，这种证书跟普通的开发者证书不一样。企业级开发证书是299美刀每年，普通的开发证书是99刀每年。而且不要跟99刀每年的开发证书里面的企业开发者混淆。在99刀每年的开发证书里，分个人开发者和企业开发者两种，企业开发者要提交的资料多一些。企业级开发证书是专门用户处理APP不需要上架App Store的情况。也就是说你用这个证书开发的APP，可以不经过Apple审核，不上App Store，自己发布，别人就能安装。</p>
+<p>什么情况下会用到这种证书呢，我想一种情况是企业内部的APP，因为一些问题，不需要上App Store，自己内部人士使用，采用这种方式是很好的。还有一种用法就是用作beta测试。我们开发出来的APP，需要进行多人的beta测试，可以用企业级证书来打包发布，然后把安装网址发给用户，用户就可以安装使用了。真的很方便。这种方式还是挺流行的，特别是大公司内部，都是使用这种方式来做测试，当测试完成之后，再用普通开发证书打包，提交到App Store审核，完美。</p>
+<p>那这种方式有没有什么弊端？当然是有的，例如用企业级开发证书打包的APP，无法使用推送通知，还有一些跟App Store相关的功能。如果你是内部使用的APP，还无法使用App Store来更新APP，只有你们自己实现APP更新的功能。还有一个缺点，一般来说用企业级开发证书打包APP，使用的BundleID跟正式要发布到App Store的BundleID是不一样的（普通做法都是在正式的bundleID后面加Enterprise后者.enterprise）,这样安装到手机上就是两个不同的APP了。对应普通用户来说，你不知道怎么给他解释这个。如果企业版和正式版都用同一个BundleID，也有不好的地方。另外还有一个缺点，就是安装企业版APP的时候，需要先信任一个证书。而且是要到设置里面自己点击信任，操作有点难度，而且很多人不敢怎么信任这些。。</p>
+<p>另外，如果你只是用企业级开发证书来打包测试的，那么要经常在企业级开发证书和普通开发证书之前切换，你用持续集成环境打包的话，还要专门设置企业版打包，我以前用Jenkins做个这个设置，挺烦，折腾了不少精力，也专门写过这方面的文章。</p>
+<p>现在还有很多企业是用这种方式来做beta测试的。</p>
+<h3>TestFlight，公开链接</h3>
+<p>大公司可以申请企业级开发证书，他们不在乎那点钱。企业级开发证书打包可以随时打包随时发布，那真是比较理想的beta测试方式。但是小公司怎么办呢，小公司没那么多财力和精力做这个事情。苹果也提供了TestFlight的方式。
+TestFlight最早是一个独立的公司，后来被苹果公司收购了，并整合到了iTunesconnect上。早期我们怎么用TestFlight来做beta测试呢？从iTunesconnect上可以看到，有一个内部测试和外部测试分类。内部测试，就是你可以邀请一些人（通过他们的Apple ID）来加入iTunesconnect，让他们作为内部测试人员。你只需要将你的APP上传到iTunesconnect，然后你刚刚上传的版本，加入到内部测试中，内部测试人员就可以收到邮件，邮件里会教他们如何使用TestFlight来安装测试。这种方似乎有缺陷，因为必须邀请他们加入iTunesconnect才行，显示这是针对公司内部人员的。</p>
+<p>而外部测试的话，不需要邀请，但是需要获取他们的邮件地址。并且你的APP版本需要先提交审核人员审核，审核通过了才能通过邮件发给相关人员。后来有第三方公司专门做这个的，不再需要用户是邮件了。你只需在审核过后，导入他们提供的文件就可以愉快的发布任何用户测试了。这种方式我自己没有试过，但是我通过这种方式安装过别人的APP。如果可以省略掉手机用户的邮件这步，真是一个大进步。</p>
+<p>不过好消息是，现在苹果已经提供了一种叫<strong>公开链接</strong>的方式，不再需要手机用户的邮件来做beta测试了。当然审核是省略不了，你仍然需要上传你构建的APP，然后建一个小组，在这个组里选中你刚构建的版本，提交审核。审核过后，会有一个叫公开连接的按钮，点击之后，会生成一个连接地址，你可以把这个链接地址发给任何人，他们打开这个链接后，会有教他们怎安装使用（当让还是通过TestFlight）。</p>
+<p>现在我看淘宝和京东已经采用这种方式在做beta测试了。这种方式优点很明显：用户是通过苹果官方方式安装的，他们比较信任这个，比那种企业版要额外信任的方式要好。还有这种方式跟正式版是没有任何区别的，推送什么的都是正常可以用的。当然缺点就是每个版本都需要苹果先审核，有点慢，不够快捷（也许这不算缺点，因为这是必要的）。</p>
+<p>我觉得<strong>公开链接</strong>这种方式是最好的beta测试方式，值得每个iOS开发负责人去使用。</p>
+<hr />
+<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ioskai-fa-betace-shi-testflight-gong-kai-lian-jie.html">iOS开发 beta测试 TestFlight 公开链接 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html"><h3 class="article-title">SVG图片在移动端的应用解决方案</h3></a>
 <h6 class="subheader" title="2018-11-03T00:00:00">2018-11-03
 </h6>
@@ -59,108 +108,7 @@
 <p>在react-native中，有专门一个库叫<a href="https://github.com/react-native-community/react-native-svg">react-native-svg</a>来处理这个。不过当时要做两个SVG形状的动画变化，并不是任何一个形状都可以的，需要遵循一定的标准。设计师给我的两个SVG文件并不能转换。后来是我自己根据文件里的一些关键参数自己在代码里直接画出来后，再做转换动画。</p>
 <p>最近我在做的native项目中，也遇到了要用SVG的图片。我们的项目里要从服务器下载SVG图片来展示。我们要实现的这些文件是需要服务器动态配置的，也就是说我们不能预先打包进我们的APP里。所以我们这里的要提供一个解决方案，跟图片JPG图片一样显示，缓存。</p>
 <p>这个需求跟之前我遇到的那个需求是很不一样的，之前的是设计师已经定义好图片，我们工程师直接拿到文件在程序里展示，不需要考虑下载和缓存之类的。这种需求其实很简单，我们实际上大部分的需求就是这种需求，网上有很多库可以完成这种需求。把SVG图片跟JPG等普通图片一样使用，网上的方案还真不多，特别是iOS方面。。。。</p>
-<p>要像普通图片一样使用，就要考虑下载，本地缓存，内存缓存。像这种需求，我们移动端都会使用专门的图片框架，像安卓端的glide，UIL等，iOS端的SDWebImage等。但是这种库它是默认都不会考虑SVG图片。但是我们最好还是像使用这种框架来处理SVG图片。最好的方式就是把SVG的支持集成到这些库中。好在这些库的优点就是容易扩展。</p>
-<h3>安卓端的解决方案</h3>
-<p>由于我们的项目是采用glide框架来处理图片，所以这里就只讲在这个框架集成SVG图片的展示。</p>
-<p>实际上glide真的是一个很强大的库，怪不得那么多人用它（早几年我们都是用UIL），它在它的sample例子里就提供了SVG的展示支持<a href="https://github.com/bumptech/glide/tree/master/samples/svg">svg</a>。在这个例子里，采用的SVG解码方式是使用外部的解码库。它采用的解码库是<a href="https://github.com/BigBadaboom/androidsvg">androidsvg</a>。这个库是web端移植过来的，所以它有很好的兼容性，是很不错的库，虽然它的star不是很多。Android就是好，有强大的Java社区，受益于这些社区，很多库都不错。而这方面iOS就那么好了，这个等一下再说。</p>
-<p>按照它提供的sample来集成SVG的支持，不是很难。但是我遇到了其他问题。因为我们项目里的glide使用的是3.7版本，sample是基于4.8版本的。这两个版本在API上有很大区别，变化很大。所以我必须要先升级到4.8版本。等我升级完后，接入SVG的支持，然而SVG图片死活显示不出来。最终发现是我的AppModule无法生成。一直在文档，查资料，还是找不到问题，我是完全按照官方文档升级和集成的。最终我发现可能是跟AndroidX相关（还不知道AndroidX是什么的自己查）。我们项目升级到了AndroidX，它会影响一些annotation生成方式。我们的项目采用插件式框架。我们很多通用库是放在一个commomlibrary的Module中，glide也是。APP module就只是一个壳。但是一些annotation的声明一定要放在APP module中才行。所以我们把 </p>
-<div class="highlight"><pre><span class="n">annotationProcessor</span> <span class="err">&#39;</span><span class="n">androidx</span><span class="p">.</span><span class="n">annotation</span><span class="o">:</span><span class="n">annotation</span><span class="o">:</span><span class="mf">1.0.0</span><span class="err">&#39;</span>
-<span class="n">annotationProcessor</span> <span class="err">&#39;</span><span class="n">com</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">bumptech</span><span class="p">.</span><span class="n">glide</span><span class="o">:</span><span class="n">compiler</span><span class="o">:</span><span class="mf">4.8.0</span><span class="err">&#39;</span> 
-</pre></div>
-
-
-<p>放在了APP module中，最终那些自动生成的代码才会真正的生成。这样就可以很愉快的用glide来显示SVG图片了。</p>
-<div class="highlight"><pre><span class="n">public</span> <span class="n">class</span> <span class="n">GlideSvgUtil</span> <span class="p">{</span>
-
-    <span class="c1">//显示网络中的svg文件</span>
-    <span class="n">public</span> <span class="k">static</span> <span class="kt">void</span> <span class="n">showSvg</span><span class="p">(</span><span class="n">ImageView</span> <span class="n">imageView</span><span class="p">,</span> <span class="n">String</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Glide</span><span class="p">.</span><span class="n">with</span><span class="p">(</span><span class="n">imageView</span><span class="p">.</span><span class="n">getContext</span><span class="p">()).</span><span class="n">as</span><span class="p">(</span><span class="n">PictureDrawable</span><span class="p">.</span><span class="n">class</span><span class="p">).</span><span class="n">listener</span><span class="p">(</span><span class="n">new</span> <span class="n">SvgSoftwareLayerSetter</span><span class="p">()).</span><span class="n">load</span><span class="p">(</span><span class="n">url</span><span class="p">).</span><span class="n">into</span><span class="p">(</span><span class="n">imageView</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="c1">//把svg放入到raw中，通过rawid来显示</span>
-    <span class="n">public</span> <span class="k">static</span> <span class="kt">void</span> <span class="n">showSvgRes</span><span class="p">(</span><span class="n">ImageView</span> <span class="n">imageView</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rawId</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Uri</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="n">ContentResolver</span><span class="p">.</span><span class="n">SCHEME_ANDROID_RESOURCE</span> <span class="o">+</span> <span class="s">&quot;://&quot;</span> <span class="o">+</span> <span class="n">imageView</span><span class="p">.</span><span class="n">getContext</span><span class="p">().</span><span class="n">getPackageName</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span>
-                <span class="o">+</span> <span class="n">rawId</span><span class="p">);</span>
-        <span class="n">Glide</span><span class="p">.</span><span class="n">with</span><span class="p">(</span><span class="n">imageView</span><span class="p">.</span><span class="n">getContext</span><span class="p">()).</span><span class="n">as</span><span class="p">(</span><span class="n">PictureDrawable</span><span class="p">.</span><span class="n">class</span><span class="p">).</span><span class="n">listener</span><span class="p">(</span><span class="n">new</span> <span class="n">SvgSoftwareLayerSetter</span><span class="p">()).</span><span class="n">load</span><span class="p">(</span><span class="n">uri</span><span class="p">).</span><span class="n">into</span><span class="p">(</span><span class="n">imageView</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="c1">//把svg的XML加载到字符串中来显示</span>
-    <span class="n">public</span> <span class="k">static</span> <span class="kt">void</span> <span class="n">showSvgContent</span><span class="p">(</span><span class="n">ImageView</span> <span class="n">imageView</span><span class="p">,</span> <span class="n">String</span> <span class="n">svgContent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Glide</span><span class="p">.</span><span class="n">with</span><span class="p">(</span><span class="n">imageView</span><span class="p">.</span><span class="n">getContext</span><span class="p">()).</span><span class="n">as</span><span class="p">(</span><span class="n">PictureDrawable</span><span class="p">.</span><span class="n">class</span><span class="p">).</span><span class="n">listener</span><span class="p">(</span><span class="n">new</span> <span class="n">SvgSoftwareLayerSetter</span><span class="p">()).</span><span class="n">load</span><span class="p">(</span><span class="n">svgContent</span><span class="p">.</span><span class="n">getBytes</span><span class="p">()).</span><span class="n">into</span><span class="p">(</span><span class="n">imageView</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<h3>iOS端的解决方案</h3>
-<p>iOS的方案还不是很好解决，我没有发现有哪一个图片框架是集成了SVG或者提供了集成的例子的。而且我们的同事还发现了一个问题。我们服务器提供的SVG图片在很多库解码出来后没有了颜色，是黑白的。很诡异的问题，然而安卓端没有这问题。我们找很多库，像SVGKit，SwiftSVG，PocketSVG，Macaw，这些库都是超过1000star的，都无法正常显示。我基本确定是我们SVG文件的兼容性问题，我问我们的设计师他是怎么生成SVG文件的。他说是用sketch导出来的。这些文件在web和安卓的库，还有甚至xcode里都是能正常显示的。这里我提供一个不能正常显示的图片。</p>
-<div class="highlight"><pre><span class="nt">&lt;svg</span> <span class="na">id=</span><span class="s">&quot;图层_1&quot;</span> <span class="na">data-name=</span><span class="s">&quot;图层 1&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="na">viewBox=</span><span class="s">&quot;0 0 80 80&quot;</span><span class="nt">&gt;</span>
-<span class="nt">&lt;defs&gt;&lt;style&gt;</span>.cls-1{fill:#ff9595;}.cls-2{fill:#ffcc80;}<span class="nt">&lt;/style&gt;&lt;/defs&gt;</span>
-<span class="nt">&lt;title&gt;</span>彩色图标<span class="nt">&lt;/title&gt;</span>
-<span class="nt">&lt;path</span> <span class="na">class=</span><span class="s">&quot;cls-1&quot;</span> <span class="na">d=</span><span class="s">&quot;M43,77A27.14,27.14,0,0,0,58.64,27.67a24.55,24.55,0,0,1-6.4,8A24.44,24.44,0,0,0,34.55,3a24.48,24.48,0,0,1,.87,6.49c0,21.19-25.57,21.72-25.57,42.37C9.85,64.9,20.47,77,43,77Z&quot;</span><span class="nt">/&gt;&lt;path</span> <span class="na">class=</span><span class="s">&quot;cls-2&quot;</span> <span class="na">d=</span><span class="s">&quot;M51,66c0-9.28-11.79-11.85-11.79-21.74A12.3,12.3,0,0,1,40,39.95,20.79,20.79,0,0,0,34.77,76.4,54.34,54.34,0,0,0,43,77c.86,0,1.7,0,2.53-.12A13.47,13.47,0,0,0,51,66Z&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/svg&gt;</span>
-</pre></div>
-
-
-<p>因为是颜色不能正常显示，我猜肯定是defs标签里的内容不能正常解析。我稍微改了下文件，就能正常显示了。我还发现对SVG显示支持的比较好的是Macaw，其他的貌似都有点小问题。所以我把这个问题在Macaw上提交了。我不知道他们会什么时候修改，所以我就自己去研究他们的源代码，准备自己来解决了。很快我就发现他们在预解析阶段，解析defs标签的时候，就没有考虑style这种子标签。所以我就加上去了，就两三行代码（他们的代码架构挺好），然后就正常显示了。后来我又到Macaw网站上看，他们已经回复我了，并且已经支持！前后也就一个多小时！他说defs标签里一般不会放style标签，不过很多其他库支持，所以他们也就支持了。我去看他改的代码，几乎跟我改一样。所以我就放弃自己的改动，采用cocoapods直接拉取他们的master上的最新代码。</p>
-<p>解码的问题解决了，但是怎么集成到图片框架里呢？我们项目是采用swift开发的，我们采用的图片处理框架是Kingfisher。我去Kingfisher的网站上看，喵神很厉害，已经有很好的文档教我们怎么扩展图片解码器。我一看，另一个问题来了，解码器是在工作线程中进行的，并且要返回一个UIImage。Macaw这个库并没有提供一个可以在子线程中将SVG文件转为UIImage的方法。他们的方法是将SVG显示在一个UIView里然后截图。。。也有人将这个问题提了。我看他们源码发现有支持的，但是没有放出来，无法使用。</p>
-<p>我最终也只能采用曲线救国的方法了。还是用他们的方法，我在解码线程里同步切到主线程中生成UIImage，然后再在子线程中返回这个UIImage。好消息是，最近两天，他们终于支持将一个文件直接转换为UIImage了具体方案看<a href="https://github.com/exyte/Macaw/issues/468">这里</a>，不过我还没测试，他们也还没发新版。</p>
-<p>SVG解码器</p>
-<div class="highlight"><pre><span class="n">import</span> <span class="n">Foundation</span>
-<span class="n">import</span> <span class="n">UIKit</span>
-<span class="n">import</span> <span class="n">Kingfisher</span>
-<span class="n">import</span> <span class="n">Macaw</span>
-
-<span class="k">struct</span> <span class="n">SVGProcessor</span><span class="o">:</span>  <span class="n">ImageProcessor</span> <span class="p">{</span>
-    <span class="n">var</span> <span class="n">size</span> <span class="o">=</span> <span class="n">CGSize</span><span class="p">(</span><span class="n">width</span><span class="o">:</span> <span class="mi">32</span><span class="p">,</span> <span class="n">height</span><span class="o">:</span> <span class="mi">32</span><span class="p">)</span>
-    <span class="n">init</span><span class="p">(</span><span class="n">_</span> <span class="n">size</span><span class="o">:</span> <span class="n">CGSize</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
-            <span class="n">print</span><span class="p">(</span><span class="s">&quot;不支持size为0的情况m，将采用默认值32&quot;</span><span class="p">)</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">self</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">let</span> <span class="n">identifier</span><span class="o">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s">&quot;com.wegene.future&quot;</span>
-
-    <span class="n">func</span> <span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="o">:</span> <span class="n">ImageProcessItem</span><span class="p">,</span> <span class="n">options</span><span class="o">:</span> <span class="n">KingfisherOptionsInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UIImage</span><span class="o">?</span> <span class="p">{</span>
-        <span class="k">switch</span> <span class="n">item</span> <span class="p">{</span>
-        <span class="k">case</span> <span class="p">.</span><span class="n">image</span><span class="p">(</span><span class="n">let</span> <span class="n">image</span><span class="p">)</span>:
-            <span class="n">print</span><span class="p">(</span><span class="s">&quot;already an image&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">image</span>
-        <span class="k">case</span> <span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">let</span> <span class="n">data</span><span class="p">)</span>:
-            <span class="n">let</span> <span class="n">svgContent</span> <span class="o">=</span> <span class="n">String</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">data</span><span class="o">:</span> <span class="n">data</span><span class="p">,</span> <span class="n">encoding</span><span class="o">:</span> <span class="n">String</span><span class="p">.</span><span class="n">Encoding</span><span class="p">.</span><span class="n">utf8</span><span class="p">)</span>
-            <span class="n">var</span> <span class="n">img</span><span class="o">:</span> <span class="n">UIImage</span><span class="o">?</span>
-            <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">sync</span> <span class="p">{</span><span class="c1">//现在Macaw库暂时只支持这种方式生成UIImage,下一版他们支持后台线程生成UIImage的方式，以后再做修改</span>
-                <span class="n">let</span> <span class="n">rootNode</span> <span class="o">=</span> <span class="n">try</span><span class="o">!</span> <span class="n">SVGParser</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="o">:</span> <span class="n">svgContent</span><span class="o">!</span><span class="p">)</span>
-                <span class="n">let</span> <span class="n">macawView</span> <span class="o">=</span> <span class="n">MacawView</span><span class="p">(</span><span class="n">node</span><span class="o">:</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">frame</span><span class="o">:</span><span class="n">CGRect</span><span class="p">(</span><span class="n">origin</span><span class="o">:</span> <span class="n">CGPoint</span><span class="p">.</span><span class="n">zero</span><span class="p">,</span> <span class="n">size</span><span class="o">:</span> <span class="n">size</span><span class="p">))</span>
-                <span class="n">UIGraphicsBeginImageContextWithOptions</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">UIScreen</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">scale</span><span class="p">)</span>
-                <span class="n">macawView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="n">in</span><span class="o">:</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span><span class="p">)</span>
-                <span class="n">img</span> <span class="o">=</span>  <span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">();</span>
-                <span class="n">UIGraphicsEndImageContext</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="n">img</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>UIImageView的扩展</p>
-<div class="highlight"><pre><span class="n">extension</span> <span class="n">UIImageView</span> <span class="p">{</span>
-    <span class="n">func</span> <span class="n">setSvgImage</span><span class="p">(</span><span class="n">_</span> <span class="n">url</span><span class="o">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">let</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">SVGProcessor</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
-        <span class="n">let</span> <span class="n">_url</span> <span class="o">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">string</span><span class="o">:</span> <span class="n">url</span><span class="p">)</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">kf</span><span class="p">.</span><span class="n">setImage</span><span class="p">(</span><span class="n">with</span><span class="o">:</span> <span class="n">_url</span><span class="p">,</span> <span class="n">options</span><span class="o">:</span><span class="p">[.</span><span class="n">processor</span><span class="p">(</span><span class="n">processor</span><span class="p">)])</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>谢谢阅读。</p>
-<hr />
-<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
-<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<p>要像普通图片一样使用，就要考虑下载，本地缓存，内存缓存。像这种需求，我们移动端都会使用专门的图片框架，像安卓端的glide，UIL等，iOS端的SDWebImage等。但是这种库它是默认都不会考虑SVG图片。但是我们最好还是像使用这种框架来处理SVG图片 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/suan-fa-svg-androidsvg-glide-macaw.html">算法 SVG androidsvg glide Macaw </a>
@@ -168,11 +116,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -413,69 +359,6 @@
 
 
 <p><a href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/code-reviewfang-an.html"><h3 class="article-title">Code Review方案</h3></a>
-<h6 class="subheader" title="2018-01-10T00:00:00">2018-01-10
-</h6>
-
-
-<h1>Code Review方案</h1>
-<h2>定义</h2>
-<p>Code Review代码评审是指在软件开发过程中，通过对源代码进行系统性检查的过程。通常的目的是查找各种缺陷，包括代码缺陷、功能实现问题、编码合理性、性能优化等；保证软件总体质量和提高开发者自身水平</p>
-<h2>code review 的好处</h2>
-<ul>
-<li>
-<ol>
-<li>提高代码质量。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>及早发现潜在缺陷，降低修改/弥补缺陷的成本。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>促进团队内部知识共享，提高团队整体水平。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>评审过程对于评审人员来说，也是一种思路重构的过程。帮助更多的人理解系统。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>是一个传递知识的手段，可以让其它并不熟悉代码的人知道作者的意图和想法，从而可以在以后轻松维护代码。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>鼓励程序员们相互学习对方的长处和优点。 </li>
-</ol>
-</li>
-<li>
-<ol>
-<li>可以被用来确认自己的设计和实现是一个清楚和简单的。</li>
-</ol>
-</li>
-</ul>
-<h2>code review形式</h2>
-<p>一般code review有两种形式，一种是代码评审会议，我称之为Code Review Meeting，就是将团队成员都组织起来开会，让代码Owner上去讲自己代码的实现和思路，其它人发表意见和进行讨论，也有把这种叫做team review。另外一种是一对一评审，我称之为Single Review，就是项目owner提交代码之后，让reviewer在空闲的时候帮忙评审代码，并且写出批注，owner收到批注后，进行修改或者回复 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/codereview.html">codereview </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/code-reviewfang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/code-reviewfang-an.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
