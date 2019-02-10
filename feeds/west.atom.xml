@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2019-01-05T00:00:00+08:00</updated><entry><title>iOS开发如何做外部测试</title><link href="http://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html" rel="alternate"></link><updated>2019-01-05T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2019-01-05:ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html</id><summary type="html">&lt;h2&gt;iOS开发如何做外部测试&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>West's blog</title><link href="http://szuwest.github.io/" rel="alternate"></link><link href="http://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>http://szuwest.github.io/</id><updated>2019-02-10T00:00:00+08:00</updated><entry><title>2018年总结和2019年展望</title><link href="http://szuwest.github.io/2018nian-zong-jie-he-2019nian-zhan-wang.html" rel="alternate"></link><updated>2019-02-10T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2019-02-10:2018nian-zong-jie-he-2019nian-zhan-wang.html</id><summary type="html">&lt;h2&gt;2018年总结和2019年展望&lt;/h2&gt;
+&lt;p&gt;一直都没写，不愿意动手，明天就要新的一年上班了，所以还是简单写写吧。&lt;/p&gt;
+&lt;h3&gt;2018年总结&lt;/h3&gt;
+&lt;p&gt;1.上半年过得很不好，一直非常焦虑，公司发展不好，心里很慌，害怕倒闭了被动找工作。后面决定满一年后就换工作，但是一直没找到合适的。在年中的时候一度非常焦虑，很长一段时间没碰过香烟了，因为心情太过焦虑，又开始在公司偶尔抽了起来。直到后面我在那个公司满一年后，真正决定开始找新工作，找到了一个自己比较合适的公司，心才定下来。&lt;/p&gt;
+&lt;p&gt;2.下班年去了新公司后很忙，每天都在马不停蹄的赶，提供工作效率，但是并不觉得很累。很久没有这种感觉了。终于找到跟自己比较匹配的工作，也能比较大的发挥自己才能的工作。老板的价值观，直接上级的价值观跟自己都比较契合，公司的文化也挺好。真心希望能在这家公司发挥自己的才能，也希望公司能做大做强。&lt;/p&gt;
+&lt;h3&gt;2019年展望&lt;/h3&gt;
+&lt;p&gt;2019年还是希望工作上能继续发挥能量，希望自己的技术能力和管理能力都能得到提升，还有希望自己的团队的每个人的能力都得到提升，当然也希望他们能得到相应的报酬。&lt;/p&gt;
+&lt;p&gt;2019年有两件大事。&lt;/p&gt;
+&lt;p&gt;1.新房装修。一是要找钱装修，二是要在年底前装修完，希望能在农历年前住进去。新房装修是个大工程，自己完全没有经验，所以要多花点心思。&lt;/p&gt;
+&lt;p&gt;2.希望老婆能生个小孩吧&lt;/p&gt;
+&lt;p&gt;2019加油。努力！奋斗！&lt;/p&gt;</summary><category term="总结"></category></entry><entry><title>iOS开发如何做外部测试</title><link href="http://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html" rel="alternate"></link><updated>2019-01-05T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2019-01-05:ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html</id><summary type="html">&lt;h2&gt;iOS开发如何做外部测试&lt;/h2&gt;
 &lt;p&gt;我们做APP开发的，开发出来的APP还未上线，又要想给别人用一下，该怎么做？实际上这是我们每个做APP开发的人都会遇到的，但是并不是每个人都清楚怎么做，有哪些方式。今天我们就来讲一讲。&lt;/p&gt;
 &lt;p&gt;在将iOS的APP如何给别人使用和测试前，先说一下安卓APP开发是怎么做的。安卓端是很简单的，你只要先生成一个证书文件keystone，然后用这个文件给apk签名，就可以将apk发给任意一个人安装使用了。这很简单，也很方便。可是iOS的就没那么容易了。我们还是从最简单的开发人员如何用真机测试开始说起。&lt;/p&gt;
 &lt;h3&gt;真机调试&lt;/h3&gt;
