@@ -50,6 +50,32 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html"><h3 class="article-title">关于技术人员加班问题的看法</h3></a>
+<h6 class="subheader" title="2016-09-04T00:00:00">2016-09-04
+</h6>
+
+
+<h2>关于技术人员加班问题的看法</h2>
+<p>身在IT行业，加班是永远绕不开的话题。互联网是以快速变化著称，加班似乎是成了名正言顺的。最近58同城加班996的问题也引起了广泛关注，而恰好最近两个星期，我们部门也一直在加班。我准备也谈谈这个问题。</p>
+<h3>我们加班的缘由</h3>
+<p>两个星期前，我们接到消息，要在两周之类上线3.0大版本。3.0版本改版非常大，虽然一部分功能已经开发了，但是一直在改，功能就从来没有稳定过。而且我们还正在开发2.7版本，突然间两周之类要上线3.0版本，是不可能的。但是这应该是老板的命令，我们应该没有还价的可能，所以加班是不可避免。还有一个更加不可避免加班的理由：我们的一个同事这个时候被借走了，借去别的子公司帮忙开发。这个借人也不是我们可以商量的，这个公司老板的要求，所以雪上加箱。</p>
+<h3>加班开发和家庭影响</h3>
+<p>为了能尽可能达成目标，我们每天都是工作到10点多，有些同事要搞到凌晨2点多，从产品，设计，到测试，所有人都需要加班。周末两天也需要加班。我老婆对我每天都很晚回家意见非常大，所以我尽量能10点多之后就回家，不然肯定闹家庭矛盾。周日我也不得不请假，留了另外两个同事在加班开发。其实我们已经非常高效了，我们的人力比Android客户端的人力还要少，大家都要努力加班赶进度 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/jia-ban.html">加班 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html"><h3 class="article-title">iOS持续集成记(iOS+Jenkins+Cocoapods+蒲公英)</h3></a>
 <h6 class="subheader" title="2016-07-18T00:00:00">2016-07-18
 </h6>
@@ -280,31 +306,6 @@
 
 
 <p><a href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html"><h3 class="article-title">Android图片缓存和相关开源项目</h3></a>
-<h6 class="subheader" title="2015-05-16T00:00:00">2015-05-16
-</h6>
-
-
-<h1>Android图片缓存和相关开源项目</h1>
-<p>现在几乎所有大一点的Android项目都会用到图片缓存。而Android应用的内存占用大户就是图片，几乎所有内存问题都会涉及到图片问题，而已图片为主的应用也会涉及到性能问题。我觉得每一个资深的Android工程师都要对图片缓存技术有所了解，并且有自己想法。图片缓存是在面试别人时必问的问题。</p>
-<p>图片缓存可以分为两点：内存缓存和磁盘缓存，当然还有必然要涉及的图片解码，图片下载，这里主要讲讲内存缓存和磁盘缓存，附带说一下图片解码和下载。</p>
-<h2>内存缓存</h2>
-<p>由于一张图片基本上会被重用或者在多个界面显示，而图片的下载和解码都是比较耗时的动作，要给用户比较好的体验，将一张图片缓存在内存中就尤为必要。如果一个应用图片比较多，要将所有图片都缓存在内存中显然不现实，特别是比较低端的机器上，内存非常有限。所以这个内存缓存必然有所限制，那么问题来了，缓存池设置多大，并且满了之后怎么处理成了要点。我们知道Android系统中给每个应用设置了最大堆，超出了这个最大堆限制就会报OutOfMemory错误。所以一般就是根据这个最大堆来设置图片缓存池的大小，业内普遍做法是取最大堆内存的8分之一，这个经验值，我觉得可以应用情况做调整。而缓存池满了之后该又要加入新的图片，怎么对已在池中的图片移除，有很多方法。最常用的是LRU（least recently used）算法。我一般会问面试者这个算法是怎么实现的，看过代码的人或者算法学得比较好的人就能答出。还有用的比较多大算法是使用频率算法，移除最大图片算法等。然而我认为比较好的内存缓存技术还应结合弱引用来用。这里涉及到什么事强引用，软引用和弱引用也是我必考项。为什么还要结合弱引用来使用比较好呢？如果一个应用要显示的图片比较多 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-tu-pian-huan-cun-imageloader-fresco.html">Android源码学习 图片缓存 ImageLoader Fresco </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

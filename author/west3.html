@@ -50,6 +50,36 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
+<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
+</h6>
+
+
+<h1>Coturn在iOS端应用和libevent的编译</h1>
+<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
+<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
+<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
+<p>下面是libevent的编译脚本主要内容</p>
+<div class="highlight"><pre>###########################################################################
+# Choose your libevent version and your currently-installed iOS SDK version:
+#
+VERSION=&quot;2.1.8-stable&quot;
+USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/2017nian.html"><h3 class="article-title">2017年</h3></a>
 <h6 class="subheader" title="2017-02-04T00:00:00">2017-02-04
 </h6>
@@ -312,32 +342,6 @@
 
 
 <p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html"><h3 class="article-title">关于技术人员加班问题的看法</h3></a>
-<h6 class="subheader" title="2016-09-04T00:00:00">2016-09-04
-</h6>
-
-
-<h2>关于技术人员加班问题的看法</h2>
-<p>身在IT行业，加班是永远绕不开的话题。互联网是以快速变化著称，加班似乎是成了名正言顺的。最近58同城加班996的问题也引起了广泛关注，而恰好最近两个星期，我们部门也一直在加班。我准备也谈谈这个问题。</p>
-<h3>我们加班的缘由</h3>
-<p>两个星期前，我们接到消息，要在两周之类上线3.0大版本。3.0版本改版非常大，虽然一部分功能已经开发了，但是一直在改，功能就从来没有稳定过。而且我们还正在开发2.7版本，突然间两周之类要上线3.0版本，是不可能的。但是这应该是老板的命令，我们应该没有还价的可能，所以加班是不可避免。还有一个更加不可避免加班的理由：我们的一个同事这个时候被借走了，借去别的子公司帮忙开发。这个借人也不是我们可以商量的，这个公司老板的要求，所以雪上加箱。</p>
-<h3>加班开发和家庭影响</h3>
-<p>为了能尽可能达成目标，我们每天都是工作到10点多，有些同事要搞到凌晨2点多，从产品，设计，到测试，所有人都需要加班。周末两天也需要加班。我老婆对我每天都很晚回家意见非常大，所以我尽量能10点多之后就回家，不然肯定闹家庭矛盾。周日我也不得不请假，留了另外两个同事在加班开发。其实我们已经非常高效了，我们的人力比Android客户端的人力还要少，大家都要努力加班赶进度 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/jia-ban.html">加班 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-ji-zhu-ren-yuan-jia-ban-wen-ti-de-kan-fa.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

@@ -49,6 +49,220 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html"><h3 class="article-title">记一次WebView填坑过程--由换行符引发的血案</h3></a>
+<h6 class="subheader" title="2019-07-27T00:00:00">2019-07-27
+</h6>
+
+
+<h1>记一次WebView填坑过程--由换行符引发的血案</h1>
+<p>最近使用WebView掉坑了，然后艰难爬坑经历感触很深，写出来大家借鉴一下。</p>
+<h3>需求</h3>
+<p>我们有个网页需要用到很多js库，这些库比较大，而且基本上是不变的。为了提高性能，将这些网页和JS库放到本地，进行加载。变的数据从服务器获取，然后跟本地的HTML组装后显示。这种需求还是挺普遍的。</p>
+<h3>实现方式</h3>
+<p>由web的同事调试好HTML文件，他们把所有的HTML，js,css,image和资源一起打包给我们
+我们把这些资源放到assets目录下（也可以专门在assets再建一个子目录来放）</p>
+<p>采用Android自带的WebView来加载和显示这些网页。有两个方法<strong>loadUrl</strong>和<strong>loadDataWithBaseUrl</strong>方法。</p>
+<blockquote>
+<p>1.loadUrl("file:///android_asset/xxxxxx.html")这种方式适合HTML不需要改变的情况，直接加载展示，省时省力</p>
+<p>2.loadDataWithBaseUrl方式需要先把HTML内容现在到内存，然后再展示。这种方式可以随意修改HTML里的内容，修改好再交由WebView展示，灵活性强。</p>
+</blockquote>
+<h3>遇到的坑</h3>
+<p>测试的时候，我们遇到同一个HTML文件，通过loadUrl方式加载展示，没有任何问题。但是通过loadDataWithBaseUrl加载展示，HTML的内容死活展示不出来</p>
+<h3>爬坑过程</h3>
+<ul>
+<li>
+<ol>
+<li>反复确认loadDataWithBaseURL的用法有没有用对，baseUrl参数没有问题。
+mWebView.loadDataWithBaseURL("file:///android_asset/", htmlContent, "text/html", "utf-8", null).
+网上搜资料看看别人的用法，还有查看我们工程里其他用了loadDataWithBaseURL方法的地方，都是差不多的。然后我怀疑是htmlContent有问题，是不是读取的时候出错了。
+我去看从asset里读取文件的方法.</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre><span></span>public static String getStringFromAssets(Context context,String fileName) {
+        try {
+            InputStreamReader inputReader = new InputStreamReader(context.getAssets().open(fileName));
+            BufferedReader bufReader = new BufferedReader(inputReader);
+
+            String line;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((line = bufReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            return stringBuilder.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return &quot;&quot;;
+    }
+</pre></div>
+
+
+<p>看上去并没有什么问题呀。我搜了下这个方法在我们工程里的使用，发现还有很多使用的地方，他们使用都没问题。我不放弃，到网上再搜一下。全是同样的方法。我断点调试，并且把htmlContent打印出来，好像没有太大的问题呀，不是这里的问题？</p>
+<ul>
+<li>2.查看我们工程里其他用了loadDataWithBaseURL方法的地方，我的用法跟他们一致。不过最终我发现我用的HTML文件跟他们用的HTML文件有不同的地方：我使用的HTML文件中
+更复杂一些，在文件里引用JS资源文件，图片文件，在HTML里本身内嵌了JS代码。我猜测是内嵌JS导致的。我网上搜资料，看看是不是这样的。终于搜到一篇<a href="https://wenwen.sogou.com/z/q436628432.htm">文章</a>说这个问题，但是这个帖子是很久以前的。下面是它的原话：</li>
+</ul>
+<blockquote>
+<p>使用WebView的loadUrl(url),网页中的Javascript运行正常。但是获取url的html内容后，使用loadData或者loadDataWithBaseURL之后，Javascript就不起作用了！google了一圈，似乎这是普遍问题，不知道这里的高手有法子解决不？</p>
+</blockquote>
+<p>貌似验证了我的想法。但是这是很久以前的帖子呀。我想Google改不会那么傻吧。后来我调试时在logcat里看到一些日志。加载网页时打印了类似下面的日志</p>
+<blockquote>
+<p>[INFO:CONSOLE(1)] "Uncaught SyntaxError: Unexpected identifier "</p>
+</blockquote>
+<p>说明网页在解析JS的时候报错了。
+我看了下网页中JavaScript，按道理的这些都是正确的，因为采用loadUrl方式加载没问题，直接在电脑上浏览器打开也没有问题。我把这些js都删掉，只加了一条console.log('1111')的打印语句。再次运行加载，没报错了！！说明内嵌JavaScript代码是可行的。那就是我们原本的JavaScript有问题了？？</p>
+<p>我把那部分JS放到一个新的单独的文件里。因为我们的HTML文件本身也引用了其他的独立JS文件。一运行，正常加载显示！JS还是那个JS，换到文件里就没问题了？</p>
+<p>所以我那时得出结论：
+* 内嵌JavaScript代码在WebView的解析跟独立JS文件不太一样，可能内嵌JavaScript代码的解析要严格一些？</p>
+<p>我开始验证这个想法，去修改内嵌JavaScript代码。
+我在很多地方加了console打印，看看执行到哪里报错。然后我发现貌似去掉了注释，报错就不一样了。</p>
+<blockquote>
+<p>Uncaught SyntaxError: Unexpected token。</p>
+<p>Uncaught SyntaxError: Unexpected end of input</p>
+</blockquote>
+<p>最后我把注释都去掉，把该加分号的地方都加上。就能正常运行了。
+我初步得出以下结论：</p>
+<blockquote>
+<p>需要HTML文档里内嵌JavaScript代码的话，要非常注意JavaScript的语法问题。WebView对这部分的JS代码语法要求非常严，经常发生识别不了而报错的情况。
+现在发现①非常注意表达式后面要加分号，不能省略分号！！②不能在JS里随便加注释。要仔细检查语法，严格遵循JS标准</p>
+</blockquote>
+<p>我把这些结论还加到了我们代码的注释了，以免后人采坑。</p>
+<p>到这里问题解决了，我把HTML从asset中加载出来，再HTML字符串中的一些字符串（默认数据）替换成我们从服务器取到的数据（真实用户数据），然后调用loadDataWithBaseURL方法展示。完美。</p>
+<p>到这里有些人会说loadUrl方法不是没问题吗，直接用它不就行了，折腾那么多干嘛。确实是如此，用loadUrl方法能实现我的需求，实际上我也试用了这个方法，没问题。
+不过采用loadUrl的方式，实现起来不太一样。需要修改JavaScript代码。这些HTML是有web同时提供的，他们都是已经默认数据直接调试好了，一打开就能展示。采用loadUrl的方法，你不能预先修改HTML文件，只能在加载完HTML数据之后，在WebView的webclient回调方法<strong>onPageFinished</strong>里去调用JS方法。</p>
+<p>就是说：
+1.你将JS里的window.onload方法去掉，让他们先不展示
+2.你新增一个js方法，这方法接收一些参数，然后在这个方法里调用渲染方法（即原来的window.onload里的方法）。
+3.在你Java代码里，在WebView的webclient回调方法<strong>onPageFinished</strong>里去调用你新增的JS方法，把参数都传入进去。</p>
+<p>看到没有，这里要修改的东西还蛮多，还要要求客户端开发人员懂JS代码。</p>
+<p>采用loadDataWithBaseURL方式，理想的情况下，不需要改JS代码，直接告诉开发人员默认数据在哪里，把HTML加载进内存的时候，通过String.replace方法，把默认数据替换为真实数据，就可以了。</p>
+<p>iOS端就是这么实现的，但是Android这边实现的时候就遇到了坑。。。。
+我肯定想两端实现方式保持一致，所有优先采用loadDataWithBaseURL方式。当然，你也可以让web开发人员按你的要求写好，那你也不用改动那么多。。。</p>
+<h3>背后真相</h3>
+<p>问题解决了，版本也发了。但问题的真相真的是WebView解析内嵌JavaScript比较严格吗？从现象来看，不支持注释，不能省略表达式的分号，这明显是<strong>换行</strong>问题。
+所以我想问题可能真的出现在从asset里读取文件地方。看代码就是没有明显错误，一行一行的读取进来，拼接好全部返回。网上查到的所有代码都是这么读的。</p>
+<p>那一次性读取整个文件进来呢？所有我找了下资料，将代码改成一次性读取整个文件。</p>
+<div class="highlight"><pre><span></span>public static String getFileFromAssets(ontext context,String fileName) {
+        try {
+            InputStreamReader inputReader = new InputStreamReader(context.getAssets().open(fileName));
+            BufferedReader bufReader = new BufferedReader(inputReader);
+
+            StringWriter out = new StringWriter();
+            copy(bufReader, out);
+            return out.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return &quot;&quot;;
+    }
+
+    private static void copy(Reader in, Writer out) throws IOException {
+        int c = -1;
+        while((c = in.read()) != -1) {
+            out.write(c);
+        }
+    }
+</pre></div>
+
+
+<p>果然什么问题都没有！看logcat打印出来的内容也是跟HTML里的内容一模一样，之前方式打印出来的没有换行并没有太过在意！</p>
+<p>那只能说明bufReader.readLine的方法有问题，我网上搜了下，说这个方法会自动去掉换行。原来真相是这个么？？原来WebView一直是个<strong>背锅侠</strong>呀，而且这个锅背了好多年😂😂。</p>
+<p>我们来看看时间的真凶readLine方法的声明：</p>
+<div class="highlight"><pre><span></span><span class="cm">/**</span>
+<span class="cm">     * Reads a line of text.  A line is considered to be terminated by any one</span>
+<span class="cm">     * of a line feed (&#39;\n&#39;), a carriage return (&#39;\r&#39;), or a carriage return</span>
+<span class="cm">     * followed immediately by a linefeed.</span>
+<span class="cm">     *</span>
+<span class="cm">     * @return     A String containing the contents of the line, not including</span>
+<span class="cm">     *             any line-termination characters, or null if the end of the</span>
+<span class="cm">     *             stream has been reached</span>
+<span class="cm">     *</span>
+<span class="cm">     * @exception  IOException  If an I/O error occurs</span>
+<span class="cm">     *</span>
+<span class="cm">     * @see java.nio.file.Files#readAllLines</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span>public<span class="w"> </span>String<span class="w"> </span>readLine<span class="o">()</span><span class="w"> </span>throws<span class="w"> </span>IOException<span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="kr">return</span><span class="w"> </span>readLine<span class="o">(</span>false<span class="o">)</span><span class="err">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+</pre></div>
+
+
+<p>注意看return的声明<strong>not includingany line-termination characters</strong>.
+人家这里说得很清楚嘛，吐血了。。。</p>
+<p>如果你对Java很熟悉，或者对readLine()方法熟悉，你就不用折腾那么多，就不会掉坑里了。</p>
+<p>我在想为什么一直没发现呢，这个方法用了这么久，网上也这么多人用，就没人遇到问题？我猜主要原因是大部分情况下，没有换行符也没有什么影响。我们一般都是把json或HTML文件放assets里，然后读取出来使用。json文件有没有换行根本不影响！我们工程里大部分都是这种用法。如果HTML里没有内嵌JavaScript代码也没有问题！如果真有内嵌JavaScript代码了，也可以通过采用loadUrl方法来绕过，就是我之前的做法那样。</p>
+<p>只有正面刚，才会发现这里有个坑。readLine这个方法不好，太有迷惑性了。
+还有就是不要随便相信网上拷来的代码！！！这些血的教训。</p>
+<p>最后附上修正版的正确的从assets里读取文件的方法。</p>
+<div class="highlight"><pre><span></span> /**
+     * 获取asset的文件，转化成String
+     *
+     * @param context
+     * @param fileName
+     * @return
+     */
+    public static String parseAssetsData(Context context, String fileName) {
+        StringBuilder stringBuilder = new StringBuilder();
+        InputStreamReader inputStreamReader = null;
+        BufferedReader bfReader = null;
+        try {
+            AssetManager assetManager = context.getAssets();
+            inputStreamReader = new InputStreamReader(assetManager.open(fileName));
+            bfReader = new BufferedReader(inputStreamReader);
+            String line;
+            //注意！！ readLine()返回的内容已经把换行符去掉，所以要补上
+            while ((line = bfReader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append(&quot;\n&quot;);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeStream(inputStreamReader);
+            closeStream(bfReader);
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 关闭流
+     *
+     * @param io
+     */
+    public static void closeStream(Closeable io) {
+        if (io != null) {
+            try {
+                io.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+</pre></div>
+
+
+<hr />
+<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/androidkai-fa-webview-javascript.html">Android开发 WebView JavaScript </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html"><h3 class="article-title">如何写出不太坏的代码</h3></a>
 <h6 class="subheader" title="2019-02-28T00:00:00">2019-02-28
 </h6>
@@ -65,25 +279,7 @@
 <h3>3.针对接口编程，而不是实现编程</h3>
 <p>当一个类要暴露一些方法给外部调用或者通信时，先定义好接口。接口定义应该简单明了，不容易引起歧义，接口尽量少。最后才考虑内部实现，而且尽量不暴露给外部，尽量不需要外部知道内部是如何实现的</p>
 <h3>4.一个类的代码量尽量不要太大，一个方法只做一件事情</h3>
-<p>一个类（或者一个方法）的代码越多，出错的概率越大。一个类三到5百行代码最佳。如果一个类的代码太多，就要考虑这个类是不是做的东西太多了，可以拆分一下。当然，有些类（例如一些SDK基类）无法避免太大，就要好好遵循第5条准则。而一个方法也不要做太多东西，只做一件事情就可以。</p>
-<h3>5.类的方法和变量的排布应该遵循一定规则</h3>
-<p>例如：</p>
-<ul>
-<li>相同功能的方法尽量放在一起。</li>
-<li>生命周期方法应该尽量放一起，按时序排列</li>
-<li>公开方法排在前面，私有方法排在后面</li>
-<li>OC可以充分使用category特性，同一类的方法放一起（swift的Extension也一样）</li>
-</ul>
-<h3>6.尽量不重复写代码，特别是逻辑代码</h3>
-<ul>
-<li>重复代码难维护，出现bug要每个重复地方都去修改，容易漏掉。</li>
-<li>加入一个项目，在实现某个功能之前，可以先看看项目里有没有已经实现过这个功能的代码。没有必要重复造轮子。如果有，但是写得不好，或者有bug，可以跟原作者沟通让其改进，或者自己改进。除非不得已，不要重复实现。如果人人一不爽就自己弄一套，那久而久之都是重复代码，难以维护。如果相互改进，则大家一起进步。</li>
-<li>不过呢，如果一部分的代码重复可以为架构带来好处，方便维护，那是可以的，值得的。例如代码的重复可以减少两个模块之前的通信和关联，那是可以的。</li>
-</ul>
-<h3>7.经常局部重构</h3>
-<p>没有人能一下子就写出很好的代码，经常重构可以减少程序bug，也可以提升自己的代码质量</p>
-<h3>书籍推荐</h3>
-<p>这里推荐一本书籍，专门讲重构的，有专门讲如何对变量命名的，是一本好书。<strong>《重构，改善既有代码的质量》</strong></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<p>一个类（或者一个方法）的代码越多，出错的概率越大。一个类三到5百行代码最佳。如果一个类的代码太多，就要考虑这个类是不是做的东西太多了 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/ioskai-fa-androidkai-fa.html">iOS开发 Android开发 </a>
@@ -91,11 +287,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -326,39 +520,6 @@
 
 
 <p><a href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
-<h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
-</h6>
-
-
-<h1>react-native框架源码学习(iOS)(下)</h1>
-<p>如果没有看过上篇，请先看<a href="">react-native框架源码学习(iOS)(上)</a>。</p>
-<h3>JSCExecutor相关初始化</h3>
-<p>在上篇中说到Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。NativeToJsBridge的构造函数还包含更多的东西。</p>
-<div class="highlight"><pre><span class="n">NativeToJsBridge</span><span class="o">::</span><span class="n">NativeToJsBridge</span><span class="p">(</span>
-    <span class="n">JSExecutorFactory</span><span class="o">*</span> <span class="n">jsExecutorFactory</span><span class="p">,</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ModuleRegistry</span><span class="o">&gt;</span> <span class="n">registry</span><span class="p">,</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MessageQueueThread</span><span class="o">&gt;</span> <span class="n">jsQueue</span><span class="p">,</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">InstanceCallback</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
-    <span class="o">:</span> <span class="n">m_destroyed</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span>
-    <span class="p">,</span> <span class="n">m_delegate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">JsToNativeBridge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">callback</span><span class="p">))</span>
-    <span class="p">,</span> <span class="n">m_executor</span><span class="p">(</span><span class="n">jsExecutorFactory</span><span class="o">-&gt;</span><span class="n">createJSExecutor</span><span class="p">(</span><span class="n">m_delegate</span><span class="p">,</span> <span class="n">jsQueue</span><span class="p">))</span>
-    <span class="p">,</span> <span class="n">m_executorMessageQueueThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">jsQueue ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

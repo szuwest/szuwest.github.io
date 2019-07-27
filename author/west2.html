@@ -50,6 +50,39 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
+<h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
+</h6>
+
+
+<h1>react-native框架源码学习(iOS)(下)</h1>
+<p>如果没有看过上篇，请先看<a href="">react-native框架源码学习(iOS)(上)</a>。</p>
+<h3>JSCExecutor相关初始化</h3>
+<p>在上篇中说到Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。NativeToJsBridge的构造函数还包含更多的东西。</p>
+<div class="highlight"><pre><span class="n">NativeToJsBridge</span><span class="o">::</span><span class="n">NativeToJsBridge</span><span class="p">(</span>
+    <span class="n">JSExecutorFactory</span><span class="o">*</span> <span class="n">jsExecutorFactory</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ModuleRegistry</span><span class="o">&gt;</span> <span class="n">registry</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MessageQueueThread</span><span class="o">&gt;</span> <span class="n">jsQueue</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">InstanceCallback</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">m_destroyed</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_delegate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">JsToNativeBridge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">callback</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_executor</span><span class="p">(</span><span class="n">jsExecutorFactory</span><span class="o">-&gt;</span><span class="n">createJSExecutor</span><span class="p">(</span><span class="n">m_delegate</span><span class="p">,</span> <span class="n">jsQueue</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_executorMessageQueueThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">jsQueue ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
 <h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
 </h6>
@@ -340,36 +373,6 @@
 
 
 <p><a href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
-<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
-</h6>
-
-
-<h1>Coturn在iOS端应用和libevent的编译</h1>
-<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
-<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
-<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
-<p>下面是libevent的编译脚本主要内容</p>
-<div class="highlight"><pre>###########################################################################
-# Choose your libevent version and your currently-installed iOS SDK version:
-#
-VERSION=&quot;2.1.8-stable&quot;
-USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
