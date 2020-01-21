@@ -1,5 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Sat, 27 Jul 2019 00:00:00 +0800</lastBuildDate><item><title>记一次WebView填坑过程--由换行符引发的血案</title><link>http://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html</link><description>&lt;h1&gt;记一次WebView填坑过程--由换行符引发的血案&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 21 Jan 2020 00:00:00 +0800</lastBuildDate><item><title>2019年总结与2020年展望</title><link>http://szuwest.github.io/2019nian-zong-jie-yu-2020nian-zhan-wang.html</link><description>&lt;h1&gt;2019年总结与2020年展望&lt;/h1&gt;
+&lt;p&gt;2019年已经成为过去，而2020年刚开始就发生了不少事。。。。&lt;/p&gt;
+&lt;h2&gt;2019年总结&lt;/h2&gt;
+&lt;h3&gt;工作&lt;/h3&gt;
+&lt;p&gt;2019年我们团队做了不少事，上半年把所有PC版的功能都移植到了手机APP上，然后还采用了Flutter技术做了个POS机版本的APP。下半年我们做了很多新功能，下半年时间稍微充足了，没有怎么加过班，这是是好事。
+一整年我们发了26个版本，平均不到半个月一个版本，迭代速度可以说是比较快了。&lt;/p&gt;
+&lt;h3&gt;生活&lt;/h3&gt;
+&lt;p&gt;下半年收房了，出现了一些意外的事。没想到小区旁边的地铁（地面的）没有做封闭处理，地铁经过时噪声非常大。当初我们买房子的时候，销售说地铁一定会封的。。。所以大家都进行维权，然后装修就被推迟了。维权最终没有结果，变成一个长期的事情。装修还得继续，拖了两个月后才开始装修。而且因为维权的事情，到时我老婆情绪波动很大，还过于劳累，本来已经怀孕了，但是最终没有保住。。。&lt;/p&gt;
+&lt;p&gt;生活就是这样，忽然来给你一个猛头一击，把你的计划全打乱。&lt;/p&gt;
+&lt;p&gt;我们下半年都是忙于装修。第一次装修总算体会到了“装修就是各种坑”。各种波折，终于也在2020年1月中把装修事情基本搞定了，只剩下几个电器未买。
+初略总结一些坑吧：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;要留足充分的时候来看合同，不管是装修合同还是买主材的一些合同。装修合同一般的套路就是故意漏掉一些边角的事情，到施工的后面增加，这是给他们增加收入的途径。一般漏掉什么呢？例如门洞规格，例如房子里的天花石膏钱，油漆的颜色可以包多少个等&lt;/li&gt;
+&lt;li&gt;尾款尽量留多点，如果太少了，只剩下尾款的时候，他们的工作就不积极了。因为钱不多了，不会主动推荐工作。然后很多东西都是不管不问的。他们的精力放到别的项目去了&lt;/li&gt;
+&lt;li&gt;很多装修的质量，要尽早发现&lt;/li&gt;
+&lt;li&gt;材料尽量货比三家&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;总之第一次装修肯定是要被坑的，这个行业就是这样的。工人的手艺也不尽相同，你想要求高质量，那你必须一步一步来验收，发现问题及时整改，不然后面是整改不了的，因为装修工序本身是讲究先后顺序的。这一次装修自己也算学到了一些教训和知识吧&lt;/p&gt;
+&lt;h2&gt;2020年展望&lt;/h2&gt;
+&lt;p&gt;工作的话就希望公司业务能发展好吧，只有业务发展好了，我们这边才会更多用户，更多业务。&lt;/p&gt;
+&lt;p&gt;技术上还需要进一步学习，团队也是如此。&lt;/p&gt;
+&lt;p&gt;生活上希望亲戚朋友身体健康，最近闹出个新型肺炎，大家都很恐慌。
+希望今年顺利怀上小孩，小孩顺利出生，不敢要求太多了。。。&lt;/p&gt;
+&lt;p&gt;生活就是认清了生活的真相后，仍让能乐观地去前进和奋斗。加油&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Tue, 21 Jan 2020 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2020-01-21:2019nian-zong-jie-yu-2020nian-zhan-wang.html</guid><category>总结</category></item><item><title>AOP在移动开发中的应用</title><link>http://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html</link><description>&lt;h1&gt;AOP在移动开发中的应用&lt;/h1&gt;
+&lt;p&gt;下面是我在我们团队上的技术分享内容，从PPT里摘抄出来的，所有很多都是个提纲摘要&lt;/p&gt;
+&lt;h2&gt;AOP简介&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AOP，Aspect Oriented Programming，面向切面编程&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;面向切面编程是一种通过横切关注点（Cross-cutting Concerns）分离来增强代码模块性的方法，它能够在不修改业务主体代码的情况下，对它添加额外的行为。&lt;/li&gt;
+&lt;li&gt;是对OOP的一种补充,是一种解耦的重要手段&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;AOP常用概念&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Join point：程序执行期间的一个点,表示方法的执行&lt;/li&gt;
+&lt;li&gt;Pointcut: 切入点实际上也是从所有的连接点(Join point)挑选自己感兴趣的连接点的过程&lt;/li&gt;
+&lt;li&gt;Aspect: 程序横向切割成若干的面，即Aspect.每个面被称为切面&lt;/li&gt;
+&lt;li&gt;Advice: 某个特定连接点的某个方面采取的行动。不同类型的建议包括“周围(Around)”，“之前(Before)”和“之后(After)”建议&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;AOP实现原理&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;编译期间的静态织入，又称为编译时增强&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行期间的动态代理，又称为运行时增强&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;运行时AOP&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;程序运行时，依靠预先创建或运行时创建的代理类来完成切面功能。这种方式依赖编程语言的动态能力&lt;/li&gt;
+&lt;li&gt;JDK 基于接口的动态代理技术（Spring AOP），基于Java反射特性实现&lt;/li&gt;
+&lt;li&gt;Objective-C的Method Swizzling和KVO，基于OC的Runtime实现&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;JDK 基于接口的动态代理技术&lt;/h4&gt;
+&lt;p&gt;基于接口编程&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.text.MessageFormat&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.util.Date&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="n"&gt;interface&lt;/span&gt; &lt;span class="n"&gt;BookService&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;void&lt;/span&gt; &lt;span class="n"&gt;lendOut&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;bookId&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;userId&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;BookServiceImpl&lt;/span&gt; &lt;span class="n"&gt;implements&lt;/span&gt; &lt;span class="n"&gt;BookService&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="n"&gt;void&lt;/span&gt; &lt;span class="n"&gt;lendOut&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;bookId&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;String&lt;/span&gt; &lt;span class="n"&gt;userId&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;println&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MessageFormat&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{0}: The book {1} is lent to {2}.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;bookId&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;userId&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;基于反射调用&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.lang.reflect.InvocationHandler&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.lang.reflect.Method&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ServiceInvocationHandler&lt;/span&gt; &lt;span class="n"&gt;implements&lt;/span&gt; &lt;span class="n"&gt;InvocationHandler&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;private&lt;/span&gt; &lt;span class="n"&gt;Object&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="n"&gt;ServiceInvocationHandler&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Object&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;this&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="nd"&gt;@Override&lt;/span&gt;
+    &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="n"&gt;Object&lt;/span&gt; &lt;span class="n"&gt;invoke&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Object&lt;/span&gt; &lt;span class="n"&gt;proxy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Method&lt;/span&gt; &lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;throws&lt;/span&gt; &lt;span class="n"&gt;Throwable&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;println&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Before...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;Object&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invoke&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;this&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;println&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;After...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;不直接持有子类实例，持有接口实例，真正的实例对象有别人创建&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.lang.reflect.Proxy&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.util.Date&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Client&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="n"&gt;static&lt;/span&gt; &lt;span class="n"&gt;void&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;throws&lt;/span&gt; &lt;span class="ne"&gt;Exception&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;BookService&lt;/span&gt; &lt;span class="n"&gt;bookService&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BookService&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;Proxy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;newProxyInstance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+                &lt;span class="n"&gt;BookService&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getClassLoader&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt;
+                &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Class&lt;/span&gt;&lt;span class="p"&gt;[]{&lt;/span&gt; &lt;span class="n"&gt;BookService&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="err"&gt;},&lt;/span&gt;
+                &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ServiceInvocationHandler&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;BookServiceImpl&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+            &lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="n"&gt;bookService&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lendOut&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;123&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;456&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;Objective-C的Method Swizzling&lt;/h4&gt;
+&lt;p&gt;NSThread的start方法扩展&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;validStart&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;@try&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isCancelled&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isFinished&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isExecuting&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;should not start&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;self&lt;/span&gt; &lt;span class="n"&gt;validStart&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;  &lt;span class="c1"&gt;//[self start];&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;@catch&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;NSException&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;exception&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;exception&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;@finally&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;@finally&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;方法替换来实现AOP（语言本身支持runtime，非常强大的特性）&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;load&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;super&lt;/span&gt; &lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="kt"&gt;Class&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;self&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;Method&lt;/span&gt; &lt;span class="n"&gt;oldMethod&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;class_getInstanceMethod&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NSSelectorFromString&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;start&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+    &lt;span class="n"&gt;Method&lt;/span&gt; &lt;span class="n"&gt;newMethod&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;class_getInstanceMethod&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NSSelectorFromString&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;validStart&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+   &lt;span class="n"&gt;method_exchangeImplementations&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;oldMethod&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;newMethod&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;编译期AOP&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;编译期就把切面代码和业务代码链接起来，需要编译器或编译工具支持&lt;/li&gt;
+&lt;li&gt;有些编程语言编译期生成中间代码的话，较容易支持这种AOP实现&lt;/li&gt;
+&lt;li&gt;Java的AspectJ，Flutter的Dart，Android的Gradle插件Transform API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;移动端语言对于AOP的支持&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Java：支持运行时AOP和编译时AOP&lt;/li&gt;
+&lt;li&gt;Objective-C支持运行时AOP&lt;/li&gt;
+&lt;li&gt;kotlin支持编译期AOP（它编译成字节码）&lt;/li&gt;
+&lt;li&gt;swift支持运行时AOP（基于Objective-C的特性，局限于OC代码）&lt;/li&gt;
+&lt;li&gt;Flutter Dart支持编译期AOP，编译中间产物是dill（修改编译工具）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;AOP在移动端应用：无埋点统计&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;传统埋点代码涉及各个模块，有点繁琐又没有太大技术含量&lt;/li&gt;
+&lt;li&gt;无埋点采用AOP实现，解耦代码，且不容易漏统计。业务开发人员只需关注自己的业务代码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Android Gradle 工具在 1.5.0 版本后提供了 Transfrom API, 允许第三方 Plugin 在打包 dex 文件之前的编译过程中操作 .class 文件
+ 遍历所有要编译的class文件并对其中符合条件的方法进行修改，注入我们要调用的SDK数据搜集代码，从而实现自动埋点的目的&lt;/p&gt;
+&lt;h2&gt;参考资料&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://www.jianshu.com/p/9f0a98ce8a8f"&gt;AOP设计原理&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.ibm.com/developerworks/cn/java/wa-spring1/"&gt;Spring 框架简介&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.jianshu.com/p/aa1112dbebc7"&gt;Android面向切面编程（AOP）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.jianshu.com/p/c202853059b4"&gt;Android AOP之字节码插桩&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.jianshu.com/p/250c83449dc0"&gt;应用于Android无埋点的Gradle插件解析&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://yq.aliyun.com/articles/705751"&gt;AOP for Flutter: AspectD(闲鱼团队开源框架)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://juejin.im/entry/5b2400bc51882574b55e4fc7"&gt;58无埋点数据采集技术在Android端实践&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.jianshu.com/p/37df81365edf"&gt;如何理解 Transform API&lt;/a&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Tue, 21 Jan 2020 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2020-01-21:aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html</guid><category>AOP 移动开发</category></item><item><title>记一次WebView填坑过程--由换行符引发的血案</title><link>http://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html</link><description>&lt;h1&gt;记一次WebView填坑过程--由换行符引发的血案&lt;/h1&gt;
 &lt;p&gt;最近使用WebView掉坑了，然后艰难爬坑经历感触很深，写出来大家借鉴一下。&lt;/p&gt;
 &lt;h3&gt;需求&lt;/h3&gt;
 &lt;p&gt;我们有个网页需要用到很多js库，这些库比较大，而且基本上是不变的。为了提高性能，将这些网页和JS库放到本地，进行加载。变的数据从服务器获取，然后跟本地的HTML组装后显示。这种需求还是挺普遍的。&lt;/p&gt;

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>West's blog - AOP 移动开发</title>
+
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+
+    <!-- So Firefox can bookmark->"abo this site" -->
+
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="http://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html"><h3 class="article-title">AOP在移动开发中的应用</h3></a>
+<h6 class="subheader" title="2020-01-21T00:00:00">2020-01-21
+</h6>
+
+
+<h1>AOP在移动开发中的应用</h1>
+<p>下面是我在我们团队上的技术分享内容，从PPT里摘抄出来的，所有很多都是个提纲摘要</p>
+<h2>AOP简介</h2>
+<ul>
+<li><strong>AOP，Aspect Oriented Programming，面向切面编程</strong></li>
+<li>面向切面编程是一种通过横切关注点（Cross-cutting Concerns）分离来增强代码模块性的方法，它能够在不修改业务主体代码的情况下，对它添加额外的行为。</li>
+<li>是对OOP的一种补充,是一种解耦的重要手段</li>
+</ul>
+<h3>AOP常用概念</h3>
+<ul>
+<li>Join point：程序执行期间的一个点,表示方法的执行</li>
+<li>Pointcut: 切入点实际上也是从所有的连接点(Join point)挑选自己感兴趣的连接点的过程</li>
+<li>Aspect: 程序横向切割成若干的面，即Aspect.每个面被称为切面</li>
+<li>Advice: 某个特定连接点的某个方面采取的行动。不同类型的建议包括“周围(Around)”，“之前(Before)”和“之后(After)”建议</li>
+</ul>
+<h2>AOP实现原理</h2>
+<ul>
+<li>
+<p>编译期间的静态织入，又称为编译时增强</p>
+</li>
+<li>
+<p>运行期间的动态代理，又称为运行时增强</p>
+</li>
+</ul>
+<h3>运行时AOP</h3>
+<ul>
+<li>程序运行时，依靠预先创建或运行时创建的代理类来完成切面功能。这种方式依赖编程语言的动态能力</li>
+<li>JDK 基于接口的动态代理技术（Spring AOP），基于Java反射特性实现</li>
+<li>Objective-C的Method Swizzling和KVO，基于OC的Runtime实现</li>
+</ul>
+<h4>JDK 基于接口的动态代理技术</h4>
+<p>基于接口编程</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.text.MessageFormat</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="p">;</span>
+
+<span class="n">interface</span> <span class="n">BookService</span> <span class="p">{</span>
+    <span class="n">void</span> <span class="n">lendOut</span><span class="p">(</span><span class="n">String</span> <span class="n">bookId</span><span class="p">,</span> <span class="n">String</span> <span class="n">userId</span><span class="p">,</span> <span class="n">Date</span> <span class="n">date</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">BookServiceImpl</span> <span class="n">implements</span> <span class="n">BookService</span> <span class="p">{</span>
+    <span class="nd">@Override</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">lendOut</span><span class="p">(</span><span class="n">String</span> <span class="n">bookId</span><span class="p">,</span> <span class="n">String</span> <span class="n">userId</span><span class="p">,</span> <span class="n">Date</span> <span class="n">date</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">MessageFormat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;{0}: The book {1} is lent to {2}.&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">bookId</span><span class="p">,</span> <span class="n">userId</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>基于反射调用</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.lang.reflect.InvocationHandler</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ServiceInvocationHandler</span> <span class="n">implements</span> <span class="n">InvocationHandler</span> <span class="p">{</span>
+    <span class="n">private</span> <span class="n">Object</span> <span class="n">target</span><span class="p">;</span>
+    <span class="n">public</span> <span class="n">ServiceInvocationHandler</span><span class="p">(</span><span class="n">Object</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nd">@Override</span>
+    <span class="n">public</span> <span class="n">Object</span> <span class="n">invoke</span><span class="p">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="p">,</span> <span class="n">Method</span> <span class="n">method</span><span class="p">,</span> <span class="n">Object</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="n">Throwable</span> <span class="p">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Before...&quot;</span><span class="p">);</span>
+        <span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;After...&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>不直接持有子类实例，持有接口实例，真正的实例对象有别人创建</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.lang.reflect.Proxy</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="p">;</span>
+
+<span class="n">public</span> <span class="k">class</span> <span class="nc">Client</span> <span class="p">{</span>
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="ne">Exception</span> <span class="p">{</span>
+        <span class="n">BookService</span> <span class="n">bookService</span> <span class="o">=</span> <span class="p">(</span><span class="n">BookService</span><span class="p">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="n">newProxyInstance</span><span class="p">(</span>
+                <span class="n">BookService</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">getClassLoader</span><span class="p">(),</span>
+                <span class="n">new</span> <span class="n">Class</span><span class="p">[]{</span> <span class="n">BookService</span><span class="o">.</span><span class="k">class</span> <span class="err">},</span>
+                <span class="n">new</span> <span class="n">ServiceInvocationHandler</span><span class="p">(</span><span class="n">new</span> <span class="n">BookServiceImpl</span><span class="p">())</span>
+            <span class="p">);</span>
+        <span class="n">bookService</span><span class="o">.</span><span class="n">lendOut</span><span class="p">(</span><span class="s2">&quot;123&quot;</span><span class="p">,</span> <span class="s2">&quot;456&quot;</span><span class="p">,</span> <span class="n">new</span> <span class="n">Date</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h4>Objective-C的Method Swizzling</h4>
+<p>NSThread的start方法扩展</p>
+<div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">validStart</span> <span class="p">{</span>
+    <span class="k">@try</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="o">||</span> <span class="nb">self</span><span class="p">.</span><span class="n">isFinished</span> <span class="o">||</span> <span class="nb">self</span><span class="p">.</span><span class="n">isExecuting</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;should not start&quot;</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="p">[</span><span class="nb">self</span> <span class="n">validStart</span><span class="p">];</span>  <span class="c1">//[self start];</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">@catch</span> <span class="p">(</span><span class="bp">NSException</span> <span class="o">*</span><span class="n">exception</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;exception&quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">@finally</span> <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;@finally&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
+
+
+<p>方法替换来实现AOP（语言本身支持runtime，非常强大的特性）</p>
+<div class="highlight"><pre><span></span><span class="p">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">load</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nb">super</span> <span class="n">load</span><span class="p">];</span>
+    <span class="kt">Class</span> <span class="k">class</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="k">class</span><span class="p">];</span>
+    <span class="n">Method</span> <span class="n">oldMethod</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="k">class</span><span class="p">,</span> <span class="n">NSSelectorFromString</span><span class="p">(</span><span class="s">@&quot;start&quot;</span><span class="p">));</span>
+    <span class="n">Method</span> <span class="n">newMethod</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="k">class</span><span class="p">,</span> <span class="n">NSSelectorFromString</span><span class="p">(</span><span class="s">@&quot;validStart&quot;</span><span class="p">));</span>
+   <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">oldMethod</span><span class="p">,</span> <span class="n">newMethod</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>编译期AOP</h3>
+<ul>
+<li>编译期就把切面代码和业务代码链接起来，需要编译器或编译工具支持</li>
+<li>有些编程语言编译期生成中间代码的话，较容易支持这种AOP实现</li>
+<li>Java的AspectJ，Flutter的Dart，Android的Gradle插件Transform API</li>
+</ul>
+<h2>移动端语言对于AOP的支持</h2>
+<ul>
+<li>Java：支持运行时AOP和编译时AOP</li>
+<li>Objective-C支持运行时AOP</li>
+<li>kotlin支持编译期AOP（它编译成字节码）</li>
+<li>swift支持运行时AOP（基于Objective-C的特性，局限于OC代码）</li>
+<li>Flutter Dart支持编译期AOP，编译中间产物是dill（修改编译工具）</li>
+</ul>
+<h2>AOP在移动端应用：无埋点统计</h2>
+<ul>
+<li>传统埋点代码涉及各个模块，有点繁琐又没有太大技术含量</li>
+<li>无埋点采用AOP实现，解耦代码，且不容易漏统计。业务开发人员只需关注自己的业务代码</li>
+</ul>
+<p>Android Gradle 工具在 1.5.0 版本后提供了 Transfrom API, 允许第三方 Plugin 在打包 dex 文件之前的编译过程中操作 .class 文件
+ 遍历所有要编译的class文件并对其中符合条件的方法进行修改，注入我们要调用的SDK数据搜集代码，从而实现自动埋点的目的</p>
+<h2>参考资料</h2>
+<p><a href="https://www.jianshu.com/p/9f0a98ce8a8f">AOP设计原理</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/wa-spring1/">Spring 框架简介</a></p>
+<p><a href="https://www.jianshu.com/p/aa1112dbebc7">Android面向切面编程（AOP）</a></p>
+<p><a href="https://www.jianshu.com/p/c202853059b4">Android AOP之字节码插桩</a></p>
+<p><a href="https://www.jianshu.com/p/250c83449dc0">应用于Android无埋点的Gradle插件解析</a></p>
+<p><a href="https://yq.aliyun.com/articles/705751">AOP for Flutter: AspectD(闲鱼团队开源框架)</a></p>
+<p><a href="https://juejin.im/entry/5b2400bc51882574b55e4fc7">58无埋点数据采集技术在Android端实践</a></p>
+<p><a href="https://www.jianshu.com/p/37df81365edf">如何理解 Transform API</a></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/aop-yi-dong-kai-fa.html">AOP 移动开发 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html#disqus_thread">comments</a></p>            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+
+
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
+            <li><a href="http://szuwest.github.io/category/chan-pin.html">产品</a></li>
+            <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
+            <li><a href="http://szuwest.github.io/category/ji-zhu.html">技术</a></li>
+            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
+            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+        </ul>
+		
+        <h5 class="sidebar-title">Social</h5>
+        <ul class="side-nav">
+            <li><a href="https://github.com/szuwest">Github</a></li>
+            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
+            <li><a href="http://weibo.com/szuwest">微博</a></li>
+        </ul>
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+                <p>West's blog by West</p>
+            </div>
+            </div>
+    </div>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-55687145-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</footer>

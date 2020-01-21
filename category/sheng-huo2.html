@@ -50,6 +50,39 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/activitydong-hua-er.html"><h3 class="article-title">Activity动画（二）</h3></a>
+<h6 class="subheader" title="2014-11-12T00:00:00">2014-11-12
+</h6>
+
+
+<h1>Activity动画（二）</h1>
+<p>如果要统一所有的Activity的打开可关闭动画，可以有一个很简便的方法：就是设置Application的theme。在Application的theme里有一个Android:windowAnimationStyle的属性，可以定义了一个Activity的打开和关闭动画。例如下面的例子就自定义了一个theme。</p>
+<hr />
+<p>````
+<style name="ThemeLightNoTitle" mce_bogus="1" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+    </style></p>
+<div class="highlight"><pre><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&quot;AnimationActivity&quot;</span> <span class="na">mce_bogus=</span><span class="s">&quot;1&quot;</span> <span class="na">parent=</span><span class="s">&quot;@android:style/Animation.Activity&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityOpenEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_in<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityOpenExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_out<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseEnterAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_left_in<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;android:activityCloseExitAnimation&quot;</span><span class="nt">&gt;</span>@anim/translate_between_interface_right_out<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;item ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/android-ji-zhu-dong-hua.html">Android 技术 动画 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/activitydong-hua-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/activitydong-hua-er.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/ji-zhu-she-jiao-sheng-huo.html"><h3 class="article-title">技术，社交，生活</h3></a>
 <h6 class="subheader" title="2014-10-23T00:00:00">2014-10-23
 </h6>
