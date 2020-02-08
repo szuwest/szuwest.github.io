@@ -50,6 +50,34 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html"><h3 class="article-title">多家公司的人证比对算法体验和开发感想</h3></a>
+<h6 class="subheader" title="2018-07-13T00:00:00">2018-07-13
+</h6>
+
+
+<h1>多家公司的人证比对算法体验和开发感想</h1>
+<p>最近在开发一个声纹采集一体机系统，这个系统里用到了人证比对功能，即刷身份证后拍照，然后将身份证里面的照片跟拍照比对，验证是否是同一个人。我们不是做人脸识别的公司，所以人脸识别功能当然是接入别人的SDK，这里我们找了好多家的人脸算法，对接过程中也遇到很多问题。经过这次的开发，我了解到这个行业的一些现状。</p>
+<p>我们的系统主要运行在Windows电脑上，而且需要无网络也能使用，所以人脸算法必须是用离线版的。人脸算法厂家一般对外提供两种方式：在线版和离线版。一般在线版都可以提供免费试用，离线版需要授权使用。</p>
+<h2>云端方案</h2>
+<p>在线版的人脸识别我试用过依图科技的和中科视拓的SDK。在我们的应用声临其境APP上有个声纹购物的场景，需要人脸验证。这两个厂家提供的API都差不多，依图的API安全性考虑更全面，错误码定义的比较详细。还有他们的API共同点是，图片传输都是将图片数据进行base64编码后传输的。至于准确率，感觉都差不多，没有特别明显的差距。</p>
+<h2>离线方案</h2>
+<p>离线版的人脸算法用得比对多。因为它是用在我们要卖的机器上，而在线版的我们只是做试验。离线版的集成和使用要比在线版麻烦很多。由于离线版要给出算法库，处于安全和容易被拷贝的原因，都是要先授权的。授权的方式一般有两种：在设备上接入加密狗USB key或者绑定设备机器码的方式。加密狗方式比较方便，我们一般采用这种方式。</p>
+<p>我们接入了很多厂家，有阅面科技，中控，杰锐达，商汤，我还把开源的dlib人脸识别也接入了 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ren-lian-jian-ce-ren-zheng-bi-dui-dlib-electron.html">人脸检测 人证比对 dlib electron </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/flutterkuang-jia-yan-jiu-he-yu-rndui-bi.html"><h3 class="article-title">Flutter框架研究和与RN对比</h3></a>
 <h6 class="subheader" title="2018-03-16T00:00:00">2018-03-16
 </h6>
@@ -343,37 +371,6 @@
 
 
 <p><a href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html"><h3 class="article-title">手机局域网内（包括热点）发现和组网通讯实现</h3></a>
-<h6 class="subheader" title="2017-11-05T00:00:00">2017-11-05
-</h6>
-
-
-<h1>手机局域网内（包括热点）组网通讯实现</h1>
-<p>最近在做一个应用，需要多个手机一起组网，一个充当主机，其他多个手机充当从机。主机跟每个从机之间可以相互通信，发送消息和文件。这不就是个CS（client-server）模式吗，只不过server不是在云端，只是在同一个局域网的手机上罢了。</p>
-<p>这里面有两个关键的地方，一个是如何发现同一个局域网内的手机客户端，包括自建的热点，一个是知道各个手机的Ip地址后，用什么方式来建立通信。这里说一下热点，手机开启热点之后，别的手机连上这个特点，其实也是一个小型局域网，只不过这个局域网稍微有点不一样（Ip地址），其他的都一样。</p>
-<h2>局域网发现</h2>
-<p>局域网发现主要难点在于如何得到对方Ip地址。我们的做法是发送UDP包。UDP协议是无面向连接的，也就是不需要像TCP协议那样提前建立连接。所以我们向局域网内某一个特定的端口广播UDP包，接收到这个包的人，发送回包，那么我们就知道彼此的存在和地址。</p>
-<p>那么关键地方是</p>
-<ul>
-<li>有人一直在监听一个端口X，接收UDP包</li>
-<li>有人在一直往这个端口X发送UDP包</li>
-</ul>
-<p>监听端的人收到了UDP包后，就知道了发送者的Ip地址。但这时发送者是不知道接收者的，因为这是UDP包，无连接的状态的。那怎么做才让发送者也知道了。其实只要发过来再做一次就行。发送者同时也是监听者，这就行了。不过发送者A监听的是另一个端口Y，接收者B接收到包后 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ju-yu-wang-re-dian-tong-xun-yan-bo-websocket.html">局域网 热点 通讯 广播 WebSocket </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
