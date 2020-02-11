@@ -19,16 +19,21 @@ I was facing exactly same issue yesterday and I thought it might be network issu
 The highest voted answer here asks me to reset a cache folder named .itmstransporter under my home dir, the run a program iTMSTransporter under a specific folder, but I can't find both of them.
 &lt;br&gt;
 But soon I figured that it is the cache folder for the people who uses the legacy uploader program: Application Loader, which is deprecated by Apple and can be no longer found in Xcode 11. Then I found that the latest Xcode has located iTMSTransporter here:
-&lt;br&gt;````
-/Applications/Xcode.app/Contents/SharedFrameworks/ContentDeliveryServices.framework/itms/bin/iTMSTransporter&lt;/p&gt;
+&lt;br&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;And its cache folder is here:
-&amp;lt;br&amp;gt;````
-/Users/your_user_name/Library/Caches/com.apple.amp.itmstransporter/
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/Applications/Xcode.app/Contents/SharedFrameworks/ContentDeliveryServices.framework/itms/bin/iTMSTransporter
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;I removed my existed cache folder, and run iTMSTransporter without any parameter, it soon started to output logs and download a bunch of files, and finished in 2 or 3 minutes. Then I tried again to upload my ipa file, it works!!!
+&lt;p&gt;&lt;br&gt;
+And its cache folder is here:
+&lt;br&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/Users/your_user_name/Library/Caches/com.apple.amp.itmstransporter/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;br&gt;
+I removed my existed cache folder, and run iTMSTransporter without any parameter, it soon started to output logs and download a bunch of files, and finished in 2 or 3 minutes. Then I tried again to upload my ipa file, it works!!!
 &lt;br&gt;
 CONCLUTION:
 &lt;br&gt;&lt;/p&gt;
