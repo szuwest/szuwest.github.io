@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Sat, 08 Feb 2020 00:00:00 +0800</lastBuildDate><item><title>上传应用到苹果一直卡住验证中（authentication with the app store）问题解决</title><link>http://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html</link><description>&lt;h1&gt;上传应用到苹果一直卡住验证中（authentication with the app store）问题解决&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>http://szuwest.github.io/</link><description></description><atom:link href="http://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Sat, 07 Mar 2020 00:00:00 +0800</lastBuildDate><item><title>探讨从H5页面拉起APP的技术方案和问题</title><link>http://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html</link><description>&lt;h1&gt;探讨从H5页面拉起APP的技术方案和问题&lt;/h1&gt;
+&lt;p&gt;从H5页面里拉起或叫唤起APP（APP需已经安装在手机上），有两种技术方案，一种通过HTTP链接（iOS叫 Universal Link，安卓叫APP Links技术）拉起技术，一种是通过自定义scheme拉起技术（也有叫深度链接deeplink的）。这两个技术适用不同的场景，也有不同的局限性。&lt;/p&gt;
+&lt;h2&gt;一、通过HTTP链接拉起&lt;/h2&gt;
+&lt;p&gt;要想通过HTTP(s)链接直接拉起APP，需要APP本身做一些配置和写一些代码实现，还需要在你网站服务器配置相关的json文件。例如配置服务器host，能打开页面的path等。有些了这些配置，苹果服务器或者谷歌的服务器验证了这些配置，就可以通过相关的HTTP链接来打开APP了&lt;/p&gt;
+&lt;p&gt;这里不管是iOS叫 Universal Link，还是安卓的APP Links，他们的技术方案是基本一样的，只是不同的平台稍微有些不一样的而已。基本规则是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;先按照要求生成一个配置文件，json格式的，里面包括了一些必要的信息，例如安卓的包名，apk签名等，iOS的appID,匹配URL的path&lt;/li&gt;
+&lt;li&gt;将配置文件放到你的网站根目录下的.wellknown目录下，让苹果或谷歌的服务器能从这里下载这个配置文件。这个文件是关键，因为苹果或谷歌要从你网站里拉取到这个配置文件。由于你的网站只有你自己有权限上传配置文件，从而保证了安全性。&lt;/li&gt;
+&lt;li&gt;在你的APP里配置相关网站host。还有你的APP被拉起后怎么处理（打开相应页面）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;网络上有很多相关教程，官方文档也有，配置起来不难，测试起来有几个问题。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;确保你的手机能跟苹果或者谷歌的服务器能正常通信&lt;/li&gt;
+&lt;li&gt;验证是在你安装APP的时候，只在这时候验证。所以你遇到奇怪的问题可以卸载重装试试。对于iOS来说，你修改了配置文件中的path后，要你的APP升级后或重新安装后才会生效&lt;/li&gt;
+&lt;li&gt;iOS需要跨域才能跳转。就是说你配置的host是www.xxx.com,在Safari中打开www.xxx.com后，在这个页面跳转www.xxx.com/yyyy, 即使你在配置文件里配置了yyyy这个path，这里并不会拉起你APP。因为这里并没有跨域。但是在ww.xxx.com/yyyy这个页面上，你往下拖动，就会看到顶部有个banner（Safari自动生成的），可以通过这个banner打开APP。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;二、通过自定义scheme拉起&lt;/h2&gt;
+&lt;p&gt;首先让我们来看一下 URL 的组成：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[scheme:][//host][path][?query][#fragment]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这里一般做法是每个APP都自定义一个唯一的scheme，通过这个scheme来拉起APP。由于每个APP都会定义自己独有的scheme，所以一般还通过scheme来判断某个应用是否已安装在手机上。host是可选的，path是必须的。一般都是通过path来定义指定打开APP特定的页面，同时通过query来携带参数。HTTP链接其实就是一种特殊的scheme。&lt;/p&gt;
+&lt;p&gt;通常我们都是同构scheme来拉起别人的APP的。例如超级APP微信的scheme是weixin://,淘宝APP的scheme是taobao://。&lt;/p&gt;
+&lt;p&gt;scheme方式是安卓和iOS都支持的。我们微基因APP的scheme是wegene，host是com.wegene.app，首页的path是/main.要打开微基因APP首页，可以通过下面这个URL：wegene://com.wegene.app/main。我们可以在H5页面里配置这个URL超链接，点击这个超链接就可以打开APP了。&lt;/p&gt;
+&lt;p&gt;当然，APP里还是要做相应处理的。iOS要先在xcode里配置scheme，还有在AppDelegate里回调里会获取到这个URL，解析这个URL，获取到path，根据是/main，就可以知道是要打开首页了。而安卓则需要在你的MainActivity的intent-filter里配置data(scheme,host,path)，action，category等(该activity要设置export为true)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; &lt;span class="nt"&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
+                &lt;span class="nt"&gt;&amp;lt;action&lt;/span&gt; &lt;span class="na"&gt;android:name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android.intent.action.VIEW&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+
+                &lt;span class="nt"&gt;&amp;lt;category&lt;/span&gt; &lt;span class="na"&gt;android:name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android.intent.category.DEFAULT&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+                &lt;span class="nt"&gt;&amp;lt;category&lt;/span&gt; &lt;span class="na"&gt;android:name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;android.intent.category.BROWSABLE&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+
+                &lt;span class="nt"&gt;&amp;lt;data&lt;/span&gt;
+                    &lt;span class="na"&gt;android:host=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;com.wegene.app&amp;quot;&lt;/span&gt;
+                    &lt;span class="na"&gt;android:path=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;/main&amp;quot;&lt;/span&gt;
+                    &lt;span class="na"&gt;android:scheme=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;wegene&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;在activity里还要从intent里获取URI的data数据。&lt;/p&gt;
+&lt;h2&gt;三、浏览器问题&lt;/h2&gt;
+&lt;p&gt;浏览器一般有几种，一种是手机自带浏览器（安卓厂商自带浏览器，iOS的Safari），一种是通用手机浏览器，例如UC浏览器，QQ浏览器，chrome，还有一种是超级APP自带浏览器，例如微信、QQ、微博他们APP内自带浏览器&lt;/p&gt;
+&lt;p&gt;超级APP自带浏览器问题：它们都禁止了通用链接方式，也基本禁用了scheme方式。但是他们提供了一种方式给用户选择：选择第三方浏览器打开。支持通用链接技术的APP可以用这种方式来被打开。&lt;/p&gt;
+&lt;p&gt;手机自带浏览器，通用浏览器问题：不同的浏览器APP实现方式不一样。总的来说，一般都支持通用链接方式和scheme方式。但是有些可能浏览器会弹出一个弹窗来让用户确认是否同意拉起APP。&lt;/p&gt;
+&lt;h2&gt;四、安卓端问题&lt;/h2&gt;
+&lt;p&gt;虽然安卓支持APP Links技术，但是这个技术依赖于谷歌服务器的验证，而谷歌服务器是被墙的，所以是在国内基本不能用。所以在安卓端能用的技术只有scheme技术了。&lt;/p&gt;
+&lt;p&gt;一般浏览器可以通过scheme来跳转，但是微信里是禁用了scheme方式的。这里一种解决方案是 微信选择第三方浏览器打开--&amp;gt;进入浏览器--&amp;gt;浏览器调用scheme--&amp;gt;进入APP相关页面。这里面浏览器页面就要做相关的检测和跳转配置了，页面多的话还要做不同页面的配置，开发量也不小。&lt;/p&gt;
+&lt;p&gt;还有一种方案，就是利用应用宝的微下载和他的APPLink机制（非谷歌的APPLinks）。实现方式是 微信浏览器打开应用宝配置的页面--&amp;gt;拉起应用宝--&amp;gt;应用宝通过我们配置的scheme和path拉起我们的APP--&amp;gt;进入APP相关页面。这里应用的技术仍然是scheme技术（deeplink），我们在应用宝里配置好scheme和path，由它来拉起我们的APP。但是前提是我们要向应用宝申请，而且需要APP符合他们的一定条件才会通过申请。&lt;/p&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;总的来说要在要在H5中拉起APP，无非就是通过专属HTTP链接技术和自定义scheme技术。然而理想很丰满，现实很骨感。在国内的所有浏览器，无论是通用浏览器APP，还是超级APP自带的浏览器，都是会做一些改造和限制。当然我们最关注的是流量霸主微信，都想从他那里引流一些用户。可是微信确实最严厉的，禁止了HTTP链接拉起APP的技术，也禁用了scheme技术，只给自家APP或者合作方留了口子。现在的做法都是引导用户点击右上角的 第三个浏览器打开来拉起APP。&lt;/p&gt;
+&lt;p&gt;现在我们要想适配好全面的H5拉起APP技术，也挺难的，要考虑到微信微博等超级APP禁止所有的跳转技术，还有各式各样的浏览器支持程度也不同。现实的情况是我们做APP开发的不太懂网页开发，做网页开发的又不懂我们APP开发（还有相关的跳转技术），所以难上加难。倒是可以借助开源试试。有个还不错的开源库看上去还不错（我没仔细研究过）&lt;a href="https://github.com/suanmei/callapp-lib"&gt;callapp-lib&lt;/a&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+&lt;img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Sat, 07 Mar 2020 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2020-03-07:tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html</guid><category>APP</category></item><item><title>上传应用到苹果一直卡住验证中（authentication with the app store）问题解决</title><link>http://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html</link><description>&lt;h1&gt;上传应用到苹果一直卡住验证中（authentication with the app store）问题解决&lt;/h1&gt;
 &lt;p&gt;虽然最近因为新型冠状病毒导致的疫情一直在持续，我们都被迫在家办公。我们由于有一些紧急的改动需要发版，5号那天我们改好之后就准备上传APP审核。安卓APP上传到各个商店都还挺顺利，但是iOS的却遇到难题了，卡住了，卡在 &lt;strong&gt;正在验证APP - 正在通过App Store进行认证&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="验证中" src="./images/app_verifying.jpg" /&gt;&lt;/p&gt;
 &lt;p&gt;自从升级了xcode11后，我一般都用&lt;strong&gt;transporter&lt;/strong&gt;来上传IPA。因为xcode上传有时候也很慢，但是transporter却是很快。但是这次transporter卡住了，一直在&lt;strong&gt;正在验证APP - 正在通过App Store进行认证&lt;/strong&gt;状态。过了很久都不动，平时几分钟就搞定了。后面我尝试了各种方法，试过xcode上传，命令行xcrun上传，搭梯子上传，通过手机热点上传，让同事他们上传，各种方法。搞了两三天，才最终搞定，真的是太悲催。感觉苹果在这块做得真是太傻逼了。&lt;/p&gt;

@@ -50,6 +50,32 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html"><h3 class="article-title">玩客云的前世与出生</h3></a>
+<h6 class="subheader" title="2017-12-24T00:00:00">2017-12-24
+</h6>
+
+
+<h1>玩客云的前世与出生</h1>
+<p>迅雷最近的股价波动很大，股价从最低点附近4美元到现在13美元附近，涨了3倍多，最高点甚至到27美元。只是短短几个月的时间，涨幅这么大，主要是因为玩客云和玩客币（现在叫链克）。对于玩客币，我自己不想说太多，但是对于玩客云这个产品，我是很有感情的。这个产品是我从头就开始参与开发，虽然我已经离开玩客云团队一段时间了，但是我还是想说说这个产品。知道这个产品前世与今生的人，其实真的不是很多。我想说一说这个产品，也算是对自己的一段总结。</p>
+<p>不过我说的所有观点都是我个人观点，跟玩客云团队无关，特此声明。</p>
+<h2>玩客云的出生</h2>
+<p>玩客云是有网心科技出品的一款智能硬件产品，主打个人云盘功能，充当CDN节点功能，后来也又加入玩客币功能。玩客云这个项目最初的时候并不叫玩客云，内部我们叫赚钱宝3代。它是迅雷下载宝和赚钱宝的合并的一个产品。实际上 玩客云=迅雷下载宝+赚钱宝+玩客币 这样的一个产品。所以在做玩客云的时候，下载宝和赚钱宝这两个项目已经停了，然后团队合并成新的团队：玩客云团队。而这个团队的绝大部分人，都是下载宝团队的人，下载宝整个项目就是这样从迅雷总部并入网心科技的。玩客云的前身就是迅雷下载宝。</p>
+<p>玩客云的最初立项是在3，4月份，从一开始老板就非常重视整个项目。我们内部叫赚钱宝3代，但是我们一直在想给他一个新的名字 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/chan-pin.html">产品</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/xun-lei-wang-xin-chao-ji-ying-pan-xun-lei-xia-zai-bao-zhuan-qian-bao-wan-ke-yun.html">迅雷 网心 超级硬盘 迅雷下载宝 赚钱宝 玩客云 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/wan-ke-yun-de-qian-shi-yu-chu-sheng.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/shou-ji-ju-yu-wang-nei-bao-gua-re-dian-fa-xian-he-zu-wang-tong-xun-shi-xian.html"><h3 class="article-title">手机局域网内（包括热点）发现和组网通讯实现</h3></a>
 <h6 class="subheader" title="2017-11-05T00:00:00">2017-11-05
 </h6>
@@ -319,42 +345,9 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
                 <hr  class="gradient"/>
             </article>
 
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html"><h3 class="article-title">iOS应用2017年强制应用HTTPS问题</h3></a>
-<h6 class="subheader" title="2016-10-18T00:00:00">2016-10-18
-</h6>
-
-
-<h2>iOS应用2017年使用HTTPS问题</h2>
-<p>昨天一个朋友发了一篇介绍HTTPS方案文章给我看，文章提到2017年苹果强制所有APP使用HTTPS协议，问我是不是真的，还是说那只是一篇软文。他也很担心，因为他的APP不是使用HTTPS协议。</p>
-<p>其实应该说是这样：从2017年1月1日起，苹果强制<strong>新提交</strong>的APP使用HTTPS协议。这里要强调<strong>新提交</strong>，也就是说已经上线了的APP不受影响，新提交的APP或新版本提交才受影响。虽说强制，但是还是有方法不使用HTTPS协议的。</p>
-<p>我查了下，现在的资料有提到3种方案：</p>
-<ul>
-<li>
-<p>1是APP里有一个配置开关NSAllowsArbitraryLoads，打开这个开关，所有网络请求都可以使用HTTP。现在所有没有用HTTPS协议的都是这么干的。这个开关现在用是没有问题的，但是2017年后苹果就不希望你这么用了。你再用的话，需要说明原因，而且理由不充分的话苹果有可能拒绝通过你的APP。</p>
-</li>
-<li>
-<p>2是增加域名白名单（NSExceptionDomains），访问白名单之内的网站请求可以是HTTP请求。这种做法也要说明理由，苹果认为你的理由不充分仍然有可能拒绝通过你的APP</p>
-</li>
-<li>
-<p>当然还有一种方案，是在iOS10系统新加的属性NSAllowsArbitraryLoadsInWebContent，专门针对浏览器访问的开关。设想一个浏览器应用，用户可以输入任务网址，这个网址能不能支持HTTPS协议，没人知道。所以就有这么一个开关，打开之后，浏览器的访问就不受HTTPS限制。但是不好的消息是，这个浏览器必须是WKWebView，而不能是UIWebView(截止2016.10.18前 ...</p></li></ul><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/https-2017-ios10.html">HTTPS 2017 iOS10 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
             <!-- /#posts-list -->
 <div class="pagination-centered">
-<h6 class="subheader">Page 3 of 6</h6>
+<h6 class="subheader">Page 3 of 7</h6>
 
 <p>
             <a href="http://szuwest.github.io/index2.html">&laquo; Prev</a>

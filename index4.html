@@ -50,6 +50,39 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html"><h3 class="article-title">iOS应用2017年强制应用HTTPS问题</h3></a>
+<h6 class="subheader" title="2016-10-18T00:00:00">2016-10-18
+</h6>
+
+
+<h2>iOS应用2017年使用HTTPS问题</h2>
+<p>昨天一个朋友发了一篇介绍HTTPS方案文章给我看，文章提到2017年苹果强制所有APP使用HTTPS协议，问我是不是真的，还是说那只是一篇软文。他也很担心，因为他的APP不是使用HTTPS协议。</p>
+<p>其实应该说是这样：从2017年1月1日起，苹果强制<strong>新提交</strong>的APP使用HTTPS协议。这里要强调<strong>新提交</strong>，也就是说已经上线了的APP不受影响，新提交的APP或新版本提交才受影响。虽说强制，但是还是有方法不使用HTTPS协议的。</p>
+<p>我查了下，现在的资料有提到3种方案：</p>
+<ul>
+<li>
+<p>1是APP里有一个配置开关NSAllowsArbitraryLoads，打开这个开关，所有网络请求都可以使用HTTP。现在所有没有用HTTPS协议的都是这么干的。这个开关现在用是没有问题的，但是2017年后苹果就不希望你这么用了。你再用的话，需要说明原因，而且理由不充分的话苹果有可能拒绝通过你的APP。</p>
+</li>
+<li>
+<p>2是增加域名白名单（NSExceptionDomains），访问白名单之内的网站请求可以是HTTP请求。这种做法也要说明理由，苹果认为你的理由不充分仍然有可能拒绝通过你的APP</p>
+</li>
+<li>
+<p>当然还有一种方案，是在iOS10系统新加的属性NSAllowsArbitraryLoadsInWebContent，专门针对浏览器访问的开关。设想一个浏览器应用，用户可以输入任务网址，这个网址能不能支持HTTPS协议，没人知道。所以就有这么一个开关，打开之后，浏览器的访问就不受HTTPS限制。但是不好的消息是，这个浏览器必须是WKWebView，而不能是UIWebView(截止2016.10.18前 ...</p></li></ul><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/https-2017-ios10.html">HTTPS 2017 iOS10 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html"><h3 class="article-title">iOS上传文件支持断点续传</h3></a>
 <h6 class="subheader" title="2016-09-30T00:00:00">2016-09-30
 </h6>
@@ -290,36 +323,9 @@
                 <hr  class="gradient"/>
             </article>
 
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html"><h3 class="article-title">同一个应用的安卓版本和iOS版本开发杂谈</h3></a>
-<h6 class="subheader" title="2016-05-13T00:00:00">2016-05-13
-</h6>
-
-
-<h2>同一个应用的安卓版本和iOS版本开发杂谈</h2>
-<p>我前段时间帮朋友做了一个应用，当然说的更实在一点可以时候就是做外包应用，包括安卓版本和iOS版本。现在想谈一谈感想和总结。
-<br/><br/>
-从1月份开始正式开发，最终在5月底完成所有交互，前后算起来就5个月的时间，当然中间有断断续续的开发和沟通。总的来说，这个时间超出了我的预期，所以总得来说我觉得价格有点不合适，稍微便宜了一些。但是因为这是我第一次做这种事情，而且也总体也还在我可接受的范围内，所以就当做一个经验了。个人做外包开发 不能低估工作量和沟通时间。越不正式的外包（朋友间的）需要的沟通和反复修改的情况会越多。千万不要低估这些情况。
-<br/></p>
-<h2>Android版本开发</h2>
-<p>我是先开发安卓版本的，原因当然是安卓开发调试方便，修改方便，还有就是我比较熟悉Android开发。一开始朋友想先开发iPhone版本，我说这个调试不方便，说服他先开发安卓版本，我觉得我这个决策是对的。我的开发主要时间都是周末或者平时的空闲时间。了解了需求之后，安卓的第一个包含主要功能的初级版本一个月之后就出来了。然后我就打了个包给朋友用。当然会有很多问题，然后反复沟通和修改，几个星期之后，主要版本出来了。这时候已经是2月多了，我记得是在我放春节假之前改了改了一个版本给他，这个版本做了一些小细节修改和bug修复。由于朋友他没有测试人员，只能靠他自己测试，我自己测试得也不多，开始难免会有些bug，不过他会集中反馈，然后我集中修改，年后回来又改了一两个版本，3月多终于基本完成安卓版本的开发 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/androidkai-fa-ioskai-fa-wai-bao.html">Android开发 iOS开发 外包 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
             <!-- /#posts-list -->
 <div class="pagination-centered">
-<h6 class="subheader">Page 4 of 6</h6>
+<h6 class="subheader">Page 4 of 7</h6>
 
 <p>
             <a href="http://szuwest.github.io/index3.html">&laquo; Prev</a>

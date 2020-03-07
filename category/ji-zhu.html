@@ -49,6 +49,83 @@
         
 
             <article>
+                <a href="http://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html"><h3 class="article-title">探讨从H5页面拉起APP的技术方案和问题</h3></a>
+<h6 class="subheader" title="2020-03-07T00:00:00">2020-03-07
+</h6>
+
+
+<h1>探讨从H5页面拉起APP的技术方案和问题</h1>
+<p>从H5页面里拉起或叫唤起APP（APP需已经安装在手机上），有两种技术方案，一种通过HTTP链接（iOS叫 Universal Link，安卓叫APP Links技术）拉起技术，一种是通过自定义scheme拉起技术（也有叫深度链接deeplink的）。这两个技术适用不同的场景，也有不同的局限性。</p>
+<h2>一、通过HTTP链接拉起</h2>
+<p>要想通过HTTP(s)链接直接拉起APP，需要APP本身做一些配置和写一些代码实现，还需要在你网站服务器配置相关的json文件。例如配置服务器host，能打开页面的path等。有些了这些配置，苹果服务器或者谷歌的服务器验证了这些配置，就可以通过相关的HTTP链接来打开APP了</p>
+<p>这里不管是iOS叫 Universal Link，还是安卓的APP Links，他们的技术方案是基本一样的，只是不同的平台稍微有些不一样的而已。基本规则是：</p>
+<ul>
+<li>先按照要求生成一个配置文件，json格式的，里面包括了一些必要的信息，例如安卓的包名，apk签名等，iOS的appID,匹配URL的path</li>
+<li>将配置文件放到你的网站根目录下的.wellknown目录下，让苹果或谷歌的服务器能从这里下载这个配置文件。这个文件是关键，因为苹果或谷歌要从你网站里拉取到这个配置文件。由于你的网站只有你自己有权限上传配置文件，从而保证了安全性。</li>
+<li>在你的APP里配置相关网站host。还有你的APP被拉起后怎么处理（打开相应页面）</li>
+</ul>
+<p>网络上有很多相关教程，官方文档也有，配置起来不难，测试起来有几个问题。</p>
+<ul>
+<li>确保你的手机能跟苹果或者谷歌的服务器能正常通信</li>
+<li>验证是在你安装APP的时候，只在这时候验证。所以你遇到奇怪的问题可以卸载重装试试。对于iOS来说，你修改了配置文件中的path后，要你的APP升级后或重新安装后才会生效</li>
+<li>iOS需要跨域才能跳转。就是说你配置的host是www.xxx.com,在Safari中打开www.xxx.com后，在这个页面跳转www.xxx.com/yyyy, 即使你在配置文件里配置了yyyy这个path，这里并不会拉起你APP。因为这里并没有跨域。但是在ww.xxx.com/yyyy这个页面上，你往下拖动，就会看到顶部有个banner（Safari自动生成的），可以通过这个banner打开APP。</li>
+</ul>
+<h2>二、通过自定义scheme拉起</h2>
+<p>首先让我们来看一下 URL 的组成：</p>
+<div class="highlight"><pre><span></span>[scheme:][//host][path][?query][#fragment]
+</pre></div>
+
+
+<p>这里一般做法是每个APP都自定义一个唯一的scheme，通过这个scheme来拉起APP。由于每个APP都会定义自己独有的scheme，所以一般还通过scheme来判断某个应用是否已安装在手机上。host是可选的，path是必须的。一般都是通过path来定义指定打开APP特定的页面，同时通过query来携带参数。HTTP链接其实就是一种特殊的scheme。</p>
+<p>通常我们都是同构scheme来拉起别人的APP的。例如超级APP微信的scheme是weixin://,淘宝APP的scheme是taobao://。</p>
+<p>scheme方式是安卓和iOS都支持的。我们微基因APP的scheme是wegene，host是com.wegene.app，首页的path是/main.要打开微基因APP首页，可以通过下面这个URL：wegene://com.wegene.app/main。我们可以在H5页面里配置这个URL超链接，点击这个超链接就可以打开APP了。</p>
+<p>当然，APP里还是要做相应处理的。iOS要先在xcode里配置scheme，还有在AppDelegate里回调里会获取到这个URL，解析这个URL，获取到path，根据是/main，就可以知道是要打开首页了。而安卓则需要在你的MainActivity的intent-filter里配置data(scheme,host,path)，action，category等(该activity要设置export为true)</p>
+<div class="highlight"><pre><span></span> <span class="nt">&lt;intent-filter&gt;</span>
+                <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.action.VIEW&quot;</span> <span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.DEFAULT&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.BROWSABLE&quot;</span> <span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;data</span>
+                    <span class="na">android:host=</span><span class="s">&quot;com.wegene.app&quot;</span>
+                    <span class="na">android:path=</span><span class="s">&quot;/main&quot;</span>
+                    <span class="na">android:scheme=</span><span class="s">&quot;wegene&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/intent-filter&gt;</span>
+</pre></div>
+
+
+<p>在activity里还要从intent里获取URI的data数据。</p>
+<h2>三、浏览器问题</h2>
+<p>浏览器一般有几种，一种是手机自带浏览器（安卓厂商自带浏览器，iOS的Safari），一种是通用手机浏览器，例如UC浏览器，QQ浏览器，chrome，还有一种是超级APP自带浏览器，例如微信、QQ、微博他们APP内自带浏览器</p>
+<p>超级APP自带浏览器问题：它们都禁止了通用链接方式，也基本禁用了scheme方式。但是他们提供了一种方式给用户选择：选择第三方浏览器打开。支持通用链接技术的APP可以用这种方式来被打开。</p>
+<p>手机自带浏览器，通用浏览器问题：不同的浏览器APP实现方式不一样。总的来说，一般都支持通用链接方式和scheme方式。但是有些可能浏览器会弹出一个弹窗来让用户确认是否同意拉起APP。</p>
+<h2>四、安卓端问题</h2>
+<p>虽然安卓支持APP Links技术，但是这个技术依赖于谷歌服务器的验证，而谷歌服务器是被墙的，所以是在国内基本不能用。所以在安卓端能用的技术只有scheme技术了。</p>
+<p>一般浏览器可以通过scheme来跳转，但是微信里是禁用了scheme方式的。这里一种解决方案是 微信选择第三方浏览器打开--&gt;进入浏览器--&gt;浏览器调用scheme--&gt;进入APP相关页面。这里面浏览器页面就要做相关的检测和跳转配置了，页面多的话还要做不同页面的配置，开发量也不小。</p>
+<p>还有一种方案，就是利用应用宝的微下载和他的APPLink机制（非谷歌的APPLinks）。实现方式是 微信浏览器打开应用宝配置的页面--&gt;拉起应用宝--&gt;应用宝通过我们配置的scheme和path拉起我们的APP--&gt;进入APP相关页面。这里应用的技术仍然是scheme技术（deeplink），我们在应用宝里配置好scheme和path，由它来拉起我们的APP。但是前提是我们要向应用宝申请，而且需要APP符合他们的一定条件才会通过申请。</p>
+<h2>总结</h2>
+<p>总的来说要在要在H5中拉起APP，无非就是通过专属HTTP链接技术和自定义scheme技术。然而理想很丰满，现实很骨感。在国内的所有浏览器，无论是通用浏览器APP，还是超级APP自带的浏览器，都是会做一些改造和限制。当然我们最关注的是流量霸主微信，都想从他那里引流一些用户。可是微信确实最严厉的，禁止了HTTP链接拉起APP的技术，也禁用了scheme技术，只给自家APP或者合作方留了口子。现在的做法都是引导用户点击右上角的 第三个浏览器打开来拉起APP。</p>
+<p>现在我们要想适配好全面的H5拉起APP技术，也挺难的，要考虑到微信微博等超级APP禁止所有的跳转技术，还有各式各样的浏览器支持程度也不同。现实的情况是我们做APP开发的不太懂网页开发，做网页开发的又不懂我们APP开发（还有相关的跳转技术），所以难上加难。倒是可以借助开源试试。有个还不错的开源库看上去还不错（我没仔细研究过）<a href="https://github.com/suanmei/callapp-lib">callapp-lib</a></p>
+<hr />
+<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/app.html">APP </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html"><h3 class="article-title">AOP在移动开发中的应用</h3></a>
 <h6 class="subheader" title="2020-01-21T00:00:00">2020-01-21
 </h6>
@@ -80,122 +157,7 @@
 </ul>
 <h3>运行时AOP</h3>
 <ul>
-<li>程序运行时，依靠预先创建或运行时创建的代理类来完成切面功能。这种方式依赖编程语言的动态能力</li>
-<li>JDK 基于接口的动态代理技术（Spring AOP），基于Java反射特性实现</li>
-<li>Objective-C的Method Swizzling和KVO，基于OC的Runtime实现</li>
-</ul>
-<h4>JDK 基于接口的动态代理技术</h4>
-<p>基于接口编程</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.text.MessageFormat</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="p">;</span>
-
-<span class="n">interface</span> <span class="n">BookService</span> <span class="p">{</span>
-    <span class="n">void</span> <span class="n">lendOut</span><span class="p">(</span><span class="n">String</span> <span class="n">bookId</span><span class="p">,</span> <span class="n">String</span> <span class="n">userId</span><span class="p">,</span> <span class="n">Date</span> <span class="n">date</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="k">class</span> <span class="nc">BookServiceImpl</span> <span class="n">implements</span> <span class="n">BookService</span> <span class="p">{</span>
-    <span class="nd">@Override</span>
-    <span class="n">public</span> <span class="n">void</span> <span class="n">lendOut</span><span class="p">(</span><span class="n">String</span> <span class="n">bookId</span><span class="p">,</span> <span class="n">String</span> <span class="n">userId</span><span class="p">,</span> <span class="n">Date</span> <span class="n">date</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">MessageFormat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;{0}: The book {1} is lent to {2}.&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">bookId</span><span class="p">,</span> <span class="n">userId</span><span class="p">));</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>基于反射调用</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.lang.reflect.InvocationHandler</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="p">;</span>
-<span class="k">class</span> <span class="nc">ServiceInvocationHandler</span> <span class="n">implements</span> <span class="n">InvocationHandler</span> <span class="p">{</span>
-    <span class="n">private</span> <span class="n">Object</span> <span class="n">target</span><span class="p">;</span>
-    <span class="n">public</span> <span class="n">ServiceInvocationHandler</span><span class="p">(</span><span class="n">Object</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">this</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nd">@Override</span>
-    <span class="n">public</span> <span class="n">Object</span> <span class="n">invoke</span><span class="p">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="p">,</span> <span class="n">Method</span> <span class="n">method</span><span class="p">,</span> <span class="n">Object</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="n">Throwable</span> <span class="p">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Before...&quot;</span><span class="p">);</span>
-        <span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;After...&quot;</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>不直接持有子类实例，持有接口实例，真正的实例对象有别人创建</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.lang.reflect.Proxy</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="p">;</span>
-
-<span class="n">public</span> <span class="k">class</span> <span class="nc">Client</span> <span class="p">{</span>
-    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="n">throws</span> <span class="ne">Exception</span> <span class="p">{</span>
-        <span class="n">BookService</span> <span class="n">bookService</span> <span class="o">=</span> <span class="p">(</span><span class="n">BookService</span><span class="p">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="n">newProxyInstance</span><span class="p">(</span>
-                <span class="n">BookService</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">getClassLoader</span><span class="p">(),</span>
-                <span class="n">new</span> <span class="n">Class</span><span class="p">[]{</span> <span class="n">BookService</span><span class="o">.</span><span class="k">class</span> <span class="err">},</span>
-                <span class="n">new</span> <span class="n">ServiceInvocationHandler</span><span class="p">(</span><span class="n">new</span> <span class="n">BookServiceImpl</span><span class="p">())</span>
-            <span class="p">);</span>
-        <span class="n">bookService</span><span class="o">.</span><span class="n">lendOut</span><span class="p">(</span><span class="s2">&quot;123&quot;</span><span class="p">,</span> <span class="s2">&quot;456&quot;</span><span class="p">,</span> <span class="n">new</span> <span class="n">Date</span><span class="p">());</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<h4>Objective-C的Method Swizzling</h4>
-<p>NSThread的start方法扩展</p>
-<div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">validStart</span> <span class="p">{</span>
-    <span class="k">@try</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="o">||</span> <span class="nb">self</span><span class="p">.</span><span class="n">isFinished</span> <span class="o">||</span> <span class="nb">self</span><span class="p">.</span><span class="n">isExecuting</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;should not start&quot;</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="p">[</span><span class="nb">self</span> <span class="n">validStart</span><span class="p">];</span>  <span class="c1">//[self start];</span>
-        <span class="p">}</span>
-    <span class="p">}</span> <span class="k">@catch</span> <span class="p">(</span><span class="bp">NSException</span> <span class="o">*</span><span class="n">exception</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;exception&quot;</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">@finally</span> <span class="p">{</span>
-        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;@finally&quot;</span><span class="p">);</span>
-    <span class="p">}</span>
-</pre></div>
-
-
-<p>方法替换来实现AOP（语言本身支持runtime，非常强大的特性）</p>
-<div class="highlight"><pre><span></span><span class="p">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">load</span> <span class="p">{</span>
-    <span class="p">[</span><span class="nb">super</span> <span class="n">load</span><span class="p">];</span>
-    <span class="kt">Class</span> <span class="k">class</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="k">class</span><span class="p">];</span>
-    <span class="n">Method</span> <span class="n">oldMethod</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="k">class</span><span class="p">,</span> <span class="n">NSSelectorFromString</span><span class="p">(</span><span class="s">@&quot;start&quot;</span><span class="p">));</span>
-    <span class="n">Method</span> <span class="n">newMethod</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="k">class</span><span class="p">,</span> <span class="n">NSSelectorFromString</span><span class="p">(</span><span class="s">@&quot;validStart&quot;</span><span class="p">));</span>
-   <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">oldMethod</span><span class="p">,</span> <span class="n">newMethod</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<h3>编译期AOP</h3>
-<ul>
-<li>编译期就把切面代码和业务代码链接起来，需要编译器或编译工具支持</li>
-<li>有些编程语言编译期生成中间代码的话，较容易支持这种AOP实现</li>
-<li>Java的AspectJ，Flutter的Dart，Android的Gradle插件Transform API</li>
-</ul>
-<h2>移动端语言对于AOP的支持</h2>
-<ul>
-<li>Java：支持运行时AOP和编译时AOP</li>
-<li>Objective-C支持运行时AOP</li>
-<li>kotlin支持编译期AOP（它编译成字节码）</li>
-<li>swift支持运行时AOP（基于Objective-C的特性，局限于OC代码）</li>
-<li>Flutter Dart支持编译期AOP，编译中间产物是dill（修改编译工具）</li>
-</ul>
-<h2>AOP在移动端应用：无埋点统计</h2>
-<ul>
-<li>传统埋点代码涉及各个模块，有点繁琐又没有太大技术含量</li>
-<li>无埋点采用AOP实现，解耦代码，且不容易漏统计。业务开发人员只需关注自己的业务代码</li>
-</ul>
-<p>Android Gradle 工具在 1.5.0 版本后提供了 Transfrom API, 允许第三方 Plugin 在打包 dex 文件之前的编译过程中操作 .class 文件
- 遍历所有要编译的class文件并对其中符合条件的方法进行修改，注入我们要调用的SDK数据搜集代码，从而实现自动埋点的目的</p>
-<h2>参考资料</h2>
-<p><a href="https://www.jianshu.com/p/9f0a98ce8a8f">AOP设计原理</a></p>
-<p><a href="https://www.ibm.com/developerworks/cn/java/wa-spring1/">Spring 框架简介</a></p>
-<p><a href="https://www.jianshu.com/p/aa1112dbebc7">Android面向切面编程（AOP）</a></p>
-<p><a href="https://www.jianshu.com/p/c202853059b4">Android AOP之字节码插桩</a></p>
-<p><a href="https://www.jianshu.com/p/250c83449dc0">应用于Android无埋点的Gradle插件解析</a></p>
-<p><a href="https://yq.aliyun.com/articles/705751">AOP for Flutter: AspectD(闲鱼团队开源框架)</a></p>
-<p><a href="https://juejin.im/entry/5b2400bc51882574b55e4fc7">58无埋点数据采集技术在Android端实践</a></p>
-<p><a href="https://www.jianshu.com/p/37df81365edf">如何理解 Transform API</a></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<li>程序运行时 ...</li></ul><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="http://szuwest.github.io/tag/aop-yi-dong-kai-fa.html">AOP 移动开发 </a>
@@ -203,11 +165,9 @@
 
 
 
-<p><a href="http://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="http://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -449,35 +409,6 @@
 
 
 <p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
-<h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
-</h6>
-
-
-<h1>react-native框架源码学习(iOS)(上)</h1>
-<h2>注意事项</h2>
-<p>要学习react-native框架iOS端源码，先要了解一下注意的事项。</p>
-<ul>
-<li>一、 首先需要非常熟悉objective-c语言，对OC的runtime机制更是必不可少。源码里大量用了runtime特性。然后也要熟悉c++语言。除了OC语言，里面还有大量的c++代码，OC与c++混合代码。对c++的template和std库也要熟悉。我本人对c++也熟悉，但是不够深入，对一些高级特性不是很了解，所以相关的一些代码看起来很吃力。最后当然也熟悉js语言。我大学时学习过js，但是那还真是远古时代了，js近年来发展很快，我对很多新特性不是很了解，这也对我学习有一定的阻碍。另外还有要比较了解iOS的JavaScriptCore框架，这个是js与OC通信的基础。</li>
-<li>二、 要对react-native的版本了解。查看网上的资料时也要注意他们所说的RN版本。现在网上很多研究资料，他们所研究的版本都是很早之前的版本。新的版本跟老版本有很多细节和流程改变了。如果你发现有些文章里说的东西跟你所看到的对不上，那就是研究的版本不一致。</li>
-<li>三、如果看不懂，多看看别人的分析文章。如果对某种语言或者框架库不熟悉，建议先把该补的补上。</li>
-</ul>
-<p>我所研究的RN版本是<strong>0.49</strong>，而最新版是0.51 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
