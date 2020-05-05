@@ -50,6 +50,39 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
+<h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
+</h6>
+
+
+<h1>react-native框架源码学习(iOS)(下)</h1>
+<p>如果没有看过上篇，请先看<a href="">react-native框架源码学习(iOS)(上)</a>。</p>
+<h3>JSCExecutor相关初始化</h3>
+<p>在上篇中说到Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。NativeToJsBridge的构造函数还包含更多的东西。</p>
+<div class="highlight"><pre><span class="n">NativeToJsBridge</span><span class="o">::</span><span class="n">NativeToJsBridge</span><span class="p">(</span>
+    <span class="n">JSExecutorFactory</span><span class="o">*</span> <span class="n">jsExecutorFactory</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ModuleRegistry</span><span class="o">&gt;</span> <span class="n">registry</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MessageQueueThread</span><span class="o">&gt;</span> <span class="n">jsQueue</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">InstanceCallback</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">m_destroyed</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_delegate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">JsToNativeBridge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">callback</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_executor</span><span class="p">(</span><span class="n">jsExecutorFactory</span><span class="o">-&gt;</span><span class="n">createJSExecutor</span><span class="p">(</span><span class="n">m_delegate</span><span class="p">,</span> <span class="n">jsQueue</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">m_executorMessageQueueThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">jsQueue ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
 <h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
 </h6>
@@ -351,31 +384,6 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
 
 
 <p><a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/qian-tan-vr.html"><h3 class="article-title">浅谈VR</h3></a>
-<h6 class="subheader" title="2016-06-11T00:00:00">2016-06-11
-</h6>
-
-
-<h2>浅谈VR</h2>
-<p>最近VR火得不行，就连央视财经也有报道说“4年后VR市场规模高达550亿元！人才缺口达80万”。然后刚刚结束的高考，某一个省份的语文作文题也是跟VR相关。所以说，VR是今后几年最热门的一个话题和技术之一，没有人会反对。</p>
-<p><strong>VR</strong>, 是Virtual Reality的缩写，即虚拟现实，它其实不是最近新的技术，它只是因为移动互联网的兴起而变得热门起来。我记得真正被全世界人认识和讨论的触发事件是Facebook发重金收购了Oculus VR公司。而除了VR，实际上还有另外一个相近技术<strong>AR</strong>. AR是Augmented Reality缩写，即增强现实。AR跟VR有挺大不同的，我现在研究得也不多，以后有机会我也想写一下AR相关的文字。</p>
-<h2>VR的应用</h2>
-<p>前几天我配老婆去海雅缤纷城逛街，然后发现那里有一个VR体验区，主要是VR电影和游戏结合的项目，还有一个是VR自行车。我体验了一下一个叫《地城游记》的游戏，感觉还可以。它主要是你坐在一个机器上，带上头盔，手可以握着一个杆，杆上有个按键，游戏中你可以按那个键来进行射击怪物。你坐在机器上，机器会根据游戏来进行晃动，例如我体验的是坐着过山车，它就会根据过山车来进行晃动，模拟你看到场景，就好像你真的在坐过山车一样。游戏中会有一些蝙蝠或者龙飞在你前面，然后有声音提示你射击它，你就会知道按那个键 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/vr-ar.html">VR AR </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/qian-tan-vr.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/qian-tan-vr.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

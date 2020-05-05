@@ -50,6 +50,33 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/sheng-huo-suo-shi.html"><h3 class="article-title">生活琐事</h3></a>
+<h6 class="subheader" title="2016-05-13T00:00:00">2016-05-13
+</h6>
+
+
+<h2>生活杂谈</h2>
+<p>最近好长时间没有写博客了，貌似差不多一年了。竟然想不到是那么久没有写过东西。</p>
+<p>去年年底买了车，现在也差不多要领结婚证了，时间的脚步根本停不下来，一眨眼该来的基本上都要来了。</p>
+<p>技术上没有太大的长进，也还有没得到有效的晋升，不过心没有太大的彷徨，因为已经麻木了吗？</p>
+<p>不过我还是一直想提升能力的，不管是技术上的，还是工作上的，生活上的。人的生活不单单是工作和技术，还有很多以外的东西。要在这个世界上好好的生活，需要掌握很多方面的能力，要接触很多的东西。</p>
+<p>我们要抱以开放的心态 接受和学习 生活中的方方面面，去掉浮躁，最终才能成功。
+技术也一样。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/za-tan.html">杂谈 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/sheng-huo-suo-shi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-huo-suo-shi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/tong-yi-ge-ying-yong-de-an-zhuo-ban-ben-he-iosban-ben-kai-fa-za-tan.html"><h3 class="article-title">同一个应用的安卓版本和iOS版本开发杂谈</h3></a>
 <h6 class="subheader" title="2016-05-13T00:00:00">2016-05-13
 </h6>
@@ -268,40 +295,6 @@
 
 
 <p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html"><h3 class="article-title">Android源码学习之View</h3></a>
-<h6 class="subheader" title="2014-12-20T00:00:00">2014-12-20
-</h6>
-
-
-<h1>Android源码学习之View</h1>
-<p>在Android中，View是所有视图控件的基类。Android的视图控件的设计采用了经典的设计模式--组合模式。View是基础控件，而ViewGroup是可以包含子View和管理子View的空间，ViewGroup同时也是一个View。这跟iOS的视图空间设计有很大不同。在iOS的视图框架中，所有视图都是继承UIView,而UIView本身是可以包含和管理子UIView的。我不知道这两种设计有什么优劣，感觉iOS的设计更简单直接。</p>
-<p>View的源代码超过2万行，当然包括了很多注释。这里面定义了很多基本的方法，主要是视图渲染的相关方法和事件的相关方法，不过有一点我不是很明白的就是里面有不少是根scrollbar相关的方法。我们实际应用中貌似有scrollbar的控件貌似只有AdapterView的子控件，ScrollView和TextView，scrollbar的特性为什么不直接放到这些类中，或者专门为这些类专门建立一个父类来处理scrollbar。View中的scrollbar特性应该大部分视图控件都不需要吧。当然这些只是我的疑问罢了，Google这样设计也许有他的道理。</p>
-<h2>重要方法</h2>
-<p>一个View要渲染到屏幕上，有几个重要的方法：</p>
-<blockquote>
-<ul>
-<li>onMeasure系方法</li>
-<li>onLayout系方法</li>
-<li>onDraw系方法</li>
-</ul>
-</blockquote>
-<h3>onMeasure系方法</h3>
-<p>每一个onXXX方法又有若干个相关XXX方法。例如onMeasure方法，相关的方法是measure(int widthMeasureSpec, int heightMeasureSpec)方法，setMeasuredDimension(int measuredWidth, int measuredHeight)方法，MeasureSpec内部类。其中measure(int widthMeasureSpec ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-view.html">Android源码学习 View </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
