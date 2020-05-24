@@ -13,7 +13,14 @@
 &lt;/ul&gt;
 &lt;p&gt;网上有不少人说这本书是可以零基础入门。也对也不对。如果是完全不懂计算的人，我觉得还是很难看到的，毕竟这里涉及到很多代码逻辑，我觉得至少要有一定的计算机基础和编程基础。我看这本书的时候，我特意看得很慢，而且会反复回退去查看相关章节。例如如果看到某个函数忘了是怎么实现的，就应该回退去查看它的实现和推导过程。&lt;/p&gt;
 &lt;p&gt;我个人觉得这本书写得很好，看完了让人感觉原来AI不是那么复杂，仿佛自己马上可以手动实现一个神经网络。我原本对AI有点怯，怕对里面的数学看不栋。但是这本书它打消了我的恐惧，让我比较理解了深度学习，人工智能，以后面对AI不再是一个黑盒，而是能想象到它里面的实现逻辑，它为什么能学习，它是怎么学习的。&lt;/p&gt;
-&lt;p&gt;当然这也只是第一步，但是我觉得这一步迈得挺好的。感谢斋藤康毅。&lt;/p&gt;</summary><category term="深度学习 人工智能 读后感"></category></entry><entry><title>探讨从H5页面拉起APP的技术方案和问题</title><link href="http://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html" rel="alternate"></link><updated>2020-03-07T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2020-03-07:tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html</id><summary type="html">&lt;h1&gt;探讨从H5页面拉起APP的技术方案和问题&lt;/h1&gt;
+&lt;p&gt;当然这也只是第一步，但是我觉得这一步迈得挺好的。感谢斋藤康毅。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;更新CNN解释器&lt;/h2&gt;
+&lt;p&gt;最近发现一个github开源库解释CNN的，可以结合这本一起看。这本是对CNN的讲解我觉得挺不错的，但是可能看一遍还是不是很理解，我是看了两三遍仍然觉得不够。后来看了这个CNN解释器库之后觉得好了些，因为它用图形具象化了。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="cnn解释器插图" src="https://poloclub.github.io/cnn-explainer/assets/figures/convlayer_overview_demo.gif" /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+&lt;img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /&gt;&lt;/p&gt;</summary><category term="深度学习 人工智能 读后感"></category></entry><entry><title>探讨从H5页面拉起APP的技术方案和问题</title><link href="http://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html" rel="alternate"></link><updated>2020-03-07T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2020-03-07:tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html</id><summary type="html">&lt;h1&gt;探讨从H5页面拉起APP的技术方案和问题&lt;/h1&gt;
 &lt;p&gt;从H5页面里拉起或叫唤起APP（APP需已经安装在手机上），有两种技术方案，一种通过HTTP链接（iOS叫 Universal Link，安卓叫APP Links技术）拉起技术，一种是通过自定义scheme拉起技术（也有叫深度链接deeplink的）。这两个技术适用不同的场景，也有不同的局限性。&lt;/p&gt;
 &lt;h2&gt;一、通过HTTP链接拉起&lt;/h2&gt;
 &lt;p&gt;要想通过HTTP(s)链接直接拉起APP，需要APP本身做一些配置和写一些代码实现，还需要在你网站服务器配置相关的json文件。例如配置服务器host，能打开页面的path等。有些了这些配置，苹果服务器或者谷歌的服务器验证了这些配置，就可以通过相关的HTTP链接来打开APP了&lt;/p&gt;
