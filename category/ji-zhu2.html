@@ -50,6 +50,34 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html"><h3 class="article-title">Jenkins slave ReactNative项目自动打包</h3></a>
+<h6 class="subheader" title="2018-03-08T00:00:00">2018-03-08
+</h6>
+
+
+<h1>Jenkins slave ReactNative项目自动打包</h1>
+<p>这次我想在谈谈Jenkins自动打包的问题。针对react-native项目。
+一般情况下，我们都是在一台电脑上安装Jenkins，然后在该电脑上打开Jenkins网页进行打包配置。如果我们有很多项目，分布在不同的电脑，而且运行的系统也不同，这时候我们需要一个master来统一管理这些电脑，然后统一在一个网页上进行打包配置。这就是Jenkins的master-slave打包模式。这种模式跟单机模式稍有不同，这里主要讲怎么配置slave。</p>
+<h2>slave节点配置</h2>
+<ul>
+<li>首先slave上也同样要安装Jenkins和相关的打包所依赖的环境，一个都不能少。配置好之后，我们并不需要在本机上打开Jenkins网页来创建项目，配置项目等，而是要到主机上去配置。在去主机的Jenkins管理页面上新建节点之前，从机还需要做一些其他配置。</li>
+<li>打开远程登录。在系统设置--&gt;共享，然后选中远程登录，允许所有用户访问。</li>
+<li>记住本机IP地址。在系统设置--&gt;网络，可以看到当前网络的IP地址。为了以后方便，可以将IP地址设置为一个固定IP地址。不然当该电脑重启之后，IP地址可能会变，然后主机再按照之前配置的旧IP连接从机的时候，就连不上了。Mac电脑配置固定IP也有注意的地方。我第一次配置就是没有成功，上不了网。选择手动方式，然后填上一个没有被占用的IP地址，然后，子网掩码也要注意，如果跟服务器是跨网段访问的，需要注意255.255 ...</li></ul><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/reactnative-jenkins-ios.html">ReactNative Jenkins iOS </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
 <h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
 </h6>
@@ -358,32 +386,6 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
 
 
 <p><a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html"><h3 class="article-title">iOS持续集成记(iOS+Jenkins+Cocoapods+蒲公英)</h3></a>
-<h6 class="subheader" title="2016-07-18T00:00:00">2016-07-18
-</h6>
-
-
-<h2>iOS持续集成记（iOS+Jenkins+Cocoapods+蒲公英）</h2>
-<p>原来我们iOS项目是有持续集成环境的，但是有一次升级系统还是升级xcode后，Jenkins就打不出可用的安装包了。原来负责整个打包机的同事又离职了，有一段时间我们都是手动打包给QA同事安装测试，现在领导要求必须把持续集成环境弄好，我们花了大约两周才基本弄好整个持续集成环境，现在把我整个过程中遇到的坑记录一下。</p>
-<h2>重装系统</h2>
-<p>打包机自从某一次升级系统之后就变得非常慢，打个包需要1个小时左右，简直要命。所以新的环境必须要建立在重装后的系统上。因为要格式化硬盘，所以要制作系统启动盘，这个网上也有不少教程，这里有个需要注意的，下载macOS系统时，一定要从官方下载。我一开始是自己在百度云上下的，制作好安装盘后重启电脑，并且将硬盘格式化后安装系统，发现验证不通过，好在另外一个同事在官网下了一个，我在它的电脑上重新制作了一次安装盘。假设你只要一台Mac电脑，遇到这种情况你就悲剧了。</p>
-<h2>git拉取代码的坑</h2>
-<p>系统装好了，Jenkins也装好了，然后配置拉去代码，可是代码死活拉不下来，为此我的同事搞了差不多一天，试了各种方法，也搞不下来代码，都是在一半的时候失败了。后来我也去弄了半天，同样的错误。主要原因可能是代码量太大了，因为其他的小工程可以git clone 下来。我突然想到换一下拉取协议试试，不采用HTTP方式，而是采用git ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/jenkins-cocoapods-pu-gong-ying.html">Jenkins Cocoapods 蒲公英 </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioschi-xu-ji-cheng-ji-iosjenkinscocoapodspu-gong-ying.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
