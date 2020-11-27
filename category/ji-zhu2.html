@@ -50,6 +50,40 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/flutterkuang-jia-yan-jiu-he-yu-rndui-bi.html"><h3 class="article-title">Flutter框架研究和与RN对比</h3></a>
+<h6 class="subheader" title="2018-03-16T00:00:00">2018-03-16
+</h6>
+
+
+<h2>Flutter是什么</h2>
+<p>现在技术更新迭代真的很快，每隔几年就会出现一些新的技术。当然，Flutter出现有有一点时间了，只不过还未真是发布，但是已经有一些人在使用了。这篇文章主要内容来自我在公司内部的一次分享会，所以大部分内容都是提炼。</p>
+<ul>
+<li>Flutter 是由 Google 的工程师团队打造的，用于创建高性能、跨平台的移动应用的框架。</li>
+<li>Flutter 针对当下以及未来的移动设备进行优化，专注于 Android and iOS 低延迟的输入和高帧率</li>
+<li>Flutter的设计跟react-native很像，但是比RN进了一步</li>
+<li>Flutter的开发语言是Dart</li>
+</ul>
+<h2>移动端跨平台开发技术演进</h2>
+<p>现在主流的移动开发平台是Android和iOS，之前还有过windows phone，每个平台的开发技术都不太一样。大家都是针对每个平台开发应用。自然有人就会觉得这样效率低下，想进行跨平台开发。从最开始的Hybrid混合开发技术，到RN的桥接技术，到现在新兴的Flutter技术，跨平台开发技术一直在演进。</p>
+<p>以往最早的Hybrid开发，主要依赖于WebView。但是WebView是一个很重的控件，很容易产生内存问题，而且复杂的UI在WebView上显示的性能不好。react-native技术抛开了WebView，利用JavaScriptCore来做桥接，将js调用转为native调用，只牺牲了小部分性能获取的跨平台开发，这是一大进步。所以现在react-native很流行的原因。</p>
+<p><img alt="react-native原理图" src="https://res.infoq.com/articles/why-is-flutter-revolutionary/zh/resources/2.png" /></p>
+<p>上图react-native框架原理</p>
+<p>Flutter实现跨平台采用了更为彻底的方案 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/reactnative-flutter.html">ReactNative Flutter </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/flutterkuang-jia-yan-jiu-he-yu-rndui-bi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/flutterkuang-jia-yan-jiu-he-yu-rndui-bi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html"><h3 class="article-title">Jenkins slave ReactNative项目自动打包</h3></a>
 <h6 class="subheader" title="2018-03-08T00:00:00">2018-03-08
 </h6>
@@ -350,42 +384,6 @@ USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href=
 
 
 <p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html"><h3 class="article-title">事件循环机制之于Android的Looper和iOS的NSRunLoop</h3></a>
-<h6 class="subheader" title="2016-12-04T00:00:00">2016-12-04
-</h6>
-
-
-<h2>事件循环机制之于Android的Looper和iOS的NSRunLoop</h2>
-<p>Android和iOS同为手机操作系统，有很多相同之处。有很多设计几乎是一样的，统一种设计模式，不同的实现。例如事件模型，它大体逻辑是这样的：</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">loop</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">initialize</span><span class="p">();</span>
-    <span class="k">do</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">get_next_message</span><span class="p">();</span>
-        <span class="nx">process_message</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nx">message</span> <span class="o">!=</span> <span class="nx">quit</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>对于这样的一种模式, Android系统和iOS系统是一样的，只不过是不同的平台不同的实现方式。应该说很多平台或者框架都是采用这一种模式。Android系统对应的就是Looper机制，iOS对应的就是NSRunLoop机制。你看名字都是loop，这是它的核心。</p>
-<p>对于移动开发者来说，理解平台是怎么实现这个事件循环机制，或者叫消息机制，是很重要的。因为在你的开发工作当中，无时无刻不在用着这种机制。不理解它的机制，充其量也只能算个初级程序员，无法深入理解系统。如果我们能了解不同平台对这一机制的实现，可以加深理解，可以提高自己。我既做过Android开发，也研究过它Looper机制。现在做iOS开发都有一段时间了，最近开研究它的NSRunLoop机制。我发现他们整体的设计思想确实一致的，但是不同的平台却也有很多差异性。</p>
-<h2>共同的设计点</h2>
-<p>首先loop跟线程是一一对应的，这是基础。然后iOS或者Android都是一个应用一个进程 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/android-ios-looper-nsrunloop.html">Android iOS Looper NSRunLoop </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
