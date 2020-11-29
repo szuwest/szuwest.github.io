@@ -50,6 +50,38 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html"><h3 class="article-title">如何写出不太坏的代码</h3></a>
+<h6 class="subheader" title="2019-02-28T00:00:00">2019-02-28
+</h6>
+
+
+<h2>如何写出不太坏的代码</h2>
+<p>本来想把标题定为“如何写出好代码”的，但是转念一想，觉得自己没那么牛逼，就改成了不太坏的代码。只要不要写出太糟糕的代码，不就是好代码了吗？</p>
+<p>以下只是个人的一些总结，如有异议，请出门右转。</p>
+<h3>1.注重命名</h3>
+<p>包括文件名，变量名，方法名。一般变量名以功能来命名，看它的名字就能知道它的用途是什么
+遵循一些命名规范。Java中成员变量名一般以m开头，而OC中的成员变量一般以_开头</p>
+<h3>2.遵循低耦合，高内聚的原则编写代码</h3>
+<p>具体表现遵循分层分模块原则，底层模块不能依赖上层模块，逻辑层不依赖界面，绝不要把逻辑层代码和界面代码混在一起</p>
+<h3>3.针对接口编程，而不是实现编程</h3>
+<p>当一个类要暴露一些方法给外部调用或者通信时，先定义好接口。接口定义应该简单明了，不容易引起歧义，接口尽量少。最后才考虑内部实现，而且尽量不暴露给外部，尽量不需要外部知道内部是如何实现的</p>
+<h3>4.一个类的代码量尽量不要太大，一个方法只做一件事情</h3>
+<p>一个类（或者一个方法）的代码越多，出错的概率越大。一个类三到5百行代码最佳。如果一个类的代码太多，就要考虑这个类是不是做的东西太多了 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ioskai-fa-androidkai-fa.html">iOS开发 Android开发 </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/2018nian-zong-jie-he-2019nian-zhan-wang.html"><h3 class="article-title">2018年总结和2019年展望</h3></a>
 <h6 class="subheader" title="2019-02-10T00:00:00">2019-02-10
 </h6>
@@ -308,35 +340,6 @@
 
 
 <p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html"><h3 class="article-title">react-native框架源码学习(iOS)(上)</h3></a>
-<h6 class="subheader" title="2018-02-26T00:00:00">2018-02-26
-</h6>
-
-
-<h1>react-native框架源码学习(iOS)(上)</h1>
-<h2>注意事项</h2>
-<p>要学习react-native框架iOS端源码，先要了解一下注意的事项。</p>
-<ul>
-<li>一、 首先需要非常熟悉objective-c语言，对OC的runtime机制更是必不可少。源码里大量用了runtime特性。然后也要熟悉c++语言。除了OC语言，里面还有大量的c++代码，OC与c++混合代码。对c++的template和std库也要熟悉。我本人对c++也熟悉，但是不够深入，对一些高级特性不是很了解，所以相关的一些代码看起来很吃力。最后当然也熟悉js语言。我大学时学习过js，但是那还真是远古时代了，js近年来发展很快，我对很多新特性不是很了解，这也对我学习有一定的阻碍。另外还有要比较了解iOS的JavaScriptCore框架，这个是js与OC通信的基础。</li>
-<li>二、 要对react-native的版本了解。查看网上的资料时也要注意他们所说的RN版本。现在网上很多研究资料，他们所研究的版本都是很早之前的版本。新的版本跟老版本有很多细节和流程改变了。如果你发现有些文章里说的东西跟你所看到的对不上，那就是研究的版本不一致。</li>
-<li>三、如果看不懂，多看看别人的分析文章。如果对某种语言或者框架库不熟悉，建议先把该补的补上。</li>
-</ul>
-<p>我所研究的RN版本是<strong>0.49</strong>，而最新版是0.51 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
