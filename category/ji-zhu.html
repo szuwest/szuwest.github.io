@@ -175,16 +175,11 @@ Flutter APP接入信鸽跟原生APP是一样的，问题就在怎么将path传�
   <span class="c1">///注册路由。routes比generateRoute的优先级高，先在routes找，找不到再到generateRoute找，最后找不到的话就进入unknownRoute</span>
   <span class="c1">///</span>
   <span class="kr">static</span> <span class="kr">final</span> <span class="nx">Map</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nx">WidgetBuilder</span><span class="o">&gt;</span> <span class="nx">routes</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">//只在内部使用</span>
+
     <span class="s1">&#39;/home&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">HomePage</span><span class="p">(),</span>
     <span class="s1">&#39;/bindSuc&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">BindSucPage</span><span class="p">(),</span>
-
-    <span class="c1">//可供外部使用（推送通知，scheme action）</span>
     <span class="s1">&#39;/orderList&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">OrderListPage</span><span class="p">(),</span><span class="c1">// 我的订单列表</span>
-    <span class="s1">&#39;/applyList&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">ApplyOrdersPage</span><span class="p">(),</span><span class="c1">// 我的申请单列表</span>
-    <span class="s1">&#39;/sampleList&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">MyCheckPage</span><span class="p">(),</span><span class="c1">// 我的套件列表</span>
-    <span class="s1">&#39;/bind&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">BindPage</span><span class="p">(),</span><span class="c1">// 绑定套件页面</span>
-  <span class="p">};</span>
+ <span class="p">};</span>
 
   <span class="c1">//要注意页面参数的配置</span>
   <span class="kr">static</span> <span class="kr">final</span> <span class="nx">RouteFactory</span> <span class="nx">generateRoute</span> <span class="o">=</span> <span class="p">(</span><span class="nx">settings</span><span class="p">)</span> <span class="p">{</span>
@@ -201,18 +196,6 @@ Flutter APP接入信鸽跟原生APP是一样的，问题就在怎么将path传�
         <span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;/buy&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nb">String</span> <span class="nx">projectId</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;project_id&#39;</span><span class="p">];</span>
-      <span class="nb">String</span> <span class="nx">productId</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;product_id&#39;</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">projectId</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="nx">HomeProject</span><span class="p">(</span><span class="nx">id</span>: <span class="kt">projectId</span><span class="p">,</span> <span class="nx">product_id</span>: <span class="kt">productId</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">MaterialPageRoute</span><span class="p">(</span>
-            <span class="nx">builder</span><span class="o">:</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">return</span> <span class="nx">BuyPage</span><span class="p">(</span><span class="nx">project</span>: <span class="kt">project</span><span class="p">,);</span>
-            <span class="p">}</span>
-        <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;/applyDetail&#39;</span><span class="p">)</span> <span class="p">{</span>
       <span class="nb">String</span> <span class="nx">_id</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">_id</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
@@ -224,37 +207,8 @@ Flutter APP接入信鸽跟原生APP是一样的，问题就在怎么将path传�
         <span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;/orderDetail&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nb">String</span> <span class="nx">_id</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">_id</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">MaterialPageRoute</span><span class="p">(</span>
-            <span class="nx">builder</span><span class="o">:</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">return</span> <span class="nx">OrderDetailPage</span><span class="p">(</span><span class="nx">id</span>: <span class="kt">_id</span><span class="p">,);</span>
-            <span class="p">}</span>
-        <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;/sample&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nb">String</span> <span class="nx">barcode</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;barcode&#39;</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">barcode</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">MaterialPageRoute</span><span class="p">(</span>
-            <span class="nx">builder</span><span class="o">:</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">return</span> <span class="nx">SampleStatePage</span><span class="p">(</span><span class="nx">barcode</span><span class="p">,);</span>
-            <span class="p">}</span>
-        <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;/webview&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nb">String</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">url</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">dynamic</span> <span class="nx">redirect</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;redirect&#39;</span><span class="p">];</span>
-        <span class="k">return</span> <span class="nx">MaterialPageRoute</span><span class="p">(</span>
-            <span class="nx">builder</span><span class="o">:</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">return</span> <span class="nx">WebViewPage</span><span class="p">(</span><span class="nx">url</span>: <span class="kt">url</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">needRedirect</span>: <span class="kt">redirect</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">,);</span>
-            <span class="p">}</span>
-        <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    <span class="c1">//....</span>
+
     <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
   <span class="p">};</span>
 
