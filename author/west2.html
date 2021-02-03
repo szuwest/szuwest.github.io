@@ -50,6 +50,40 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html"><h3 class="article-title">记一次WebView填坑过程--由换行符引发的血案</h3></a>
+<h6 class="subheader" title="2019-07-27T00:00:00">2019-07-27
+</h6>
+
+
+<h1>记一次WebView填坑过程--由换行符引发的血案</h1>
+<p>最近使用WebView掉坑了，然后艰难爬坑经历感触很深，写出来大家借鉴一下。</p>
+<h3>需求</h3>
+<p>我们有个网页需要用到很多js库，这些库比较大，而且基本上是不变的。为了提高性能，将这些网页和JS库放到本地，进行加载。变的数据从服务器获取，然后跟本地的HTML组装后显示。这种需求还是挺普遍的。</p>
+<h3>实现方式</h3>
+<p>由web的同事调试好HTML文件，他们把所有的HTML，js,css,image和资源一起打包给我们
+我们把这些资源放到assets目录下（也可以专门在assets再建一个子目录来放）</p>
+<p>采用Android自带的WebView来加载和显示这些网页。有两个方法<strong>loadUrl</strong>和<strong>loadDataWithBaseUrl</strong>方法。</p>
+<blockquote>
+<p>1.loadUrl("file:///android_asset/xxxxxx.html")这种方式适合HTML不需要改变的情况，直接加载展示，省时省力</p>
+<p>2.loadDataWithBaseUrl方式需要先把HTML内容现在到内存，然后再展示。这种方式可以随意修改HTML里的内容，修改好再交由WebView展示，灵活性强。</p>
+</blockquote>
+<h3>遇到的坑</h3>
+<p>测试的时候，我们遇到同一个HTML文件，通过loadUrl方式加载展示，没有任何问题。但是通过loadDataWithBaseUrl加载展示，HTML的内容死活展示不出来 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/androidkai-fa-webview-javascript.html">Android开发 WebView JavaScript </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html"><h3 class="article-title">如何写出不太坏的代码</h3></a>
 <h6 class="subheader" title="2019-02-28T00:00:00">2019-02-28
 </h6>
@@ -307,39 +341,6 @@
 
 
 <p><a href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
-<h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
-</h6>
-
-
-<h1>react-native框架源码学习(iOS)(下)</h1>
-<p>如果没有看过上篇，请先看<a href="">react-native框架源码学习(iOS)(上)</a>。</p>
-<h3>JSCExecutor相关初始化</h3>
-<p>在上篇中说到Instance的初始化方法initializeBridge里，最主要是创建了NativeToJsBridge的实例。而NativeToJsBridge的构造函数里，主要是调用了executorFactory来创建一个JSCExecutor。NativeToJsBridge的构造函数还包含更多的东西。</p>
-<div class="highlight"><pre><span class="n">NativeToJsBridge</span><span class="o">::</span><span class="n">NativeToJsBridge</span><span class="p">(</span>
-    <span class="n">JSExecutorFactory</span><span class="o">*</span> <span class="n">jsExecutorFactory</span><span class="p">,</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ModuleRegistry</span><span class="o">&gt;</span> <span class="n">registry</span><span class="p">,</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MessageQueueThread</span><span class="o">&gt;</span> <span class="n">jsQueue</span><span class="p">,</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">InstanceCallback</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
-    <span class="o">:</span> <span class="n">m_destroyed</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span>
-    <span class="p">,</span> <span class="n">m_delegate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">JsToNativeBridge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">callback</span><span class="p">))</span>
-    <span class="p">,</span> <span class="n">m_executor</span><span class="p">(</span><span class="n">jsExecutorFactory</span><span class="o">-&gt;</span><span class="n">createJSExecutor</span><span class="p">(</span><span class="n">m_delegate</span><span class="p">,</span> <span class="n">jsQueue</span><span class="p">))</span>
-    <span class="p">,</span> <span class="n">m_executorMessageQueueThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">jsQueue ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/reactnative-yuan-ma-ios.html">ReactNative 源码 iOS </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

@@ -50,6 +50,34 @@
 
 
             <article>
+                <a href="http://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html"><h3 class="article-title">多家公司的人证比对算法体验和开发感想</h3></a>
+<h6 class="subheader" title="2018-07-13T00:00:00">2018-07-13
+</h6>
+
+
+<h1>多家公司的人证比对算法体验和开发感想</h1>
+<p>最近在开发一个声纹采集一体机系统，这个系统里用到了人证比对功能，即刷身份证后拍照，然后将身份证里面的照片跟拍照比对，验证是否是同一个人。我们不是做人脸识别的公司，所以人脸识别功能当然是接入别人的SDK，这里我们找了好多家的人脸算法，对接过程中也遇到很多问题。经过这次的开发，我了解到这个行业的一些现状。</p>
+<p>我们的系统主要运行在Windows电脑上，而且需要无网络也能使用，所以人脸算法必须是用离线版的。人脸算法厂家一般对外提供两种方式：在线版和离线版。一般在线版都可以提供免费试用，离线版需要授权使用。</p>
+<h2>云端方案</h2>
+<p>在线版的人脸识别我试用过依图科技的和中科视拓的SDK。在我们的应用声临其境APP上有个声纹购物的场景，需要人脸验证。这两个厂家提供的API都差不多，依图的API安全性考虑更全面，错误码定义的比较详细。还有他们的API共同点是，图片传输都是将图片数据进行base64编码后传输的。至于准确率，感觉都差不多，没有特别明显的差距。</p>
+<h2>离线方案</h2>
+<p>离线版的人脸算法用得比对多。因为它是用在我们要卖的机器上，而在线版的我们只是做试验。离线版的集成和使用要比在线版麻烦很多。由于离线版要给出算法库，处于安全和容易被拷贝的原因，都是要先授权的。授权的方式一般有两种：在设备上接入加密狗USB key或者绑定设备机器码的方式。加密狗方式比较方便，我们一般采用这种方式。</p>
+<p>我们接入了很多厂家，有阅面科技，中控，杰锐达，商汤，我还把开源的dlib人脸识别也接入了 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="http://szuwest.github.io/tag/ren-lian-jian-ce-ren-zheng-bi-dui-dlib-electron.html">人脸检测 人证比对 dlib electron </a>
+</p>
+
+
+
+<p><a href="http://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="http://szuwest.github.io/flutterkuang-jia-yan-jiu-he-yu-rndui-bi.html"><h3 class="article-title">Flutter框架研究和与RN对比</h3></a>
 <h6 class="subheader" title="2018-03-16T00:00:00">2018-03-16
 </h6>
@@ -354,36 +382,6 @@
 
 
 <p><a href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
-<h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
-</h6>
-
-
-<h1>Coturn在iOS端应用和libevent的编译</h1>
-<p>coturn是一个Google的开源库，用于客服端-服务器-客户端之间建立数据通道，传输数据流。现在直播所有的技术WebRTC就是基于coturn的。这个技术真的很牛。</p>
-<p>我们的产品个人私有云，一款智能硬件，接上你的硬盘，就可以通过手机消费你硬盘里的文件，任务时候任何地方，只要你联网。从智能盒子和手机之间的数据传输就需要coturn这种技术。WebRTC很好，但是不适用于智能硬件.</p>
-<p>Coturn依赖的库有libevent和OpenSSL。OpenSSL有很多iOS的库，使用也很广泛。libevent也是一个使用挺多的C库，但是在移动平台上很少用。我在iOS平台上编译libevent遇到了很多问题。一个是不能直接用同时用在真机和模拟器上，一个是iOS10以下系统会闪退。第一个问题比较好解决，但是第二个问题不太好解决。我一直以为是我编译的库有问题，后来另一个同事他把崩溃堆栈发给我看，我发现是iOS9的系统库缺少一个get_clocktime的函数。经过搜索，发现是libevent确实是有这个东西，也有人遇到同样的问题。可以通过一个编译参数来禁用掉。</p>
-<p>下面是libevent的编译脚本主要内容</p>
-<div class="highlight"><pre>###########################################################################
-# Choose your libevent version and your currently-installed iOS SDK version:
-#
-VERSION=&quot;2.1.8-stable&quot;
-USERSDKVERSION=&quot;10.3 ...</pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="http://szuwest.github.io/tag/ios-coturn-libevent.html">iOS Coturn libevent </a>
-</p>
-
-
-
-<p><a href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
