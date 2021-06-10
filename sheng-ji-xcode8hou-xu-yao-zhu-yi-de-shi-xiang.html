@@ -6,11 +6,11 @@
 
     <title>升级Xcode8后需要注意的事项</title>
 
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
-    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="https://szuwest.github.io/theme/js/custom.modernizr.js"></script>
 
     <!-- So Firefox can bookmark->"abo this site" -->
 
@@ -23,7 +23,7 @@
 <div class="top-bar">
 <div class="row">
     <div class="large-9 large-centered columns">
-	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+	    <h1><a href="https://szuwest.github.io">West's blog</a></h1>
     </div>
 </div>
 </div>
@@ -47,7 +47,7 @@
     <div class="large-9 columns">
 <article>
     <header>
-        <h3 class="article-title"><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html" rel="bookmark"
+        <h3 class="article-title"><a href="https://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html" rel="bookmark"
         title="Permalink to 升级Xcode8后需要注意的事项">升级Xcode8后需要注意的事项</a></h3>
     </header>
 
@@ -70,10 +70,10 @@
 <p>这是个大坑，当然你可以说它是大好，如果它没有给你带来不便利的话。Xcode8里有个自动管理签名开发，即将签名改为自动管理签名后者手动管理签名。其实就是要你登录你的开发账号，然后选择你的develop team。可是一般团队里就一个开发者账号，你就必须给每个人的电脑上都登录一下这个开发者账号。如果能把账号密码公开给大家当然没问题，不能的话就只有管理者去每个人的电脑上登录一下账号。</p>
 <p>这都还是算好的，因为我们开发者自己弄两下就可以搞定。但是有个蛋疼的地方：我们给测试同事打包是在打包机上自动打包的，采用的是Jenkins持续集成环境，并且打包采用的证书是企业版证书，打包出来之后需要给大家随意安装的。当升级Xcode8之后，signing方式改变了，然后打包就失败了。因为打包机上我们是必须重新修改BundleID，然后指定签名文件。但是我们平时开发是Xcode配置是自动签名方式，打包机是通过Jenkins重新配置了打包方式，这样就出问题了。。。</p>
 <p>我现在尝试去解决这种冲突，但是还没搞定。develop team貌似Xcode8中新加的，以前不需要指定。我也网上找了一些资料，貌似有人想直接打包前直接用she'll脚本修改工程文件配置。这也是一个方向。接下来下周我估计要把这个问题研究一下。每次环境变动，Jenkins都要重新搞，折腾得我苦不堪言。什么时候苹果把签名和调试不要搞得那么复杂，造福一下开发者就好了。</p>
-<p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
+    <a href="https://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
 </p>
 
 
@@ -84,7 +84,7 @@
     <script type="text/javascript">
         var disqus_shortname = 'westblog'
         var disqus_identifier = "sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html";
-        var disqus_url = "http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html";
+        var disqus_url = "https://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html";
 
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -101,8 +101,8 @@
     <aside class="large-3 columns">
         <h5 class="sidebar-title">Site</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
-            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+            <li><a href="https://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="https://szuwest.github.io/tags.html">Tags</a>
 
 
         </ul>
@@ -110,28 +110,26 @@
 		
         <h5 class="sidebar-title">Categories</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
-            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
-            <li><a href="http://szuwest.github.io/category/chan-pin.html">产品</a></li>
-            <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
-            <li><a href="http://szuwest.github.io/category/ji-zhu.html">技术</a></li>
-            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
-            <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
-            <li><a href="http://szuwest.github.io/category/zong-jie.html">总结</a></li>
+            <li><a href="https://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="https://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
+            <li><a href="https://szuwest.github.io/category/chan-pin.html">产品</a></li>
+            <li><a href="https://szuwest.github.io/category/ios.html">iOS</a></li>
+            <li><a href="https://szuwest.github.io/category/ji-zhu.html">技术</a></li>
+            <li><a href="https://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="https://szuwest.github.io/category/suan-fa.html">算法</a></li>
+            <li><a href="https://szuwest.github.io/category/zong-jie.html">总结</a></li>
    
         </ul>
 
         <h5 class="sidebar-title">Links</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
-            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
-            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+            <li><a href="https://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="https://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
         </ul>
 		
         <h5 class="sidebar-title">Social</h5>
         <ul class="side-nav">
             <li><a href="https://github.com/szuwest">Github</a></li>
-            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
             <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
             <li><a href="http://weibo.com/szuwest">微博</a></li>
         </ul>

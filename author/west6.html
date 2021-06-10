@@ -6,11 +6,11 @@
 
     <title>West's blog - West</title>
 
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
-    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="https://szuwest.github.io/theme/js/custom.modernizr.js"></script>
 
     <!-- So Firefox can bookmark->"abo this site" -->
 
@@ -23,7 +23,7 @@
 <div class="top-bar">
 <div class="row">
     <div class="large-9 large-centered columns">
-	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+	    <h1><a href="https://szuwest.github.io">West's blog</a></h1>
     </div>
 </div>
 </div>
@@ -50,7 +50,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html"><h3 class="article-title">Android图片缓存和相关开源项目</h3></a>
+                <a href="https://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html"><h3 class="article-title">Android图片缓存和相关开源项目</h3></a>
 <h6 class="subheader" title="2015-05-16T00:00:00">2015-05-16
 </h6>
 
@@ -59,15 +59,15 @@
 <p>现在几乎所有大一点的Android项目都会用到图片缓存。而Android应用的内存占用大户就是图片，几乎所有内存问题都会涉及到图片问题，而已图片为主的应用也会涉及到性能问题。我觉得每一个资深的Android工程师都要对图片缓存技术有所了解，并且有自己想法。图片缓存是在面试别人时必问的问题。</p>
 <p>图片缓存可以分为两点：内存缓存和磁盘缓存，当然还有必然要涉及的图片解码，图片下载，这里主要讲讲内存缓存和磁盘缓存，附带说一下图片解码和下载。</p>
 <h2>内存缓存</h2>
-<p>由于一张图片基本上会被重用或者在多个界面显示，而图片的下载和解码都是比较耗时的动作，要给用户比较好的体验，将一张图片缓存在内存中就尤为必要。如果一个应用图片比较多，要将所有图片都缓存在内存中显然不现实，特别是比较低端的机器上，内存非常有限。所以这个内存缓存必然有所限制，那么问题来了，缓存池设置多大，并且满了之后怎么处理成了要点。我们知道Android系统中给每个应用设置了最大堆，超出了这个最大堆限制就会报OutOfMemory错误。所以一般就是根据这个最大堆来设置图片缓存池的大小，业内普遍做法是取最大堆内存的8分之一，这个经验值，我觉得可以应用情况做调整。而缓存池满了之后该又要加入新的图片，怎么对已在池中的图片移除，有很多方法。最常用的是LRU（least recently used）算法。我一般会问面试者这个算法是怎么实现的，看过代码的人或者算法学得比较好的人就能答出。还有用的比较多大算法是使用频率算法，移除最大图片算法等。然而我认为比较好的内存缓存技术还应结合弱引用来用。这里涉及到什么事强引用，软引用和弱引用也是我必考项。为什么还要结合弱引用来使用比较好呢？如果一个应用要显示的图片比较多 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+<p>由于一张图片基本上会被重用或者在多个界面显示，而图片的下载和解码都是比较耗时的动作，要给用户比较好的体验，将一张图片缓存在内存中就尤为必要。如果一个应用图片比较多，要将所有图片都缓存在内存中显然不现实，特别是比较低端的机器上，内存非常有限。所以这个内存缓存必然有所限制，那么问题来了，缓存池设置多大，并且满了之后怎么处理成了要点。我们知道Android系统中给每个应用设置了最大堆，超出了这个最大堆限制就会报OutOfMemory错误。所以一般就是根据这个最大堆来设置图片缓存池的大小，业内普遍做法是取最大堆内存的8分之一，这个经验值，我觉得可以应用情况做调整。而缓存池满了之后该又要加入新的图片，怎么对已在池中的图片移除，有很多方法。最常用的是LRU（least recently used）算法。我一般会问面试者这个算法是怎么实现的，看过代码的人或者算法学得比较好的人就能答出。还有用的比较多大算法是使用频率算法，移除最大图片算法等。然而我认为比较好的内存缓存技术还应结合弱引用来用。这里涉及到什么事强引用，软引用和弱引用也是我必考项。为什么还要结合弱引用来使用比较好呢？如果一个应用要显示的图片比较多 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-tu-pian-huan-cun-imageloader-fresco.html">Android源码学习 图片缓存 ImageLoader Fresco </a>
+    <a href="https://szuwest.github.io/tag/androidyuan-ma-xue-xi-tu-pian-huan-cun-imageloader-fresco.html">Android源码学习 图片缓存 ImageLoader Fresco </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html">Read More</a>
+<p><a href="https://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -75,7 +75,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html"><h3 class="article-title">Android开发中何时使用多进程？</h3></a>
+                <a href="https://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html"><h3 class="article-title">Android开发中何时使用多进程？</h3></a>
 <h6 class="subheader" title="2015-03-10T00:00:00">2015-03-10
 </h6>
 
@@ -83,15 +83,15 @@
 <h1>问答-Android开发中何时使用多进程？</h1>
 <p>我在github上回答了一个问题：
 <code>Android开发中何时使用多进程？</code></p>
-<div class="highlight"><pre><span class="mf">1.</span><span class="err">要想知道如何使用多进程，先要知道</span><span class="n">Android</span><span class="err">里的多进程概念。一般情况下，一个应用程序就是一个进程，这个进程名称就是应用程序包名。我们知道进程是系统分配资源和调度的基本单位，所以每个进程都有自己独立的资源和内存空间，别的进程是不能任意访问其他进程的内存和资源的。那如何让自己的应用拥有多个进程？很简单，我们的四大组件在</span><span class="n">AndroidManifest</span><span class="err">文件中注册的时候，有个属性是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">，这里可以指定组件的所处的进程。默认就是应用的主进程。指定为别的进程之后，系统在启动这个组件的时候，就先创建（如果还没创建的话）这个进程，然后再创建该组件。你可以重载</span><span class="n">Application</span><span class="err">类的</span><span class="n">onCreate</span><span class="err">方法，打印出它的进程名称，就可以清楚的看见了。再设置</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">属性时候，有个地方需要注意：如果是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="o">=</span><span class="s">&quot;:deamon&quot;</span><span class="err">，以</span><span class="o">:</span><span class="err">开头的名字，则表示这是一个应用程序的私有进程，否则它是一个全局进程 ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+<div class="highlight"><pre><span class="mf">1.</span><span class="err">要想知道如何使用多进程，先要知道</span><span class="n">Android</span><span class="err">里的多进程概念。一般情况下，一个应用程序就是一个进程，这个进程名称就是应用程序包名。我们知道进程是系统分配资源和调度的基本单位，所以每个进程都有自己独立的资源和内存空间，别的进程是不能任意访问其他进程的内存和资源的。那如何让自己的应用拥有多个进程？很简单，我们的四大组件在</span><span class="n">AndroidManifest</span><span class="err">文件中注册的时候，有个属性是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">，这里可以指定组件的所处的进程。默认就是应用的主进程。指定为别的进程之后，系统在启动这个组件的时候，就先创建（如果还没创建的话）这个进程，然后再创建该组件。你可以重载</span><span class="n">Application</span><span class="err">类的</span><span class="n">onCreate</span><span class="err">方法，打印出它的进程名称，就可以清楚的看见了。再设置</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">属性时候，有个地方需要注意：如果是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="o">=</span><span class="s">&quot;:deamon&quot;</span><span class="err">，以</span><span class="o">:</span><span class="err">开头的名字，则表示这是一个应用程序的私有进程，否则它是一个全局进程 ...</span></pre></div><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/ji-zhu-wen-da-github-jin-cheng.html">技术问答 github 进程 </a>
+    <a href="https://szuwest.github.io/tag/ji-zhu-wen-da-github-jin-cheng.html">技术问答 github 进程 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html">Read More</a>
+<p><a href="https://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -99,7 +99,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html"><h3 class="article-title">Android源码学习之ViewGroup</h3></a>
+                <a href="https://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html"><h3 class="article-title">Android源码学习之ViewGroup</h3></a>
 <h6 class="subheader" title="2015-02-02T00:00:00">2015-02-02
 </h6>
 
@@ -109,15 +109,15 @@
 <p>是什么使得ViewGroup具有了容易功能呢？ViewGroup除了继承View外，还是实现了两个接口：<code>ViewManager</code>和<code>ViewParent</code>。ViewManager主要定义了addView和removeView的方法，ViewParent主要定义了刷新容器的接口requestLayout和其他一些焦点事件的处理等接口。除此之外，还有非常重要的一点，ViewGroup是一个抽象类。我们知道View并不是抽象类，为什么ViewGroup继承了View反而成了抽象类呢，是增加了什么新的抽象方法吗？不是，ViewGroup中的抽象方法是继承于View的onLayout方法。onLayout方法在View中并不是抽象方法，只是一个空方法，但是在ViewGroup中它被定义为了抽象方法。我第一次发现原来还可以这样做。onLayout的主要作用是放置子View的位置，而不同的布局方式算法不一样，所有留给子类实现比较合理。</p>
 <p>ViewGroup中并没有覆盖onMeasure方法，但是增加了一些计算子View大小的方法：measureChildren方法就是将所有的子View都遍历一遍，并调用他们的measure方法。ViewGroup中同样没有覆盖onDraw方法，但是覆盖了dispatchDraw方法。dispatchDraw方法主要作用是调用每个子View的draw方法。看来onXXX方法在ViewGroup中并不重要，它更多的在调用子View的方法。</p>
 <h2>LayoutParams</h2>
-<p>布局参数LayoutParams是ViewGroup的一个重要内部类 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+<p>布局参数LayoutParams是ViewGroup的一个重要内部类 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-viewgroup.html">Android源码学习 ViewGroup </a>
+    <a href="https://szuwest.github.io/tag/androidyuan-ma-xue-xi-viewgroup.html">Android源码学习 ViewGroup </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html">Read More</a>
+<p><a href="https://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -125,21 +125,21 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/gu-piao-tou-zi-zong-jie.html"><h3 class="article-title">股票投资总结</h3></a>
+                <a href="https://szuwest.github.io/gu-piao-tou-zi-zong-jie.html"><h3 class="article-title">股票投资总结</h3></a>
 <h6 class="subheader" title="2015-02-01T00:00:00">2015-02-01
 </h6>
 
 
 <h1>股票投资总结</h1>
-<p>自从  去年从8月份开始入市美股，11月中入市A股，后来入市港股，真是认识到股市的钱真不是那么容易赚的。为什么很多人劝说不要踏入股市，为什么股市是一赢二平七输，都是很有道理的。要想通过股市一夜暴富也是基本不可能。不过不管怎样，学一下理财和投资，还是不错的。这也算是为以后铺路。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
+<p>自从  去年从8月份开始入市美股，11月中入市A股，后来入市港股，真是认识到股市的钱真不是那么容易赚的。为什么很多人劝说不要踏入股市，为什么股市是一赢二平七输，都是很有道理的。要想通过股市一夜暴富也是基本不可能。不过不管怎样，学一下理财和投资，还是不错的。这也算是为以后铺路。</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/sheng-huo.html">生活</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/sheng-huo-tou-zi.html">生活 投资 </a>
+    <a href="https://szuwest.github.io/tag/sheng-huo-tou-zi.html">生活 投资 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/gu-piao-tou-zi-zong-jie.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/gu-piao-tou-zi-zong-jie.html">Read More</a>
+<p><a href="https://szuwest.github.io/gu-piao-tou-zi-zong-jie.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/gu-piao-tou-zi-zong-jie.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -147,7 +147,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html"><h3 class="article-title">Android源码学习系列开篇</h3></a>
+                <a href="https://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html"><h3 class="article-title">Android源码学习系列开篇</h3></a>
 <h6 class="subheader" title="2014-12-20T00:00:00">2014-12-20
 </h6>
 
@@ -155,15 +155,15 @@
 <h1>Android源码学习开篇</h1>
 <p>最近一直觉得自己后劲不足，很多想做的效果都觉得很艰难，不知道怎么下手。从很早的时候我就想学习Android源代码。第一次下载Android的源代码是2011年四季度的时候，那时候在公司的电脑上安装了Linux系统，也把源码下载下来了。但是后来一段时间后，我离开那个公司。后来几年时间都没有下过Android源码，因为一直在Android和iOS直接切换开发。不过我确实下载了Android SDK源码。其实一般的应用开发只要了解Android SDK开发就够。这些年断断续续看过一些SDK的源码。</p>
 <p>这段时间，我终于下定决心要好好学习一下Android源码，原因之一是我拥有了一部自己的MacBook Pro，不再为电脑而烦恼。为了下载Android源代码，我试了很多方法下载，人生第一次为软件付费，买了一个VPN。但是我电脑硬盘比较小，源码很大，我下载了好几次要么下载到一部分就中断了没法继续下载，要么是我的电脑磁盘装不下。。最后我还是在百度网盘下载了一个别人已经下载好的。</p>
-<p>当然我的学习还是以framework的源码为主，然后逐渐往底层学习。要学习framework根本不必下载Android源码，直接下载Android SDK的源码就行，Google提供的SDK Manager就有下载源码功能，然后在Eclipse或者Android Studio关联即可。为了鞭策自己学习，我决定写一个自己Android源码学习系列文章，记录自己的学习心得。另外最近作为面试官，面了一些Android的求职者，感觉很多人都是满足实现功能，不能自己去探究实现原理。想当年自己也是这样。越早摆脱这种情况，越有优势。</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+<p>当然我的学习还是以framework的源码为主，然后逐渐往底层学习。要学习framework根本不必下载Android源码，直接下载Android SDK的源码就行，Google提供的SDK Manager就有下载源码功能，然后在Eclipse或者Android Studio关联即可。为了鞭策自己学习，我决定写一个自己Android源码学习系列文章，记录自己的学习心得。另外最近作为面试官，面了一些Android的求职者，感觉很多人都是满足实现功能，不能自己去探究实现原理。想当年自己也是这样。越早摆脱这种情况，越有优势。</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi.html">Android源码学习 </a>
+    <a href="https://szuwest.github.io/tag/androidyuan-ma-xue-xi.html">Android源码学习 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html">Read More</a>
+<p><a href="https://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/androidyuan-ma-xue-xi-xi-lie-kai-pian.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -171,7 +171,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html"><h3 class="article-title">Android源码学习之View</h3></a>
+                <a href="https://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html"><h3 class="article-title">Android源码学习之View</h3></a>
 <h6 class="subheader" title="2014-12-20T00:00:00">2014-12-20
 </h6>
 
@@ -189,15 +189,15 @@
 </ul>
 </blockquote>
 <h3>onMeasure系方法</h3>
-<p>每一个onXXX方法又有若干个相关XXX方法。例如onMeasure方法，相关的方法是measure(int widthMeasureSpec, int heightMeasureSpec)方法，setMeasuredDimension(int measuredWidth, int measuredHeight)方法，MeasureSpec内部类。其中measure(int widthMeasureSpec ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+<p>每一个onXXX方法又有若干个相关XXX方法。例如onMeasure方法，相关的方法是measure(int widthMeasureSpec, int heightMeasureSpec)方法，setMeasuredDimension(int measuredWidth, int measuredHeight)方法，MeasureSpec内部类。其中measure(int widthMeasureSpec ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/androidyuan-ma-xue-xi-view.html">Android源码学习 View </a>
+    <a href="https://szuwest.github.io/tag/androidyuan-ma-xue-xi-view.html">Android源码学习 View </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html">Read More</a>
+<p><a href="https://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/androidyuan-ma-xue-xi-zhi-view.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -205,7 +205,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html"><h3 class="article-title">当做了一段时间的Android的困惑</h3></a>
+                <a href="https://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html"><h3 class="article-title">当做了一段时间的Android的困惑</h3></a>
 <h6 class="subheader" title="2014-12-14T00:00:00">2014-12-14
 </h6>
 
@@ -213,15 +213,15 @@
 <h1>当做了一段时间的Android的困惑</h1>
 <p>当做一门技术到达一定的时间之后，就会陷入一个困境。不知道如何提高。任何一门技术，都是刚开始的时候，进步非常快，然后收获非常多，但是越往后越难有进步。因为因为任何一门技术都有一定的瓶颈，如何打破这个瓶颈，是很重要的。一旦打破这个瓶颈，就会进入下一个平台，下一个级别。然而第二个级别也还是会重复第一个级别的步骤。如此重复。</p>
 <p>我们大多数人都是会在第一个第二个级别上挣扎前进，无法突破。我不知道自己的Android技术现在时处在第一还是第二个级别，但是我现在确实遇到了瓶颈，感觉突破很艰难。最近产品上又有些需求比较难做，自己感觉可以实现，但是真要做出来，需要花很多时间和精力，还不能确定完全实现产品所需效果。而项目本身是比较紧急的，如果既要实现效果又要保证进度，估计我要不吃饭不睡觉才可以实现，这真是不可能的。其实这总结到一句话就是自己的实力还没达到随心所用的地步，特别是一些需要定制的动画交互方面的。这些效果别人都都能做出来了，但是自己要做同样的效果，需要绞尽脑汁。</p>
-<p>鸟厂的Android人才真的很少，有Android技术三年以上的人全公司估计少之又少。鸟厂其实人才不少，但是留不住，很多人呆了一年就离开，真是件令人悲伤的事，可是互联网行业还真是大部分公司都是这样子。有时候人真需要沟通交互才可以进步 更快。我已经很久没有试过这个感觉了。那种进步很快，跟大家交流碰出火花的情形少之又少，还是两年前刚来鸟厂的时候有这个感觉。有时候觉得挺孤独的 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ji-zhu.html">技术</a>
+<p>鸟厂的Android人才真的很少，有Android技术三年以上的人全公司估计少之又少。鸟厂其实人才不少，但是留不住，很多人呆了一年就离开，真是件令人悲伤的事，可是互联网行业还真是大部分公司都是这样子。有时候人真需要沟通交互才可以进步 更快。我已经很久没有试过这个感觉了。那种进步很快，跟大家交流碰出火花的情形少之又少，还是两年前刚来鸟厂的时候有这个感觉。有时候觉得挺孤独的 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/kun-huo-android.html">困惑，Android </a>
+    <a href="https://szuwest.github.io/tag/kun-huo-android.html">困惑，Android </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html">Read More</a>
+<p><a href="https://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/dang-zuo-liao-yi-duan-shi-jian-de-androidde-kun-huo.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -229,20 +229,20 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html"><h3 class="article-title">关于Pelican上Disqus无法加载的问题</h3></a>
+                <a href="https://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html"><h3 class="article-title">关于Pelican上Disqus无法加载的问题</h3></a>
 <h6 class="subheader" title="2014-12-01T00:00:00">2014-12-01
 </h6>
 
 
 <p>最近发现我的博客Disqus加载不出来，以前是好好的。后来根据它的提示去找问题，找了半天也找不出问题所在。然后网上search，发现了一篇跟我类似的问题文章<a href="http://whilgeek.github.io/posts/2014/07/we-were-unable-to-load-disqus/">这里</a>。我的配置文件里确实有 <code>RELATIVE_URLS = True</code>,把它设置为False也没用。检查了N遍shortname，到Disqus设置里各种试各种检查，都还是没有解决。</p>
 <p>没有办法，我只好在Disqus上重新创建一个新的site，然后回来配置相应的改了。run起来了，可以了。神了。</p>
-<p>不过经过这一次的折腾，我还学到不少别的东西。前段不太懂的人，真是悲剧。以后在这方面好好补补</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/sheng-huo.html">生活</a>
+<p>不过经过这一次的折腾，我还学到不少别的东西。前段不太懂的人，真是悲剧。以后在这方面好好补补</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/sheng-huo.html">生活</a>
 
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html">Read More</a>
+<p><a href="https://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/guan-yu-pelicanshang-disquswu-fa-jia-zai-de-wen-ti.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -250,7 +250,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html"><h3 class="article-title">快速滚动条(FastScroll)的定制</h3></a>
+                <a href="https://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html"><h3 class="article-title">快速滚动条(FastScroll)的定制</h3></a>
 <h6 class="subheader" title="2014-11-27T00:00:00">2014-11-27
 </h6>
 
@@ -260,15 +260,15 @@
 <p>经过我反复看他们的代码和资源文件，终于找到了相关的类--ExpandableListView，这个跟系统的ExpandableListView不是同一个，只是单纯的名字相同而已。因为代码混淆过了，我花了很大力气虽然看懂了个大概，却是，没办法完全搞清一些细节性的东西。原理大致是这样：他们并没有去定制FastScroll，而是自己生成了一个叫ScrollPanel的View，然后把这个View画上去，并且对这个View设置了OnTouchListener，对用户的触摸事件处理，拖动的时候不断去滚动ListView，实现类型FastScroll的效果。</p>
 <p>由于它们的源代码混淆了很多细节看不了，我只好去参考系统的FastScroll源代码。虽然大致看懂了，但是自己去实现的时候，还是达不到想要的效果。因为时间和精力问题，我现在只能暂时放一放，之后有时间再研究，实在不行我心里也有其他曲线救国的方案可以试试。</p>
 <p>今天发现了一个类型功能的库，很不错。记录一下.</p>
-<p><a href="https://github.com/szuwest/quickscroll">QuickScroll</a></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+<p><a href="https://github.com/szuwest/quickscroll">QuickScroll</a></p><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/android-view-scroll.html">Android View Scroll </a>
+    <a href="https://szuwest.github.io/tag/android-view-scroll.html">Android View Scroll </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html">Read More</a>
+<p><a href="https://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -276,7 +276,7 @@
 
 
             <article>
-                <a href="http://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html"><h3 class="article-title">自定义DateView控件</h3></a>
+                <a href="https://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html"><h3 class="article-title">自定义DateView控件</h3></a>
 <h6 class="subheader" title="2014-11-21T00:00:00">2014-11-21
 </h6>
 
@@ -301,15 +301,15 @@
     <span class="p">}</span>
 
     <span class="n">public</span> <span class="nf">DateView</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">super ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/android.html">Android</a>
+        <span class="n">super ...</span></pre></div><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/android-zi-ding-yi-kong-jian-ri-qi-kong-jian.html">Android 自定义控件 日期控件 </a>
+    <a href="https://szuwest.github.io/tag/android-zi-ding-yi-kong-jian-ri-qi-kong-jian.html">Android 自定义控件 日期控件 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html">Read More</a>
+<p><a href="https://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -318,9 +318,9 @@
 <h6 class="subheader">Page 6 of 7</h6>
 
 <p>
-            <a href="http://szuwest.github.io/author/west5.html">&laquo; Prev</a>
+            <a href="https://szuwest.github.io/author/west5.html">&laquo; Prev</a>
 
-        <a href="http://szuwest.github.io/author/west7.html">Next &raquo;</a>
+        <a href="https://szuwest.github.io/author/west7.html">Next &raquo;</a>
 </p>
 </div>
 
@@ -331,8 +331,8 @@
     <aside class="large-3 columns">
         <h5 class="sidebar-title">Site</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
-            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+            <li><a href="https://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="https://szuwest.github.io/tags.html">Tags</a>
 
 
         </ul>
@@ -340,28 +340,26 @@
 		
         <h5 class="sidebar-title">Categories</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
-            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
-            <li><a href="http://szuwest.github.io/category/chan-pin.html">产品</a></li>
-            <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
-            <li><a href="http://szuwest.github.io/category/ji-zhu.html">技术</a></li>
-            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
-            <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
-            <li><a href="http://szuwest.github.io/category/zong-jie.html">总结</a></li>
+            <li><a href="https://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="https://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
+            <li><a href="https://szuwest.github.io/category/chan-pin.html">产品</a></li>
+            <li><a href="https://szuwest.github.io/category/ios.html">iOS</a></li>
+            <li><a href="https://szuwest.github.io/category/ji-zhu.html">技术</a></li>
+            <li><a href="https://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="https://szuwest.github.io/category/suan-fa.html">算法</a></li>
+            <li><a href="https://szuwest.github.io/category/zong-jie.html">总结</a></li>
    
         </ul>
 
         <h5 class="sidebar-title">Links</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
-            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
-            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+            <li><a href="https://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="https://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
         </ul>
 		
         <h5 class="sidebar-title">Social</h5>
         <ul class="side-nav">
             <li><a href="https://github.com/szuwest">Github</a></li>
-            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
             <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
             <li><a href="http://weibo.com/szuwest">微博</a></li>
         </ul>

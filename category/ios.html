@@ -6,11 +6,11 @@
 
     <title>West's blog - iOS</title>
 
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/normalize.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/foundation.min.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/style.css" />
-    <link rel="stylesheet" href="http://szuwest.github.io/theme/css/pygments.css" />	
-    <script src="http://szuwest.github.io/theme/js/custom.modernizr.js"></script>
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/normalize.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/style.css" />
+    <link rel="stylesheet" href="https://szuwest.github.io/theme/css/pygments.css" />	
+    <script src="https://szuwest.github.io/theme/js/custom.modernizr.js"></script>
 
     <!-- So Firefox can bookmark->"abo this site" -->
 
@@ -23,7 +23,7 @@
 <div class="top-bar">
 <div class="row">
     <div class="large-9 large-centered columns">
-	    <h1><a href="http://szuwest.github.io">West's blog</a></h1>
+	    <h1><a href="https://szuwest.github.io">West's blog</a></h1>
     </div>
 </div>
 </div>
@@ -49,7 +49,7 @@
         
 
             <article>
-                <a href="http://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html"><h3 class="article-title">上传应用到苹果一直卡住验证中（authentication with the app store）问题解决</h3></a>
+                <a href="https://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html"><h3 class="article-title">上传应用到苹果一直卡住验证中（authentication with the app store）问题解决</h3></a>
 <h6 class="subheader" title="2020-02-08T00:00:00">2020-02-08
 </h6>
 
@@ -107,15 +107,15 @@ CONCLUTION:
 <p>我要补充一点是这个<strong>com.apple.amp.itmstransporter</strong>文件下原来的只有2.8兆左右，后面重新下载下来的68左右，相差很大，开始我没翻墙来下载，下载很慢，下载3.9兆后就不动了。命令行那里也没有打印出什么来。后来我停掉，然后打开梯子，然后重新运行命令，就下载很快了，命令行也打印出来很多信息，完成后那个缓存文件夹大约68M。然后最好关掉梯子，重新打开transporter来上传，这样就能正常上传了。</p>
 <hr />
 <p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
-<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/yan-zheng-zhong-yi-zhi-qia-zhu.html">验证中 一直卡住 </a>
+    <a href="https://szuwest.github.io/tag/yan-zheng-zhong-yi-zhi-qia-zhu.html">验证中 一直卡住 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html#disqus_thread">comments</a></p>            </article>
+<p><a href="https://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html#disqus_thread">comments</a></p>            </article>
 
 
                 <hr  class="gradient"/>
@@ -125,7 +125,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html"><h3 class="article-title">iOS后台下载和断点续传</h3></a>
+                <a href="https://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html"><h3 class="article-title">iOS后台下载和断点续传</h3></a>
 <h6 class="subheader" title="2016-12-08T00:00:00">2016-12-08
 </h6>
 
@@ -143,15 +143,15 @@ CONCLUTION:
 <p>ASIHTTPRequest方式的下载不错，速度很快，也能很好的断点续传，但是跟Android的还是慢了一点，不过我觉得这可能是系统不同的原因。ASIHTTPRequest还有一个比较致命的弱点，就是不能后台下载，这对于下载大文件来说是必须的。在iOS平台要做后台下载，最好的方式还是使用NSURLSession。</p>
 <p>所以我决定好好研究一下NSURLSession，并且改用这种方式。</p>
 <h3>NSURLSession后台下载</h3>
-<p>实际上NSURLSession的后台下载真的很强大，苹果真做了件很好的事。当你创建一个后台下载任务的时候，实际上你就把这个下载交给系统来接管了。所以即使你把APP杀掉 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>实际上NSURLSession的后台下载真的很强大，苹果真做了件很好的事。当你创建一个后台下载任务的时候，实际上你就把这个下载交给系统来接管了。所以即使你把APP杀掉 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/nsurlsession-asihttprequest-hou-tai-xia-zai.html">NSURLSession ASIHTTPRequest 后台下载 </a>
+    <a href="https://szuwest.github.io/tag/nsurlsession-asihttprequest-hou-tai-xia-zai.html">NSURLSession ASIHTTPRequest 后台下载 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html">Read More</a>
+<p><a href="https://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -159,7 +159,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html"><h3 class="article-title">iOS直接上传系统照片和视频（ALAsset）</h3></a>
+                <a href="https://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html"><h3 class="article-title">iOS直接上传系统照片和视频（ALAsset）</h3></a>
 <h6 class="subheader" title="2016-12-01T00:00:00">2016-12-01
 </h6>
 
@@ -169,15 +169,15 @@ CONCLUTION:
 <p>这个问题一直在我心头，卡了我很久，之前我有网上找解决方法，没有找到，很多都是说将ALAsset导出文件到沙盒的事。我自己也有想过要怎么解决。我想过从ALAsset中读取一段一段的NSData数据，然后分别将这些数据上传。这样也许是可以的，但貌似需要服务器那边能将这些包组合起来。另外客户端这些做起来也挺复杂。还有一种方法是我不使用AFN库，自己直接用NSURLConnection来写，跟服务器建立连接后不断的从ALAsset中读取数据写入跟服务器建立的连接。这个是参考Java的写法。可是我又不知从何动手。并且之前都很忙，没有时间想这么多。</p>
 <p>最近我比较闲了，我想正好有时间来解决这个问题。这是我心中的一块石头，我要把它拿掉。</p>
 <p>这次我直接在github上找，说不定能找到一些有用的代码。果真让我找到了 <a href="https://github.com/formal-method/FMAssetStream">FMAssetStream</a>这个库,这个库的做法很简单，定义了一个子类来扩展<strong>NSInputStream</strong>，重载了一个最重要的方法 :</p>
-<div class="highlight"><pre><span class="o">-</span> <span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="n">read ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<div class="highlight"><pre><span class="o">-</span> <span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="n">read ...</span></pre></div><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/shang-chuan-alasset-nsinputstream.html">上传 ALAsset NSInputStream </a>
+    <a href="https://szuwest.github.io/tag/shang-chuan-alasset-nsinputstream.html">上传 ALAsset NSInputStream </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html">Read More</a>
+<p><a href="https://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ioszhi-jie-shang-chuan-xi-tong-zhao-pian-he-shi-pin-alasset.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -185,7 +185,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html"><h3 class="article-title">iOS应用2017年强制应用HTTPS问题</h3></a>
+                <a href="https://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html"><h3 class="article-title">iOS应用2017年强制应用HTTPS问题</h3></a>
 <h6 class="subheader" title="2016-10-18T00:00:00">2016-10-18
 </h6>
 
@@ -202,15 +202,15 @@ CONCLUTION:
 <p>2是增加域名白名单（NSExceptionDomains），访问白名单之内的网站请求可以是HTTP请求。这种做法也要说明理由，苹果认为你的理由不充分仍然有可能拒绝通过你的APP</p>
 </li>
 <li>
-<p>当然还有一种方案，是在iOS10系统新加的属性NSAllowsArbitraryLoadsInWebContent，专门针对浏览器访问的开关。设想一个浏览器应用，用户可以输入任务网址，这个网址能不能支持HTTPS协议，没人知道。所以就有这么一个开关，打开之后，浏览器的访问就不受HTTPS限制。但是不好的消息是，这个浏览器必须是WKWebView，而不能是UIWebView(截止2016.10.18前 ...</p></li></ul><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>当然还有一种方案，是在iOS10系统新加的属性NSAllowsArbitraryLoadsInWebContent，专门针对浏览器访问的开关。设想一个浏览器应用，用户可以输入任务网址，这个网址能不能支持HTTPS协议，没人知道。所以就有这么一个开关，打开之后，浏览器的访问就不受HTTPS限制。但是不好的消息是，这个浏览器必须是WKWebView，而不能是UIWebView(截止2016.10.18前 ...</p></li></ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/https-2017-ios10.html">HTTPS 2017 iOS10 </a>
+    <a href="https://szuwest.github.io/tag/https-2017-ios10.html">HTTPS 2017 iOS10 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html">Read More</a>
+<p><a href="https://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/iosying-yong-2017nian-qiang-zhi-ying-yong-httpswen-ti.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -218,7 +218,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html"><h3 class="article-title">iOS上传文件支持断点续传</h3></a>
+                <a href="https://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html"><h3 class="article-title">iOS上传文件支持断点续传</h3></a>
 <h6 class="subheader" title="2016-09-30T00:00:00">2016-09-30
 </h6>
 
@@ -233,15 +233,15 @@ CONCLUTION:
 </pre></div>
 
 
-<p>只要对NSInputStream指定它的NSStreamFileCurrentOffsetKey的值为你想要的offset ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>只要对NSInputStream指定它的NSStreamFileCurrentOffsetKey的值为你想要的offset ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/shang-chuan-duan-dian-xu-chuan-nsinputstream.html">上传 断点续传 NSInputStream </a>
+    <a href="https://szuwest.github.io/tag/shang-chuan-duan-dian-xu-chuan-nsinputstream.html">上传 断点续传 NSInputStream </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html">Read More</a>
+<p><a href="https://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/iosshang-chuan-wen-jian-zhi-chi-duan-dian-xu-chuan.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -249,7 +249,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html"><h3 class="article-title">升级Xcode8后Jenkins打包问题</h3></a>
+                <a href="https://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html"><h3 class="article-title">升级Xcode8后Jenkins打包问题</h3></a>
 <h6 class="subheader" title="2016-09-29T00:00:00">2016-09-29
 </h6>
 
@@ -261,15 +261,15 @@ CONCLUTION:
 <h3>解决方法</h3>
 <p>先说不能打包的原因，主要是签名方式冲突。Jenkins的配置是指定签名，而我们Xcode8采用的是自动签名。我们开发时采用自动签名，而且打企业版安装采用的签名文件跟我们开发时的签名文件时不一样的。所以Jenkins打包肯定得采用手动签名方式。</p>
 <p>报错如下：</p>
-<div class="highlight"><pre><span class="n">xxxxx</span> <span class="n">has</span> <span class="n">conflicting</span> <span class="n">provisioning</span> <span class="n">settings</span><span class="p">.</span> <span class="n">xxxxx</span> <span class="n">is</span> <span class="n">automatically</span> <span class="kt">signed</span><span class="p">,</span> <span class="n">but</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">xxxxxxxxxxxxx</span> <span class="n">has</span> <span class="n">been</span> <span class="n">manually</span> <span class="n">specified ...</span></pre></div><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<div class="highlight"><pre><span class="n">xxxxx</span> <span class="n">has</span> <span class="n">conflicting</span> <span class="n">provisioning</span> <span class="n">settings</span><span class="p">.</span> <span class="n">xxxxx</span> <span class="n">is</span> <span class="n">automatically</span> <span class="kt">signed</span><span class="p">,</span> <span class="n">but</span> <span class="n">code</span> <span class="n">signing</span> <span class="n">identity</span> <span class="n">xxxxxxxxxxxxx</span> <span class="n">has</span> <span class="n">been</span> <span class="n">manually</span> <span class="n">specified ...</span></pre></div><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10-framework.html">Jenkins Xcode8 iOS10 framework </a>
+    <a href="https://szuwest.github.io/tag/jenkins-xcode8-ios10-framework.html">Jenkins Xcode8 iOS10 framework </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html">Read More</a>
+<p><a href="https://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/sheng-ji-xcode8hou-jenkinsda-bao-wen-ti.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -277,7 +277,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html"><h3 class="article-title">升级Xcode8后需要注意的事项</h3></a>
+                <a href="https://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html"><h3 class="article-title">升级Xcode8后需要注意的事项</h3></a>
 <h6 class="subheader" title="2016-09-24T00:00:00">2016-09-24
 </h6>
 
@@ -287,15 +287,15 @@ CONCLUTION:
 <h3>升级第一坑，注释代码快捷键失效</h3>
 <p>当你经过漫长的等待Xcode下载和安装之后，满心欢喜打开Xcode，发现字体变了，貌似看上去还不错（有同事跟我说这很丑），然后开始写代码，发现可以高亮显示当前编辑行，不错嘛，写着写着突然想注释掉一行代码，发现command+/怎么按都没反应，十分恼火。这什么破玩意儿，这么明显的bug都有。然后网上搜解决方案，确实有人也遇到这个问题。貌似需要跑一个命令什么的。实际上不用那么费劲，重启一下Xcode就好了。</p>
 <h3>升级第二坑，iOS的字体变宽了</h3>
-<p>当我Run一下程序想看看我们的程序在iOS10上有没有问题，启动之后打开引导页，发现最底下的两个按钮字显示不全了：注册账号 变成了 注···号，登录账号变成了 登···号，这是什么鬼？我没有动过这块的任何代码，甚至连这个页面的xib也没有打开过。后来才知道，运来是iOS的字体变宽了，如果你一个按钮在iOS9原来刚好放下4个字，然后iOS10它就装不下了 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>当我Run一下程序想看看我们的程序在iOS10上有没有问题，启动之后打开引导页，发现最底下的两个按钮字显示不全了：注册账号 变成了 注···号，登录账号变成了 登···号，这是什么鬼？我没有动过这块的任何代码，甚至连这个页面的xib也没有打开过。后来才知道，运来是iOS的字体变宽了，如果你一个按钮在iOS9原来刚好放下4个字，然后iOS10它就装不下了 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
+    <a href="https://szuwest.github.io/tag/jenkins-xcode8-ios10.html">Jenkins Xcode8 iOS10 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html">Read More</a>
+<p><a href="https://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/sheng-ji-xcode8hou-xu-yao-zhu-yi-de-shi-xiang.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -303,7 +303,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html"><h3 class="article-title">iOS系统相册上传不得不说的那些事儿</h3></a>
+                <a href="https://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html"><h3 class="article-title">iOS系统相册上传不得不说的那些事儿</h3></a>
 <h6 class="subheader" title="2016-05-02T00:00:00">2016-05-02
 </h6>
 
@@ -314,15 +314,15 @@ CONCLUTION:
 <p>首先说一下iOS相册的问题。iOS的相片都是存放在系统库ALAssetLibrary中，开发者从这个库中读取到的是一个个ALAsset对象，而不是一个文件系统的File文件。当然iOS8系统新增了Photo Framework,但是只是增强了相关功能，还是不能直接取到File。 这个Android平台或者PC平台很不一样的。</p>
 <p>我们知道一般的上传文件流程就是，将本地的文件转换为二进制数据或流，通过HTTP协议或者socket协议，本地和服务器之间建立一个连接，本地将流写入这个连接，服务器那边接收这个流，并将接收到的流写入文件，直接客户端那边将整个文件传完，传输就结束了。上传文件这个过程一般会被封装库，使用者只需传入必要的参数就可以了。我以前做自动备份相册的时候，就是使用了别人提供的静态库，它上传文件API就是需要传一个文件的本地路径。这就麻烦了，因为我们的应用从iOS系统库读取到的对象是ALAsset, 所以我需要先将ALAsset从系统中导出，写入我们应用的沙盒中，然后再把它在沙盒中路径传给上传库进行上传。</p>
 <h2>导出ALAsset</h2>
-<p>据我所知，iOS系统cocoa层网络传输基本上只有<strong>NSURLConnection</strong>和基于<strong>NSURLSession</strong>一套API。它们提供的接口基本上都是基于NSData，或者文件路径或者NSInputStream。网上有很多库或者框架都是基于这两套API来做上传，我们一般也使用第三方的框架来减少工作量 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>据我所知，iOS系统cocoa层网络传输基本上只有<strong>NSURLConnection</strong>和基于<strong>NSURLSession</strong>一套API。它们提供的接口基本上都是基于NSData，或者文件路径或者NSInputStream。网上有很多库或者框架都是基于这两套API来做上传，我们一般也使用第三方的框架来减少工作量 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/ioswang-luo-bian-cheng-xi-tong-xiang-ce-shang-chuan-dao-chu-shi-pin-nsurlconnection-nsurlsession-da-wen-jian-shang-chuan-hou-tai-shang-chuan.html">iOS网络编程 系统相册上传 导出视频 NSURLConnection NSURLSession 大文件上传 后台上传 </a>
+    <a href="https://szuwest.github.io/tag/ioswang-luo-bian-cheng-xi-tong-xiang-ce-shang-chuan-dao-chu-shi-pin-nsurlconnection-nsurlsession-da-wen-jian-shang-chuan-hou-tai-shang-chuan.html">iOS网络编程 系统相册上传 导出视频 NSURLConnection NSURLSession 大文件上传 后台上传 </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html">Read More</a>
+<p><a href="https://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/iosxi-tong-xiang-ce-shang-chuan-bu-de-bu-shuo-de-na-xie-shi-er.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -330,7 +330,7 @@ CONCLUTION:
 
 
             <article>
-                <a href="http://szuwest.github.io/swiftchu-tan.html"><h3 class="article-title">swift初探</h3></a>
+                <a href="https://szuwest.github.io/swiftchu-tan.html"><h3 class="article-title">swift初探</h3></a>
 <h6 class="subheader" title="2014-06-22T00:00:00">2014-06-22
 </h6>
 
@@ -338,15 +338,15 @@ CONCLUTION:
 <h1>swift初探</h1>
 <p>自从swift公布以来，火得不得了。如果你是开发者，还没有看过swift，那还真是out了（不过话说回来，并不是没有看过swift就不是好开发者。好的程序员跟看没看过某种语言没有什么关系）。我从公布以来就断断续续的看，一直在看官方的英文文档。偶尔也看看别人写的或者翻译的文章。现在虽然没有把官方文档看完，但是也看了大部分，可以写写感想心得。</p>
 <p>简单来说，swift是集合了许多脚本语言的特性而又不像其他一般的脚本语言的苹果新生代开发语言。swift集合了很多语言的特性，如ruby，object-c，c++，c#等，其中长得最像的应该是ruby。咋看之下swift就想ruby一样的脚本语言。完全面向对象，类型定义，closure特性，函数式编程等等。不过据官方文档介绍，swift语言不是解释型语言，它最终会编译成二进制代码，并且它的运行效率比object-c要快。说比object-C要快我是比较怀疑的，而外国开发者进行了测试，得出结论是如果不强加一些编译优化的话，是快不过objC的。</p>
-<p>如果对ruby，Object-C，c++语言熟悉的话，学起swift来应该没有什么难度。但是它还有很多语法特性是别的语言没有的，并且有些在我看来有点奇怪的特性。不过这是都没有什么，说明自己见识少，熟悉了就好了。首先一个比较特别的是，你不在需要在每行代码结束时加上分号，直接回车换行就行 ...</p><p class="subheader">Category: <a href="http://szuwest.github.io/category/ios.html">iOS</a>
+<p>如果对ruby，Object-C，c++语言熟悉的话，学起swift来应该没有什么难度。但是它还有很多语法特性是别的语言没有的，并且有些在我看来有点奇怪的特性。不过这是都没有什么，说明自己见识少，熟悉了就好了。首先一个比较特别的是，你不在需要在每行代码结束时加上分号，直接回车换行就行 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
 
     Tagged: 
-    <a href="http://szuwest.github.io/tag/swift.html">swift </a>
+    <a href="https://szuwest.github.io/tag/swift.html">swift </a>
 </p>
 
 
 
-<p><a href="http://szuwest.github.io/swiftchu-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="http://szuwest.github.io/swiftchu-tan.html">Read More</a>
+<p><a href="https://szuwest.github.io/swiftchu-tan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/swiftchu-tan.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
@@ -366,8 +366,8 @@ CONCLUTION:
     <aside class="large-3 columns">
         <h5 class="sidebar-title">Site</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/archives.html">Archives</a>
-            <li><a href="http://szuwest.github.io/tags.html">Tags</a>
+            <li><a href="https://szuwest.github.io/archives.html">Archives</a>
+            <li><a href="https://szuwest.github.io/tags.html">Tags</a>
 
 
         </ul>
@@ -375,28 +375,26 @@ CONCLUTION:
 		
         <h5 class="sidebar-title">Categories</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/category/android.html">Android</a></li>
-            <li><a href="http://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
-            <li><a href="http://szuwest.github.io/category/chan-pin.html">产品</a></li>
-            <li><a href="http://szuwest.github.io/category/ios.html">iOS</a></li>
-            <li><a href="http://szuwest.github.io/category/ji-zhu.html">技术</a></li>
-            <li><a href="http://szuwest.github.io/category/sheng-huo.html">生活</a></li>
-            <li><a href="http://szuwest.github.io/category/suan-fa.html">算法</a></li>
-            <li><a href="http://szuwest.github.io/category/zong-jie.html">总结</a></li>
+            <li><a href="https://szuwest.github.io/category/android.html">Android</a></li>
+            <li><a href="https://szuwest.github.io/category/bian-cheng-jia-gou.html">编程架构</a></li>
+            <li><a href="https://szuwest.github.io/category/chan-pin.html">产品</a></li>
+            <li><a href="https://szuwest.github.io/category/ios.html">iOS</a></li>
+            <li><a href="https://szuwest.github.io/category/ji-zhu.html">技术</a></li>
+            <li><a href="https://szuwest.github.io/category/sheng-huo.html">生活</a></li>
+            <li><a href="https://szuwest.github.io/category/suan-fa.html">算法</a></li>
+            <li><a href="https://szuwest.github.io/category/zong-jie.html">总结</a></li>
    
         </ul>
 
         <h5 class="sidebar-title">Links</h5>
         <ul class="side-nav">
-            <li><a href="http://szuwest.github.io/pages/about.html">About</a></li>
-            <li><a href="http://szhanfeng203.blog.163.com/">我的生活博客</a></li>
-            <li><a href="http://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
+            <li><a href="https://szuwest.github.io/pages/about.html">About</a></li>
+            <li><a href="https://szuwest.github.io/feeds/all.atom.xml">RSS</a></li>
         </ul>
 		
         <h5 class="sidebar-title">Social</h5>
         <ul class="side-nav">
             <li><a href="https://github.com/szuwest">Github</a></li>
-            <li><a href="https://twitter.com/szuwest">Twitter</a></li>
             <li><a href="https://www.facebook.com/profile.php?id=1084651913">Facebook</a></li>
             <li><a href="http://weibo.com/szuwest">微博</a></li>
         </ul>
