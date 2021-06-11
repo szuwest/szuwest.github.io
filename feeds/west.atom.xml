@@ -109,7 +109,10 @@
 &lt;li&gt;红黑树最差情况是怎样的?&lt;/li&gt;
 &lt;li&gt;基于2-3树和基于2-3-4树模型实现的红黑树有什么区别?&lt;/li&gt;
 &lt;li&gt;HashMap里的红黑树数据结构什么搞那么复杂?(包含双向链表， 空间冗余)&lt;/li&gt;
-&lt;/ul&gt;</summary><category term="HashMap 红黑树"></category></entry><entry><title>Flutter APP加入信鸽推送通知方案</title><link href="https://szuwest.github.io/flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html" rel="alternate"></link><updated>2021-02-03T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2021-02-03:flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html</id><summary type="html">&lt;h1&gt;Flutter APP加入信鸽推送通知方案&lt;/h1&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+&lt;img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /&gt;&lt;/p&gt;</summary><category term="HashMap 红黑树"></category></entry><entry><title>Flutter APP加入信鸽推送通知方案</title><link href="https://szuwest.github.io/flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html" rel="alternate"></link><updated>2021-02-03T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2021-02-03:flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html</id><summary type="html">&lt;h1&gt;Flutter APP加入信鸽推送通知方案&lt;/h1&gt;
 &lt;p&gt;最近我们团队又采用Flutter开发一款新APP。而且最近由于信鸽（现在又叫腾讯云移动推送）修改按量收费，我们决定在新APP里加入信鸽SDK来做推送通知功能。&lt;/p&gt;
 &lt;p&gt;我们之前主要主APP里已经使用了信鸽SDK来做推送通知功能，但这次是第一次在Flutter开发的APP上加入推送通知功能。当我们完全加入该功能之后，我觉得可以将这个技术方案分享一下。&lt;/p&gt;
 &lt;p&gt;其实加入信鸽SDK的方式跟原生APP是一样的，只是在处理推送通知页面跳转方式不一样而已。&lt;/p&gt;
@@ -280,7 +283,10 @@ Flutter APP接入信鸽跟原生APP是一样的，问题就在怎么将path传�
 
 
 &lt;p&gt;我认为generateRoute里的处理非常奇妙。设想有一个页面是一定要传一个id才可以正常浏览的。一般我们都会把这个页面的构造函数定义一个参数，由外部初始化的时候传入。如果将这个页面也支持注册到路由表routes里，那么你要获取传递过去的参数就有点麻烦了。你可能需要在该页面里面通过 &lt;strong&gt;var args=ModalRoute.of(context).settings.arguments&lt;/strong&gt;方式来获取。这样不直观。&lt;/p&gt;
-&lt;p&gt;所以我认为这样处理Flutter的跳转是比较完美的方式。&lt;/p&gt;</summary><category term="Flutter 推送通知 信鸽"></category></entry><entry><title>我的35岁</title><link href="https://szuwest.github.io/wo-de-35sui.html" rel="alternate"></link><updated>2020-11-29T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2020-11-29:wo-de-35sui.html</id><summary type="html">&lt;h1&gt;我的35岁&lt;/h1&gt;
+&lt;p&gt;所以我认为这样处理Flutter的跳转是比较完美的方式。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+&lt;img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /&gt;&lt;/p&gt;</summary><category term="Flutter 推送通知 信鸽"></category></entry><entry><title>我的35岁</title><link href="https://szuwest.github.io/wo-de-35sui.html" rel="alternate"></link><updated>2020-11-29T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2020-11-29:wo-de-35sui.html</id><summary type="html">&lt;h1&gt;我的35岁&lt;/h1&gt;
 &lt;p&gt;35岁是一道坎，因为很多文章说程序员过了35岁就很容易失业了。&lt;/p&gt;
 &lt;p&gt;35岁真的是人生的一道坎，不只事业，其他方方面面也是。&lt;/p&gt;
 &lt;p&gt;有个词语叫&lt;strong&gt;三十而立&lt;/strong&gt;，大家都说30岁是人生的一道坎，一个分界线。其实我认为35才是，特别是对于现代的我们。&lt;/p&gt;
