@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>West's blog</title><link>https://szuwest.github.io/</link><description></description><atom:link href="https://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Fri, 11 Jun 2021 00:00:00 +0800</lastBuildDate><item><title>HashMap与红黑树学习总结</title><link>https://szuwest.github.io/hashmap-redblacktree.html</link><description>&lt;h1&gt;HashMap与红黑树学习总结&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>兄弟成长于天蓝时代</title><link>https://szuwest.github.io/</link><description></description><atom:link href="https://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Fri, 11 Jun 2021 00:00:00 +0800</lastBuildDate><item><title>HashMap与红黑树学习总结</title><link>https://szuwest.github.io/hashmap-redblacktree.html</link><description>&lt;h1&gt;HashMap与红黑树学习总结&lt;/h1&gt;
 &lt;h2&gt;HashMap解读（JDK1.8）&lt;/h2&gt;
 &lt;h3&gt;带着问题去看代码：&lt;/h3&gt;
 &lt;ul&gt;
