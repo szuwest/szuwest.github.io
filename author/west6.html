@@ -50,6 +50,30 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html"><h3 class="article-title">再谈iOS开发和Android开发之间的切换</h3></a>
+<h6 class="subheader" title="2015-07-18T00:00:00">2015-07-18
+</h6>
+
+
+<h1>再谈iOS开发和Android开发之间的切换</h1>
+<p>由于项目变化的原因，Android开发增加了很多人手，而iOS开发团队又被调走，只留下了两个人。所以iOS开发负责人找我谈话希望我过去帮忙做iOS。出于对项目整体进度而言，我去帮忙iOS开发是最好的。我可以在iOS和Android开发之间随意切换，而Android开发确实有点多人，iOS人手严重不足，招人很难，其他人转iOS开发也需要时间，所以我就答应了。</p>
+<p>说起我的Android和开发经历，真是很多感概。从我决定离开第一家做芯片的公司开始，我就想进入iOS开发或者Android开发。其实我最开始是想做iOS开发的，但是当时很难找，我不但没有经验，还是从一家芯片公司刚跳出来（虽然我是软件工程专业出身，但是一开始却进入了芯片行业，说多了都是泪）。最终一家小公司接受了我做Android开发，那时候是2011年初。但是做了大半年多的Android开发之后，公司发现Android很难赚钱，就想转做iOS开发，因为它的生态环境好。开始是我们老大去做，但是他搞了半天还没搞出个helloworld列子，所以就让我去做了。由于我大学的时候就学过Object-C，也接触Object-C开发，所以很快就上手了。再后来，苦于小公司技术进步慢，就跳槽来了现在的X公司。</p>
+<p>我是以Android技术面进入X公司的，但是进来之后，我的老大跟我说，你想做Android还是iOS开发，因为我本身也在做iOS开发，也像往这个方向，就选了iOS开发。那个时候，项目采用的方式全编码方式，没有用xib ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/android-ios.html">Android iOS </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/zai-tan-ioskai-fa-he-androidkai-fa-zhi-jian-de-qie-huan.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/androidtu-pian-huan-cun-he-xiang-guan-kai-yuan-xiang-mu.html"><h3 class="article-title">Android图片缓存和相关开源项目</h3></a>
 <h6 class="subheader" title="2015-05-16T00:00:00">2015-05-16
 </h6>
@@ -269,47 +293,6 @@
 
 
 <p><a href="https://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/kuai-su-gun-dong-tiao-fastscrollde-ding-zhi.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html"><h3 class="article-title">自定义DateView控件</h3></a>
-<h6 class="subheader" title="2014-11-21T00:00:00">2014-11-21
-</h6>
-
-
-<p>最近因为项目需要自定义一个日期控件，我花了一个多小时写了这个控件。虽然跟设计效果图还有点细微差别，但是这个可以慢慢修改。</p>
-<p><img alt="效果图1" src="http://image16-c.poco.cn/mypoco/myphoto/20141128/01/17538075320141128010028044.png" /> <img alt="效果图1" src="http://image16-c.poco.cn/mypoco/myphoto/20141128/01/17538075320141128010051063.png" /> </p>
-<div class="highlight"><pre>    <span class="n">public</span> <span class="n">class</span> <span class="n">DateView</span> <span class="n">extends</span> <span class="n">View</span> <span class="p">{</span>
-
-    <span class="n">private</span> <span class="k">static</span> <span class="n">final</span> <span class="kt">int</span> <span class="n">DAY_TEXT_SIZE</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>
-    <span class="n">private</span> <span class="k">static</span> <span class="n">final</span> <span class="kt">int</span> <span class="n">MONTH_TEXT_SIZE</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-
-    <span class="n">private</span> <span class="kt">int</span> <span class="n">mDay</span><span class="p">;</span>
-    <span class="n">private</span> <span class="kt">int</span> <span class="n">mMonth</span><span class="p">;</span>
-    <span class="n">private</span> <span class="kt">int</span> <span class="n">mYear</span><span class="p">;</span>
-
-    <span class="n">private</span> <span class="n">TextPaint</span> <span class="n">mDayPaint</span><span class="p">;</span>
-    <span class="n">private</span> <span class="n">TextPaint</span> <span class="n">mMonthPaint</span><span class="p">;</span>
-
-    <span class="n">public</span> <span class="nf">DateView</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">super</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
-        <span class="n">initView</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="n">public</span> <span class="nf">DateView</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">super ...</span></pre></div><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/android-zi-ding-yi-kong-jian-ri-qi-kong-jian.html">Android 自定义控件 日期控件 </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/zi-ding-yi-dateviewkong-jian.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

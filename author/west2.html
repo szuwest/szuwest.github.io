@@ -50,6 +50,53 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html"><h3 class="article-title">AOP在移动开发中的应用</h3></a>
+<h6 class="subheader" title="2020-01-21T00:00:00">2020-01-21
+</h6>
+
+
+<h1>AOP在移动开发中的应用</h1>
+<p>下面是我在我们团队上的技术分享内容，从PPT里摘抄出来的，所有很多都是个提纲摘要</p>
+<h2>AOP简介</h2>
+<ul>
+<li><strong>AOP，Aspect Oriented Programming，面向切面编程</strong></li>
+<li>面向切面编程是一种通过横切关注点（Cross-cutting Concerns）分离来增强代码模块性的方法，它能够在不修改业务主体代码的情况下，对它添加额外的行为。</li>
+<li>是对OOP的一种补充,是一种解耦的重要手段</li>
+</ul>
+<h3>AOP常用概念</h3>
+<ul>
+<li>Join point：程序执行期间的一个点,表示方法的执行</li>
+<li>Pointcut: 切入点实际上也是从所有的连接点(Join point)挑选自己感兴趣的连接点的过程</li>
+<li>Aspect: 程序横向切割成若干的面，即Aspect.每个面被称为切面</li>
+<li>Advice: 某个特定连接点的某个方面采取的行动。不同类型的建议包括“周围(Around)”，“之前(Before)”和“之后(After)”建议</li>
+</ul>
+<h2>AOP实现原理</h2>
+<ul>
+<li>
+<p>编译期间的静态织入，又称为编译时增强</p>
+</li>
+<li>
+<p>运行期间的动态代理，又称为运行时增强</p>
+</li>
+</ul>
+<h3>运行时AOP</h3>
+<ul>
+<li>程序运行时 ...</li></ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/aop-yi-dong-kai-fa.html">AOP 移动开发 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html"><h3 class="article-title">记一次WebView填坑过程--由换行符引发的血案</h3></a>
 <h6 class="subheader" title="2019-07-27T00:00:00">2019-07-27
 </h6>
@@ -313,34 +360,6 @@
 
 
 <p><a href="https://szuwest.github.io/flutterkuang-jia-yan-jiu-he-yu-rndui-bi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/flutterkuang-jia-yan-jiu-he-yu-rndui-bi.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html"><h3 class="article-title">Jenkins slave ReactNative项目自动打包</h3></a>
-<h6 class="subheader" title="2018-03-08T00:00:00">2018-03-08
-</h6>
-
-
-<h1>Jenkins slave ReactNative项目自动打包</h1>
-<p>这次我想在谈谈Jenkins自动打包的问题。针对react-native项目。
-一般情况下，我们都是在一台电脑上安装Jenkins，然后在该电脑上打开Jenkins网页进行打包配置。如果我们有很多项目，分布在不同的电脑，而且运行的系统也不同，这时候我们需要一个master来统一管理这些电脑，然后统一在一个网页上进行打包配置。这就是Jenkins的master-slave打包模式。这种模式跟单机模式稍有不同，这里主要讲怎么配置slave。</p>
-<h2>slave节点配置</h2>
-<ul>
-<li>首先slave上也同样要安装Jenkins和相关的打包所依赖的环境，一个都不能少。配置好之后，我们并不需要在本机上打开Jenkins网页来创建项目，配置项目等，而是要到主机上去配置。在去主机的Jenkins管理页面上新建节点之前，从机还需要做一些其他配置。</li>
-<li>打开远程登录。在系统设置--&gt;共享，然后选中远程登录，允许所有用户访问。</li>
-<li>记住本机IP地址。在系统设置--&gt;网络，可以看到当前网络的IP地址。为了以后方便，可以将IP地址设置为一个固定IP地址。不然当该电脑重启之后，IP地址可能会变，然后主机再按照之前配置的旧IP连接从机的时候，就连不上了。Mac电脑配置固定IP也有注意的地方。我第一次配置就是没有成功，上不了网。选择手动方式，然后填上一个没有被占用的IP地址，然后，子网掩码也要注意，如果跟服务器是跨网段访问的，需要注意255.255 ...</li></ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/reactnative-jenkins-ios.html">ReactNative Jenkins iOS </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

@@ -50,6 +50,34 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html"><h3 class="article-title">Jenkins slave ReactNative项目自动打包</h3></a>
+<h6 class="subheader" title="2018-03-08T00:00:00">2018-03-08
+</h6>
+
+
+<h1>Jenkins slave ReactNative项目自动打包</h1>
+<p>这次我想在谈谈Jenkins自动打包的问题。针对react-native项目。
+一般情况下，我们都是在一台电脑上安装Jenkins，然后在该电脑上打开Jenkins网页进行打包配置。如果我们有很多项目，分布在不同的电脑，而且运行的系统也不同，这时候我们需要一个master来统一管理这些电脑，然后统一在一个网页上进行打包配置。这就是Jenkins的master-slave打包模式。这种模式跟单机模式稍有不同，这里主要讲怎么配置slave。</p>
+<h2>slave节点配置</h2>
+<ul>
+<li>首先slave上也同样要安装Jenkins和相关的打包所依赖的环境，一个都不能少。配置好之后，我们并不需要在本机上打开Jenkins网页来创建项目，配置项目等，而是要到主机上去配置。在去主机的Jenkins管理页面上新建节点之前，从机还需要做一些其他配置。</li>
+<li>打开远程登录。在系统设置--&gt;共享，然后选中远程登录，允许所有用户访问。</li>
+<li>记住本机IP地址。在系统设置--&gt;网络，可以看到当前网络的IP地址。为了以后方便，可以将IP地址设置为一个固定IP地址。不然当该电脑重启之后，IP地址可能会变，然后主机再按照之前配置的旧IP连接从机的时候，就连不上了。Mac电脑配置固定IP也有注意的地方。我第一次配置就是没有成功，上不了网。选择手动方式，然后填上一个没有被占用的IP地址，然后，子网掩码也要注意，如果跟服务器是跨网段访问的，需要注意255.255 ...</li></ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/reactnative-jenkins-ios.html">ReactNative Jenkins iOS </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/jenkins-slave-reactnativexiang-mu-zi-dong-da-bao.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosxia.html"><h3 class="article-title">react-native框架源码学习(iOS)(下)</h3></a>
 <h6 class="subheader" title="2018-03-02T00:00:00">2018-03-02
 </h6>
@@ -339,40 +367,6 @@
 
 
 <p><a href="https://szuwest.github.io/sheng-wen-shi-bie-zhi-androidshou-ji-lu-yin-cai-ji-tan-tao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/sheng-wen-shi-bie-zhi-androidshou-ji-lu-yin-cai-ji-tan-tao.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html"><h3 class="article-title">适配iOS11与iPhone X需要注意事项</h3></a>
-<h6 class="subheader" title="2017-09-26T00:00:00">2017-09-26
-</h6>
-
-
-<h1>适配iOS11与iPhone X需要注意的事项</h1>
-<p>最近苹果发布了iOS11和iPhone X，我之前开发的一个应用界面出现了问题，然后需要适配。记录一下需要注意的事项。</p>
-<h2>适配iOS11</h2>
-<p>第一个问题是iOS11导航栏改变了。除了加入largeTitle这种特性以外，还改变了很多东西，可以说是完全重写了导航栏。我遇到的问题是导航栏返回按钮图片变得很大，巨丑无比，所以得看看什么原因。</p>
-<ul>
-<li>我看了下我导航栏的设置代码，还做了挺多事，而且做了很多hack。第一是通过 <strong>[UINavigationBar appearance].backIndicatorImage</strong> 和 <strong>[UINavigationBar appearance].backIndicatorTransitionMaskImage</strong>设置了返回按钮图片，还有 </li>
-</ul>
-<div class="highlight"><pre><span class="p">[[</span><span class="n">UIBarButtonItem</span> <span class="n">appearance</span><span class="p">]</span> <span class="n">setBackButtonTitlePositionAdjustment</span><span class="o">:</span><span class="n">UIOffsetMake</span><span class="p">(</span><span class="n">NSIntegerMin</span><span class="p">,</span> <span class="n">NSIntegerMin</span><span class="p">)</span> <span class="n">forBarMetrics</span><span class="o">:</span><span class="n">UIBarMetricsDefault</span><span class="p">];</span>
-</pre></div>
-
-
-<p>设置了把返回按钮右边的文字隐藏掉。还有通过hack 方式找到 _UINavigationBarBackIndicatorView把它的frame给改了。</p>
-<p>因为iOS11的导航栏变化很大，_UINavigationBarBackIndicatorView这个类找不到了，所以frame修改就失败了。然后因为我发现我设置的返回按钮的那种图片本来是很大，因为设置了frame把它缩小了。而现在frame已经设置不了，所以就按图片原本的大小显示了。最后解决办法就是把图片大小设置成符合导航栏的大小。</p>
-<p>图片大小是正常了，但是还是有别问题 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/ios11-iphonex.html">iOS11 iPhoneX </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

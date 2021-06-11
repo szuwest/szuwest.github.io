@@ -49,6 +49,139 @@
         
 
             <article>
+                <a href="https://szuwest.github.io/hashmap-redblacktree.html"><h3 class="article-title">HashMap与红黑树学习总结</h3></a>
+<h6 class="subheader" title="2021-06-11T00:00:00">2021-06-11
+</h6>
+
+
+<h1>HashMap与红黑树学习总结</h1>
+<h2>HashMap解读（JDK1.8）</h2>
+<h3>带着问题去看代码：</h3>
+<ul>
+<li>里面是怎么存储数据的(使用到的数据结构)?</li>
+<li>怎么计算哈希值，怎么解决哈希冲突?</li>
+<li>初始化容量是多少?不断加入数据时，如何进行扩容? 扩容后数据的存储位置是怎么样的 </li>
+<li>查找数据的时间复杂度 </li>
+<li>为什么要用红黑树?这里的红黑树实现有什么特点</li>
+</ul>
+<h3>HashMap特性</h3>
+<ul>
+<li>hash算法效率好，高低位异或</li>
+<li>数组⻓度是2的n次幂，采用&amp;运算来代替模运算</li>
+<li>采用modCount来实现failFast</li>
+<li>为LinkHashMap预留方法实现</li>
+<li>效率高，用链接来解决哈希冲突。插入数据时链接过长转为红黑树，删除数据时红黑树高度变低了转化为链表。</li>
+<li>数组扩容时链表会一分为二，红黑树也一样，红黑树甚至会转化为链表</li>
+<li>线程不安全。</li>
+<li>源代码里语句很简洁，经常一行代码包括N多赋值与判断，变量命名过 于简单</li>
+</ul>
+<p>Hashtable是线程安全的，它是经典的哈希表实现(数组+ 链表)，没有红黑树。同样是哈希表，HashMap跟Hashtable的实现天差地别，可以看出HashMap追求极致的性能，而Hashtable是线程安全的，有加锁操作，性能不会好，所以就采用了最简单的实现</p>
+<h2>红黑树</h2>
+<h3>红黑树的由来</h3>
+<p>要完全理解红黑树，必须把下面这些概念都完全搞清楚。</p>
+<blockquote>
+<p><strong>树》二叉树》二叉排序树》自平衡二叉树》2-3树和2-3-4树 (B树)》红黑树</strong></p>
+</blockquote>
+<ul>
+<li>树，只有一个父节点，有若干个子节点</li>
+<li>二叉排序树(Binary Sort Tree)，又称二叉查找树(Binary Search Tree)，又称 二叉搜索树。任意一个节点，它的值比它左孩子的值要大，比它右孩子的值要小</li>
+<li>平衡二叉树， 又叫AVL树（它的名字是它的发明者们的缩写），是一个二叉搜索树，它的任意一个节点的左右孩子高度差不超过1</li>
+</ul>
+<p><strong>B树</strong></p>
+<ul>
+<li>B树是一种平衡的多路搜索树</li>
+<li>1 个节点可以存储超过 2 个元素(多个元素从小到大排 列)、可以拥有超过 2 个子节点。一个节点存储的元素个 数是它的儿子个数减1</li>
+<li>拥有二叉搜索树的一些性质  </li>
+<li>绝对平衡:每个节点的所有子树高度一致 </li>
+<li>2-3树和2-3-4树是B树的特例，2-3树是最简单的B树</li>
+</ul>
+<p><strong>2-3树、2-3-4树与红黑树</strong></p>
+<ul>
+<li>2-3树、2-3-4树虽然能保持平衡，但是计算机不好实现</li>
+<li>红黑树(Red Black Tree) 是一种自平衡二叉查找树。红黑树是近似平衡 的二叉树，左右子树高差有可能大于 1，但是他的平均性能要好于AVL树</li>
+<li>红黑树对应的理论模型可以是2-3树，也可以是2-3-4树。普遍红黑树的实 现是采用2-3-4树模型</li>
+</ul>
+<p>因为2-3（2-3-4）树不好实现，所有把它当做一种模型，采用二叉树的方式（代码较好实现）来实现这个模型。这个就是红黑树。这就是红黑树的由来（<strong>当然这是我的猜测</strong>）。</p>
+<p>红黑树怎么实现这个模型的呢？2-3树一个节点能存两个值，二叉树只能存一个值，所以要把2-3树拆分成两个节点：一个红色，一个黑色。红色代码它可以向上跟它的父节点合并成一个节点，对应的就是2-3树里有两个值元素的节点。这是就是基础。剩下就的就是定各种规则来让红黑树符合2-3树的特征。也就有了红黑树的5个规则。</p>
+<p><strong>一张重要的图：2-3-4树与红黑树</strong> </p>
+<p><img alt="2-3-4树与红黑树" src="images/WechatIMG290.png" /></p>
+<h3>红黑树5个特性</h3>
+<ul>
+<li>1) 节点是红色或黑色</li>
+<li>2) 根节点是黑色</li>
+<li>3) 空节点(NIL节点，有些文章也叫叶子节点)是黑色的</li>
+<li>4) 每个红色节点的两个子节点都是黑色。(从每个叶子到根的所 有路径上不能有两个连续的红色节点)</li>
+<li>5 )从任一节点到其每个叶子的路径上包含的黑色节点数量都相同 </li>
+<li>附加特性:插入的节点设为红色</li>
+</ul>
+<p>红黑树5个特性(Why）</p>
+<ul>
+<li>1)红色在2-3-4树模型中代表要跟父节点合并成一个节点 </li>
+<li>2)根节点没有父节点，没有办法合并，所以根节点不能是红色的</li>
+<li>3)由于根据特性1任何节点都有颜色，空节点也应该有颜色，被定义为 黑色在代码实现上比较方便(看TreeMap的实现就很明显)。</li>
+<li>第4和第5特性要结合一起来看，第5点规定从根到叶子节点的路径上只 算黑色节点数，而第4点规定红色节点不能连续，这两点保证了红黑树 的左右两个子树的高度差不会太大。这也是它性能不错的原因。</li>
+<li>附加特性:在代码实现红黑树的时候，插入的代码设为红色，红色的节 点不影响平衡(第5点特性)，这样可以减少对树的旋转操作</li>
+</ul>
+<p>如果你理解了上面的why，就不会再怕记不住它的5条规则了。</p>
+<h3>节点插入与删除涉及操作</h3>
+<p>为了保持红黑树的平衡(即符合红黑树的5个特性)，节点 插入或删除需要做一些操作:
+1. 变色 
+2. 左旋转或右旋转，或者将两种旋转组合
+3. 涉及到的节点:当前插入的节点，兄弟节点，当前节点的父节点，爷爷节点，叔叔节点</p>
+<p><strong>插入总结</strong></p>
+<p>先看父，再看叔叔，然后看爷爷。若爷孙三代不在直线， 先父转，再变色, 再爷转。
+这一句话概括了几乎所有情况。</p>
+<p><strong>删除总结</strong></p>
+<p>要想理解红黑树的删除，必须先理解二叉排序树的删除操作。</p>
+<p>二叉查找树的结点无非是有两个子结点，有一个子结点和叶子结 点三种，其中有两个子结点的 M 结点的删除逻辑是：
+<em> 首先寻找 M 结点左子树最大或右子树最小的结点 X
+</em> 然后把 X 结点的值复制到 M 结点
+* 最后删除 X 结点，而这个结点要么是叶子结点，要么就只有一个 孩子</p>
+<p>所以，删除任一结点的问题就简化成了: <strong>删除一个最多只有一个孩 子的结点的情况(要么没有孩子，要么只有一个孩子)</strong></p>
+<p>红黑树删除节点要领</p>
+<ul>
+<li>删除红色叶子节点不影响平衡</li>
+<li>删除黑色节点会影响树的平衡，所以想办法从孩子节点， 或者兄弟节点，或者父节点借一个红色节点过来，并把它 变黑，这样树就恢复平衡了。</li>
+<li>如果没办法借到红色节点，只能将平衡交给父节点处理，递归向上调整。</li>
+</ul>
+<h3>红黑树的实现</h3>
+<ul>
+<li>HashMap中的红黑树特性:代码复杂，成员变量多，包含 双向链表结构，空间冗余</li>
+<li>TreeMap: 按照2-3-4树模型实现，代码可读性强</li>
+<li>重复造轮子:手动实现一个红黑树</li>
+</ul>
+<p>TreeMap是学习红黑树的最佳源码，没有之一。HashMap里的红黑树相当复杂，在删除一个具有两个孩子节点的地方不太一样，它是直接交换两个节点的，这点开始看得我头疼。</p>
+<h3>对网上红黑树参考资料吐槽</h3>
+<ul>
+<li>没有把红黑树规则3说清楚(说叶子节点是黑色的很容易让 人误解)</li>
+<li>大部分没有讲红黑树怎么来的，有什么用</li>
+<li>没有讲解红黑树的删除操作(删除比插入更复杂)</li>
+<li>对代码的解读只是简单的代码注释，估计作者也是半懂不 懂的</li>
+</ul>
+<p>我写了个《HashMap、红黑树与B树》的PPT给我们团队做技术分享。该PPT已转为PDF传到了GitHub，感兴趣的可以看看。<a href="https://github.com/szuwest/share_ppt">地址在这</a></p>
+<h2>终极疑问</h2>
+<ul>
+<li>红黑树最差情况是怎样的?</li>
+<li>基于2-3树和基于2-3-4树模型实现的红黑树有什么区别?</li>
+<li>HashMap里的红黑树数据结构什么搞那么复杂?(包含双向链表， 空间冗余)</li>
+</ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/hashmap-hong-hei-shu.html">HashMap 红黑树 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/hashmap-redblacktree.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html"><h3 class="article-title">Flutter APP加入信鸽推送通知方案</h3></a>
 <h6 class="subheader" title="2021-02-03T00:00:00">2021-02-03
 </h6>
@@ -61,171 +194,7 @@
 <p>先说说信鸽SDK的优势和注意事项。信鸽SDK以前是免费的，在去年才改成收费的，并入了腾讯云。所以他们才改名叫腾讯云移动推送。信鸽SDK还算比较稳定，毕竟是大厂开发的。收费后新增了很多统计功能，有一个重要的数据是通知开启率，还有就是通知点击率，还是很有用的数据。改成收费的的新版SDK有个问题，会跟我们的采用的iOS版的growingIO统计SDK冲突，导致growingIO活跃用户丢失。最后跟growingIO开发人员反馈后，修改growingIO SDK采用的统计方式才正常。</p>
 <p>安卓版的信鸽SDK集成了几大厂商的通道，比较容易集成到自己项目里，这也是他的优势。然后为了推送通知能尽量在两端保持一致，这里要专门提一下推送配置。</p>
 <h2>推送配置</h2>
-<p>我觉得这一点对于推送通知很重要，尽量将两端的配置保持一致，服务器或者运营编辑在推送一条消息的时候，可以较简单的完成，不容易出错。在安卓端，我们采用客户端自定义方式，即自定义intent-filter里的data字段里的scheme，host，path字段。这里scheme，host一般是固定的，每个页面的path不同。而iOS里采用开启附加参数方式。附加参数里有个必须字段就是path字段。这里两端的path字段就是一致，而且还可以根据页面情况增加其他参数。</p>
-<p>AndroidManifest.xml配置</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;.MainActivity&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;intent-filter&gt;</span>
-        <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.action.VIEW&quot;</span> <span class="nt">/&gt;</span>
-       <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.DEFAULT&quot;</span> <span class="nt">/&gt;</span>
-       <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.BROWSABLE&quot;</span> <span class="nt">/&gt;</span>
-         <span class="nt">&lt;data</span>
-             <span class="na">android:host=</span><span class="s">&quot;myhost&quot;</span>
-             <span class="na">android:path=</span><span class="s">&quot;/main&quot;</span>
-             <span class="na">android:scheme=</span><span class="s">&quot;myscheme&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/intent-filter&gt;</span>
-<span class="nt">&lt;/activity&gt;</span>
-</pre></div>
-
-
-<p>信鸽里的推送配置（采用客户端自定义方式）,还可以往页面传递参数param1</p>
-<div class="highlight"><pre><span></span>myscheme://myhost/main?param1=xx
-</pre></div>
-
-
-<p>信鸽里的iOS配置，开启高级配置里的<strong>附加参数</strong></p>
-<div class="highlight"><pre><span></span>path=main
-param1=xxx
-</pre></div>
-
-
-<p>服务器API推送也是按照类似的方式配置参数，跟服务器开发人员约定好了就行了。</p>
-<p>采用这种方式，可以专门写个文档，将每个要推送的页面对应的path,需要的额外参数都定义好，服务器开发人员或者运营编辑都可以查阅这个文档来创建推送。非常方便。</p>
-<p>那APP收到推送后将如何处理呢？其实也很简单。</p>
-<p>安卓端点击通知将会拉起相应配置的activity，在activity的onCreate或者onNewIntent方法里获取到intent，intent.getData获取到Uri,就可以提前里面的参宿parma1了。</p>
-<p>iOS端用户点击通知后会打开APP，信鸽已经处理了是冷启动和后台再次唤醒进入APP的情况，都会统一回调到一个接口，在回调接口里获取到一个字典数据。在早期免费版信鸽里，配置发附加参数就在这个字典里。改成收费版后，他们把附加参数转成json字符串放入了一个叫custom的字段里存储。将custom里的josn字符串取出来，再解析成字典就，就可以获取里面的path和param1参数了。然后再根据path来跳转到相应的页面，不再累述。</p>
-<h2>Flutter如何处理页面跳转</h2>
-<p>Flutter跟原生页面不同，但是Flutter页面天生支持path跳转，因为它是基于路由的。
-Flutter APP接入信鸽跟原生APP是一样的，问题就在怎么将path传递到Flutter。这很简单，通过EventChannel。</p>
-<p>Flutter APP的iOS端几乎和原生一样，变了的是，将path和param1参数通过event channel传递到Flutter层。</p>
-<p>但是安卓端就稍微变了下。安卓原生APP有很多activity，每个activity都配置一个独立的path。到了Flutter APP只需一个MainActivity就可以了。</p>
-<p>安卓的配置就变成了</p>
-<div class="highlight"><pre><span></span>myscheme://myhost/main?path=page2&amp;param1=xx
-</pre></div>
-
-
-<p>这里myscheme://myhost/main就是不需要变的了（除非你还有的activity存在），要跳转的页面通过path参数来决定。native端MainActivity收到通知后需要将path等参宿传递到Flutter层</p>
-<p>native端需要注意点：
-这里需要特别注意当native端收到推送通知回调时，Flutter的event channel可能没有准备好，需要先将数据用一个变量存起来，等event channel准备好之后，再传递到Flutter，然后将数据清除。</p>
-<p>这里特别说明一下，两端都是给Flutter层传递一个map数据：</p>
-<div class="highlight"><pre><span></span>{path:page2,param1:xxx}
-</pre></div>
-
-
-<h3>Flutter层处理</h3>
-<p>Flutter层处理也有一定技巧。在main函数执行的之后，就要开始注册监听event channel。
-当event channel收到数据通知的时候，拿到数据map。然后用map里的path来做跳转。</p>
-<div class="highlight"><pre><span></span><span class="o">//</span><span class="err">接收</span><span class="nt">native</span><span class="err">传递来的参数</span><span class="nt">obj</span>
-  <span class="nt">void</span> <span class="nt">_onReceivePush</span><span class="o">(</span><span class="nt">Object</span> <span class="nt">obj</span><span class="o">)</span> <span class="p">{</span>
-    <span class="err">WGLog.log(&#39;</span><span class="n">_onReceivePush</span><span class="p">:</span> <span class="err">$</span><span class="n">obj</span><span class="s1">&#39;);</span>
-<span class="s1">    if (obj != null &amp;&amp; obj is Map) {</span>
-<span class="s1">      Map&lt;String, dynamic&gt; pushData = Map&lt;String, dynamic&gt;.from(obj);</span>
-<span class="s1">      String path = pushData</span><span class="cp">[</span><span class="s1">&#39;path&#39;</span><span class="cp">]</span><span class="s1">;</span>
-<span class="s1">      if (path != null &amp;&amp; path.length &gt; 0) {</span>
-<span class="s1">        if (!path.startsWith(&#39;</span><span class="o">/</span><span class="s1">&#39;)) {</span>
-<span class="s1">          path = &#39;</span><span class="o">/</span><span class="err">&#39;</span> <span class="o">+</span> <span class="n">path</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="nt">if</span> <span class="o">(</span><span class="nt">UserManager</span><span class="p">.</span><span class="nc">instance</span><span class="p">.</span><span class="nc">isLogin</span><span class="o">())</span> <span class="p">{</span>
-          <span class="err">_handlePush(path,</span> <span class="err">pushData)</span><span class="p">;</span>
-        <span class="p">}</span> <span class="nt">else</span> <span class="p">{</span><span class="err">//未登录的情况，先缓存数据登录后再使用</span>
-          <span class="err">gPushData</span> <span class="err">=</span> <span class="err">obj</span><span class="p">;</span>
-          <span class="err">WGToast.showToast(&quot;请先登录&quot;)</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="err">}</span> <span class="nt">else</span> <span class="p">{</span>
-        <span class="err">WGLog.log(&quot;path</span> <span class="err">$path</span> <span class="err">error&quot;)</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="err">}</span>
-  <span class="err">}</span>
-
-  <span class="nt">void</span> <span class="nt">_handlePush</span><span class="o">(</span><span class="nt">String</span> <span class="nt">path</span><span class="o">,</span> <span class="nt">Map</span><span class="o">&lt;</span><span class="nt">String</span><span class="o">,</span> <span class="nt">dynamic</span><span class="o">&gt;</span> <span class="nt">args</span><span class="o">)</span> <span class="p">{</span>
-    <span class="err">if</span> <span class="err">(path</span> <span class="err">==</span> <span class="err">&quot;/home&quot;</span> <span class="err">||</span> <span class="err">path</span> <span class="err">==</span> <span class="err">&quot;/main&quot;)</span> <span class="err">{</span>
-      <span class="err">//首页</span>
-    <span class="p">}</span> <span class="nt">else</span> <span class="p">{</span>
-      <span class="err">Navigator.pushNamed(context,</span> <span class="err">path,</span> <span class="n">arguments</span><span class="p">:</span> <span class="n">args</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="err">}</span>
-</pre></div>
-
-
-<p>最重要的是 <strong>Navigator.pushNamed(context, path, arguments: args)</strong>这句代码。这args就是从native层传过来的map，里面可能包含要跳转页面的参数。</p>
-<p>因为Flutter是基于路由的，所以路由注册很重要，还有相关页面如何获取或者处理传递过来的参数呢？
-在MaterialApp的构造函数里有几个很重要的参数，routes，onGenerateRoute，onUnknownRoute。我们主要设置这几个参数来管理整个Flutter页面的路由。</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">MyApp</span> <span class="kr">extends</span> <span class="nx">StatelessWidget</span> <span class="p">{</span>
-  <span class="c1">// This widget is the root of your application.</span>
-  <span class="kd">@override</span>
-  <span class="nx">Widget</span> <span class="nx">build</span><span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">MaterialApp</span><span class="p">(</span>
-      <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;xxxx&#39;</span><span class="p">,</span>
-       <span class="c1">//注册页面</span>
-      <span class="nx">routes</span>: <span class="kt">AppRouter.routes</span><span class="p">,</span>
-      <span class="nx">onGenerateRoute</span>: <span class="kt">AppRouter.generateRoute</span><span class="p">,</span>
-      <span class="nx">onUnknownRoute</span>: <span class="kt">AppRouter.unknownRoute</span><span class="p">,</span>
-      <span class="nx">home</span>: <span class="kt">MainPage</span><span class="p">(</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;xxx&#39;</span><span class="p">),</span>
-    <span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>routes表示注册的路由表。当Navigator push一个命名路由的时候，会先到这个路由表里找对应path的路由，如果表里没有，就会进入onGenerateRoute，你可以在这里即时生成路由页面来处理，也可以不处理。如果onGenerateRoute没有处理，就会进入onUnknownRoute定义的路由页面。</p>
-<p>我是这样配置的：
-不需要额外参数的页面，直接注册在routes路由表里，需要传递额外参数才能打开的页面，放到onGenerateRoute动态生成（因为这里可以直接获取到外部传入的args），最后准备一个UnknownPage.而且这个UnknownPage很重要。设想你的APP已经发布了1.0，2.0，3.0版本。现在向全部用户发送推送消息，这个消息对应的页面是2.0版本才加入的，那么还在用1.0版本的用户收到这个通知后会怎么样。他会进入这个UnknownPage，你可以在这个页面提示他的APP版本太低，给个升级按钮，点击后可以跳转到商店去升级APP。</p>
-<p>我把路由处理逻辑都放在一个这门的类来处理AppRouter。</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">AppRouter</span> <span class="p">{</span>
-
-  <span class="c1">///注册路由。routes比generateRoute的优先级高，先在routes找，找不到再到generateRoute找，最后找不到的话就进入unknownRoute</span>
-  <span class="c1">///</span>
-  <span class="kr">static</span> <span class="kr">final</span> <span class="nx">Map</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nx">WidgetBuilder</span><span class="o">&gt;</span> <span class="nx">routes</span> <span class="o">=</span> <span class="p">{</span>
-
-    <span class="s1">&#39;/home&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">HomePage</span><span class="p">(),</span>
-    <span class="s1">&#39;/bindSuc&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">BindSucPage</span><span class="p">(),</span>
-    <span class="s1">&#39;/orderList&#39;</span><span class="o">:</span> <span class="p">(</span><span class="nx">BuildContext</span> <span class="nx">context</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">OrderListPage</span><span class="p">(),</span><span class="c1">// 我的订单列表</span>
- <span class="p">};</span>
-
-  <span class="c1">//要注意页面参数的配置</span>
-  <span class="kr">static</span> <span class="kr">final</span> <span class="nx">RouteFactory</span> <span class="nx">generateRoute</span> <span class="o">=</span> <span class="p">(</span><span class="nx">settings</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">WGLog</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;settings ${settings.toString()} &quot;</span><span class="p">);</span>
-    <span class="nx">Map</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nx">dynamic</span><span class="o">&gt;</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">arguments</span> <span class="kr">as</span> <span class="nx">Map</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span> <span class="nx">dynamic</span><span class="o">&gt;</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;/project&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nb">String</span> <span class="nx">pid</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">pid</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="nx">HomeProject</span><span class="p">(</span><span class="nx">id</span>: <span class="kt">pid</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">MaterialPageRoute</span><span class="p">(</span>
-            <span class="nx">builder</span><span class="o">:</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">return</span> <span class="nx">ProjectDetailPage</span><span class="p">(</span><span class="nx">project</span>: <span class="kt">project</span><span class="p">,);</span>
-            <span class="p">}</span>
-        <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;/applyDetail&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nb">String</span> <span class="nx">_id</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">_id</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">model</span> <span class="o">=</span> <span class="nx">ApplyInfoModel</span><span class="p">(</span><span class="nx">apply_id</span>: <span class="kt">_id</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">MaterialPageRoute</span><span class="p">(</span>
-            <span class="nx">builder</span><span class="o">:</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-              <span class="k">return</span> <span class="nx">ApplyOrderDetailPage</span><span class="p">(</span><span class="nx">model</span>: <span class="kt">model</span><span class="p">,);</span>
-            <span class="p">}</span>
-        <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="c1">//....</span>
-
-    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
-  <span class="p">};</span>
-
-  <span class="c1">/// 未知路由页面。一般是APP版本太低，推送过来的页面未定义</span>
-  <span class="kr">static</span> <span class="kr">final</span> <span class="nx">RouteFactory</span> <span class="nx">unknownRoute</span> <span class="o">=</span> <span class="p">(</span><span class="nx">settings</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">MaterialPageRoute</span><span class="p">(</span>
-        <span class="nx">builder</span><span class="o">:</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">UnknownPage</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">);</span>
-  <span class="p">};</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>我认为generateRoute里的处理非常奇妙。设想有一个页面是一定要传一个id才可以正常浏览的。一般我们都会把这个页面的构造函数定义一个参数，由外部初始化的时候传入。如果将这个页面也支持注册到路由表routes里，那么你要获取传递过去的参数就有点麻烦了。你可能需要在该页面里面通过 <strong>var args=ModalRoute.of(context).settings.arguments</strong>方式来获取。这样不直观。</p>
-<p>所以我认为这样处理Flutter的跳转是比较完美的方式。</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+<p>我觉得这一点对于推送通知很重要，尽量将两端的配置保持一致，服务器或者运营编辑在推送一条消息的时候，可以较简单的完成，不容易出错。在安卓端，我们采用客户端自定义方式，即自定义intent-filter里的data字段里的scheme，host，path字段。这里scheme，host一般是固定的，每个页面的path不同。而iOS里采用开启附加参数方式 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="https://szuwest.github.io/tag/flutter-tui-song-tong-zhi-xin-ge.html">Flutter 推送通知 信鸽 </a>
@@ -233,11 +202,9 @@ Flutter APP接入信鸽跟原生APP是一样的，问题就在怎么将path传�
 
 
 
-<p><a href="https://szuwest.github.io/flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="https://szuwest.github.io/flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/flutter-appjia-ru-xin-ge-tui-song-tong-zhi-fang-an.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -497,32 +464,6 @@ Flutter APP接入信鸽跟原生APP是一样的，问题就在怎么将path传�
 
 
 <p><a href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html"><h3 class="article-title">SVG图片在移动端的应用解决方案</h3></a>
-<h6 class="subheader" title="2018-11-03T00:00:00">2018-11-03
-</h6>
-
-
-<h2>SVG图片在移动端的应用解决方案</h2>
-<p>近几年来SVG使用得越来越多，就连Android的官方库也加入VectorDrawable的支持。这个类就是用来支持向量图的。SVG图片在web端使用非常广泛，我第一次接触这个也是在做react-native的项目中使用的。当时我们要做一些动画，需要从一个形状变换成另一个形状，这种一般都是用矢量图来做的。当时设计师就给了我一些矢量图，于是我就开始研究这个东西。</p>
-<p>在react-native中，有专门一个库叫<a href="https://github.com/react-native-community/react-native-svg">react-native-svg</a>来处理这个。不过当时要做两个SVG形状的动画变化，并不是任何一个形状都可以的，需要遵循一定的标准。设计师给我的两个SVG文件并不能转换。后来是我自己根据文件里的一些关键参数自己在代码里直接画出来后，再做转换动画。</p>
-<p>最近我在做的native项目中，也遇到了要用SVG的图片。我们的项目里要从服务器下载SVG图片来展示。我们要实现的这些文件是需要服务器动态配置的，也就是说我们不能预先打包进我们的APP里。所以我们这里的要提供一个解决方案，跟图片JPG图片一样显示，缓存。</p>
-<p>这个需求跟之前我遇到的那个需求是很不一样的，之前的是设计师已经定义好图片，我们工程师直接拿到文件在程序里展示，不需要考虑下载和缓存之类的。这种需求其实很简单，我们实际上大部分的需求就是这种需求，网上有很多库可以完成这种需求。把SVG图片跟JPG等普通图片一样使用，网上的方案还真不多，特别是iOS方面。。。。</p>
-<p>要像普通图片一样使用，就要考虑下载，本地缓存，内存缓存。像这种需求，我们移动端都会使用专门的图片框架，像安卓端的glide，UIL等，iOS端的SDWebImage等。但是这种库它是默认都不会考虑SVG图片。但是我们最好还是像使用这种框架来处理SVG图片 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/suan-fa-svg-androidsvg-glide-macaw.html">算法 SVG androidsvg glide Macaw </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

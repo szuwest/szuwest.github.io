@@ -50,6 +50,40 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html"><h3 class="article-title">适配iOS11与iPhone X需要注意事项</h3></a>
+<h6 class="subheader" title="2017-09-26T00:00:00">2017-09-26
+</h6>
+
+
+<h1>适配iOS11与iPhone X需要注意的事项</h1>
+<p>最近苹果发布了iOS11和iPhone X，我之前开发的一个应用界面出现了问题，然后需要适配。记录一下需要注意的事项。</p>
+<h2>适配iOS11</h2>
+<p>第一个问题是iOS11导航栏改变了。除了加入largeTitle这种特性以外，还改变了很多东西，可以说是完全重写了导航栏。我遇到的问题是导航栏返回按钮图片变得很大，巨丑无比，所以得看看什么原因。</p>
+<ul>
+<li>我看了下我导航栏的设置代码，还做了挺多事，而且做了很多hack。第一是通过 <strong>[UINavigationBar appearance].backIndicatorImage</strong> 和 <strong>[UINavigationBar appearance].backIndicatorTransitionMaskImage</strong>设置了返回按钮图片，还有 </li>
+</ul>
+<div class="highlight"><pre><span class="p">[[</span><span class="n">UIBarButtonItem</span> <span class="n">appearance</span><span class="p">]</span> <span class="n">setBackButtonTitlePositionAdjustment</span><span class="o">:</span><span class="n">UIOffsetMake</span><span class="p">(</span><span class="n">NSIntegerMin</span><span class="p">,</span> <span class="n">NSIntegerMin</span><span class="p">)</span> <span class="n">forBarMetrics</span><span class="o">:</span><span class="n">UIBarMetricsDefault</span><span class="p">];</span>
+</pre></div>
+
+
+<p>设置了把返回按钮右边的文字隐藏掉。还有通过hack 方式找到 _UINavigationBarBackIndicatorView把它的frame给改了。</p>
+<p>因为iOS11的导航栏变化很大，_UINavigationBarBackIndicatorView这个类找不到了，所以frame修改就失败了。然后因为我发现我设置的返回按钮的那种图片本来是很大，因为设置了frame把它缩小了。而现在frame已经设置不了，所以就按图片原本的大小显示了。最后解决办法就是把图片大小设置成符合导航栏的大小。</p>
+<p>图片大小是正常了，但是还是有别问题 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/ios11-iphonex.html">iOS11 iPhoneX </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/gua-pei-ios11yu-iphone-xxu-yao-zhu-yi-shi-xiang.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/coturnzai-iosduan-ying-yong-he-libeventde-bian-yi.html"><h3 class="article-title">Coturn在iOS端应用和libevent的编译</h3></a>
 <h6 class="subheader" title="2017-07-02T00:00:00">2017-07-02
 </h6>
