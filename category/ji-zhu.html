@@ -49,6 +49,202 @@
         
 
             <article>
+                <a href="https://szuwest.github.io/flutter-frameworkyuan-ma-xue-xi-yi.html"><h3 class="article-title">Flutter framework源码学习（一）</h3></a>
+<h6 class="subheader" title="2021-09-19T00:00:00">2021-09-19
+</h6>
+
+
+<h1>Flutter framework源码学习（一）</h1>
+<p>以下内容只是我在团队技术分享里的keynote的摘录，实际上在分享会上会补充很多细节，这里就略过了。</p>
+<h2>Flutter架构</h2>
+<p>Flutter主要分为engine层，framework层和embeder层，engine层主要用c++写的，framework层主要是Dart语言写的，embedder层主要是平台相关的native语言写的。这里framework的源码最容易获得，也最方便容易学习。当你安装好Flutter环境之后，在Android studio打开任意Flutter项目，就可以从你的项目代码跳转到framework代码进行研究，这边跟Android是差不都的。</p>
+<p><img alt="flutter架构" src="images/flutter-architeture.jpg" /></p>
+<h2>Flutter framework 源码目录说明</h2>
+<ul>
+<li>基于stable分支，Flutter 2.2.3版本，Dart 2.12.3</li>
+<li>flutter/packages/flutter/lib目录下：522个文件，378733行代码（大量注释）</li>
+<li>重要源码目录说明</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>flutter/packages/flutter/lib</td>
+<td>framework源码</td>
+</tr>
+<tr>
+<td>flutter/example/layers/raw</td>
+<td>raw目录下的例子有助于理解framework的底层layer</td>
+</tr>
+<tr>
+<td>flutter/bin/cache/artifacts/engine</td>
+<td>编译后的engine二进制文件</td>
+</tr>
+<tr>
+<td>flutter/bin/cache/dart-sdk</td>
+<td>dark sdk源码</td>
+</tr>
+<tr>
+<td>flutter/bin/cache/pkg/sky_engine/lib</td>
+<td>framework底层源码</td>
+</tr>
+</tbody>
+</table>
+<h3>源码特点</h3>
+<ul>
+<li>大量使用断言：普通的断言语句和断言代码块</li>
+<li>大量使用mixin来复用代码</li>
+<li>类属性使用getter和setter访问器</li>
+<li>异常捕获：try-catch-finally 增强程序健壮性</li>
+<li>用native关键字来定义在c++实现的方法</li>
+<li>@pragma(‘vm:entry-point')表明类或属性在c++中使用</li>
+<li>特别的语法：级联操作符 .. ，is! (当对象不是相应类型时返回 true)</li>
+<li>特别表达式：result = expr1 ?? expr2（若expr1为null, 返回expr2的值，否则返回expr1的值）；expr1 ??= expr2（若expr1为null, 则把expr2的值赋值给expr1）</li>
+</ul>
+<h2>framework启动流程</h2>
+<ul>
+<li>默认找main.dart下的main方法</li>
+<li>启动流程：main—&gt;runApp-&gt;WidgetsFlutterBinding.ensureInitialized—&gt;BindingBase构造函数—&gt;XXBinding.initInstances</li>
+</ul>
+<p>关键代码</p>
+<div class="highlight"><pre><span></span><span class="n">oid</span> <span class="n">runApp</span><span class="p">(</span><span class="n">Widget</span> <span class="n">app</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">WidgetsFlutterBinding</span><span class="p">.</span><span class="n">ensureInitialized</span><span class="p">()</span>
+    <span class="p">..</span><span class="n">scheduleAttachRootWidget</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+    <span class="p">..</span><span class="n">scheduleWarmUpFrame</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kd">static</span> <span class="n">WidgetsBinding</span> <span class="n">ensureInitialized</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">WidgetsBinding</span><span class="p">.</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span>
+      <span class="n">WidgetsFlutterBinding</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">WidgetsBinding</span><span class="p">.</span><span class="n">instance</span><span class="o">!</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="n">BindingBase</span><span class="p">()</span> <span class="p">{</span>
+     <span class="p">....</span>
+    <span class="n">initInstances</span><span class="p">();</span>
+    <span class="p">.....</span>
+  <span class="p">}</span>
+</pre></div>
+
+
+<h3>mixin: 代码复用的利器</h3>
+<ul>
+<li>用mixin关键字定义，用on实现mixin的继承机制（类似），用with来使用mixin
+一个类A使用了一个mixin B，可以简单理解为 A继承于B</li>
+<li>Class C extends B with A, 如果A，B，C中有同名方法，C的不会被覆盖。如果只有A， B有同名方法，A会覆盖B的方法。本类最优先，mixin比父类优先</li>
+<li>如果一个mixin A继承了(on)多个其他的mixin，那么一个类在使用（with）A时，必须也要使用其他的mixin。mixin使用通过super调用父mixin的方法。</li>
+<li>一个类使用（with）了多个mixin，那么出现同名冲突时最右的优先级最高(可以认为从右往左单向继承，越往左父层级越高)</li>
+<li>mixin本质是一个没有构造函数的类。不能直接实例化，专门用来代码复用，实现多继承的机制，但是没有c++多继承那么复杂。</li>
+<li>dart run test_main.dart 可直接运行dart源码，这很方便写测试代码</li>
+</ul>
+<p>把上面5点都理解了，就理解了mixin的本质。我为了理解BindingXXX的启动流程，自己写了个类似的测试代码：test_main.dart。这个代码我留在最后吧。</p>
+<h3>initInstances方法调用链</h3>
+<p><strong>initInstances方法调用链: WidgetsBinding—&gt;RendererBinding—&gt;SemanticsBinding—&gt;PaintingBinding—&gt;ServicesBinding—&gt;SchedulerBinding—&gt;GestureBinding—&gt;BindingBase</strong></p>
+<table>
+<thead>
+<tr>
+<th>Binding类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GestureBinding</td>
+<td>提供了 window.onPointerDataPacket 回调，绑定 Framework 手势子系统，是 Framework 事件模型与底层事件的绑定入口</td>
+</tr>
+<tr>
+<td>ServicesBinding</td>
+<td>提供了 window.onPlatformMessage 回调， 用于绑定平台消息通道（message channel），主要处理原生和 Flutter 通信</td>
+</tr>
+<tr>
+<td>SchedulerBinding</td>
+<td>提供了 window.onBeginFrame 和 window.onDrawFrame 回调，监听刷新事件，绑定 Framework 绘制调度子系统</td>
+</tr>
+<tr>
+<td>PaintingBinding</td>
+<td>绑定绘制库，主要用于处理图片缓存</td>
+</tr>
+<tr>
+<td>SemanticsBinding</td>
+<td>语义化层与 Flutter engine 的桥梁，主要是辅助功能的底层支持</td>
+</tr>
+<tr>
+<td>RendererBinding</td>
+<td>提供了 window.onMetricsChanged 、window.onTextScaleFactorChanged 等回调。持有PipelineOwner和RenderView(Root RenderObject), 它是渲染树与 Flutter engine 的桥梁</td>
+</tr>
+<tr>
+<td>WidgetsBinding</td>
+<td>提供了 window.onLocaleChanged、onBuildScheduled 等回调。持有BuildOwner和Root Element, 它是 Flutter widget 层与 engine 的桥梁</td>
+</tr>
+<tr>
+<td>BindingBase</td>
+<td>是其他Binding的基类，主要定义initInstances方法和公有属性window</td>
+</tr>
+</tbody>
+</table>
+<h3>三个树的创建</h3>
+<ul>
+<li>通过attachRootWidget方法先后创建了RenderObjectToWidgetAdapter和RenderObjectToWidgetElement</li>
+<li>RenderObjectToWidgetAdapter是root widget，它的child是APP的顶层widget。RenderObjectToWidgetAdapter的key是GlobalObjectKey</li>
+<li>RenderObjectToWidgetElement是root element, 持有root widget和root RenderObject。它被创建之后调用了mount方法。</li>
+<li>RenderView是 root RenderObject，由RenderBinding创建，它持有window</li>
+<li>WidgetBinding持有root element，而root element持有root widget和render object。</li>
+</ul>
+<h3>window：Framework和Engine的桥梁</h3>
+<ul>
+<li>ui.window是SingletonFlutterWindow，是Framework和Engine的桥梁，封装了原生跟flutter dart之间的各种回调。最后的UI渲染就是通过它传给engine的</li>
+<li>UI渲染数据是通过render方法传给engine层的</li>
+<li>window持有PlatformDispatcher，几乎所有的回调都是通过PlatformDispatcher来跟平台交互的</li>
+<li>onBeginFrame和onDrawFrame由engine主动调用，这两个callback都在SchedulerBinding里设置了。onBeginFrame最终会调用到一些动画相关的东西，onDrawFrame会调用到drawFrame，并将渲染数据通过window的render传给engine</li>
+<li>scheduleFrame:由flutter层调用，告知engine适时（VSync信号到来）回调onBeginFrame和onDrawFrame</li>
+<li>scheduleFrame和onDrawFrame配合就可以做到不断的更新界面</li>
+</ul>
+<p>window这个类很关键，不同的framework版本还不太一样，但是渲染更新的接口都在这。</p>
+<h3>VSync信号</h3>
+<p>不管是手机还是电脑，为了更新显示画面，显示器是以固定的频率刷新的。当一帧图像绘制完毕后准备绘制下一帧时，显示器会发出一个垂直同步信号（VSync）
+ 下面两种图可以帮助理解VSync信号原理
+ <img alt="VSync信号" src="images/vsync.png" />
+ <img alt="VSync信号和渲染过程" src="draw-vsync.webp" /></p>
+<h2>Flutter帧渲染的整体流程</h2>
+<p>通过Widget Tree和Element Tree生成绘制树RenderObject Tree。RenderObject Tree会再进行Layout布局和Paint渲染等步骤生成Layer Tree，组装成scene，通过window传给engine层。在Flutter Engine层中，主要对Layer Tree进行光栅化、合成和上屏的操作。flutter中的layer，scene实际上只是c++层中的layer，scene的封装.</p>
+<p><img alt="渲染过程" src="images/painting.jpg" /></p>
+<h2>扩展：直接使用layer和window渲染界面</h2>
+<ul>
+<li>直接绕过三个树，采用底层layer来画控件（又回到命令式编程），连XXBinding的初始化都省了</li>
+<li>flutter/example/layers/raw的例子</li>
+</ul>
+<p>raw目录下的例子真的挺有意思，一定要去看看，有意想不到的收获。</p>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/158089384">Flutter 核心原理与混合开发模式</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/208798157">Flutter框架层启动源码剖析</a></li>
+<li><a href="https://blog.csdn.net/XSF50717/article/details/104279579">Flutter UI渲染分析</a></li>
+<li><a href="https://xiaozhuanlan.com/topic/7610425893">Flutter 核心原理：Flutter帧渲染的整体流程</a></li>
+<li><a href="https://xieguanglei.github.io/blog/post/flutter-code-chapter-01.html">Flutter Framework 源码解析（ 1 ）—— 开篇和绘图引擎的用法</a></li>
+</ul>
+<hr />
+<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
+<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/flutter-framework.html">Flutter framework </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/flutter-frameworkyuan-ma-xue-xi-yi.html#disqus_thread">comments</a></p>            </article>
+
+
+                <hr  class="gradient"/>
+
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/hashmap-redblacktree.html"><h3 class="article-title">HashMap与红黑树学习总结</h3></a>
 <h6 class="subheader" title="2021-06-11T00:00:00">2021-06-11
 </h6>
@@ -76,98 +272,7 @@
 <li>源代码里语句很简洁，经常一行代码包括N多赋值与判断，变量命名过 于简单</li>
 </ul>
 <p>Hashtable是线程安全的，它是经典的哈希表实现(数组+ 链表)，没有红黑树。同样是哈希表，HashMap跟Hashtable的实现天差地别，可以看出HashMap追求极致的性能，而Hashtable是线程安全的，有加锁操作，性能不会好，所以就采用了最简单的实现</p>
-<h2>红黑树</h2>
-<h3>红黑树的由来</h3>
-<p>要完全理解红黑树，必须把下面这些概念都完全搞清楚。</p>
-<blockquote>
-<p><strong>树》二叉树》二叉排序树》自平衡二叉树》2-3树和2-3-4树 (B树)》红黑树</strong></p>
-</blockquote>
-<ul>
-<li>树，只有一个父节点，有若干个子节点</li>
-<li>二叉排序树(Binary Sort Tree)，又称二叉查找树(Binary Search Tree)，又称 二叉搜索树。任意一个节点，它的值比它左孩子的值要大，比它右孩子的值要小</li>
-<li>平衡二叉树， 又叫AVL树（它的名字是它的发明者们的缩写），是一个二叉搜索树，它的任意一个节点的左右孩子高度差不超过1</li>
-</ul>
-<p><strong>B树</strong></p>
-<ul>
-<li>B树是一种平衡的多路搜索树</li>
-<li>1 个节点可以存储超过 2 个元素(多个元素从小到大排 列)、可以拥有超过 2 个子节点。一个节点存储的元素个 数是它的儿子个数减1</li>
-<li>拥有二叉搜索树的一些性质  </li>
-<li>绝对平衡:每个节点的所有子树高度一致 </li>
-<li>2-3树和2-3-4树是B树的特例，2-3树是最简单的B树</li>
-</ul>
-<p><strong>2-3树、2-3-4树与红黑树</strong></p>
-<ul>
-<li>2-3树、2-3-4树虽然能保持平衡，但是计算机不好实现</li>
-<li>红黑树(Red Black Tree) 是一种自平衡二叉查找树。红黑树是近似平衡 的二叉树，左右子树高差有可能大于 1，但是他的平均性能要好于AVL树</li>
-<li>红黑树对应的理论模型可以是2-3树，也可以是2-3-4树。普遍红黑树的实 现是采用2-3-4树模型</li>
-</ul>
-<p>因为2-3（2-3-4）树不好实现，所有把它当做一种模型，采用二叉树的方式（代码较好实现）来实现这个模型。这个就是红黑树。这就是红黑树的由来（<strong>当然这是我的猜测</strong>）。</p>
-<p>红黑树怎么实现这个模型的呢？2-3树一个节点能存两个值，二叉树只能存一个值，所以要把2-3树拆分成两个节点：一个红色，一个黑色。红色代码它可以向上跟它的父节点合并成一个节点，对应的就是2-3树里有两个值元素的节点。这是就是基础。剩下就的就是定各种规则来让红黑树符合2-3树的特征。也就有了红黑树的5个规则。</p>
-<p><strong>一张重要的图：2-3-4树与红黑树</strong> </p>
-<p><img alt="2-3-4树与红黑树" src="images/WechatIMG290.png" /></p>
-<h3>红黑树5个特性</h3>
-<ul>
-<li>1) 节点是红色或黑色</li>
-<li>2) 根节点是黑色</li>
-<li>3) 空节点(NIL节点，有些文章也叫叶子节点)是黑色的</li>
-<li>4) 每个红色节点的两个子节点都是黑色。(从每个叶子到根的所 有路径上不能有两个连续的红色节点)</li>
-<li>5 )从任一节点到其每个叶子的路径上包含的黑色节点数量都相同 </li>
-<li>附加特性:插入的节点设为红色</li>
-</ul>
-<p>红黑树5个特性(Why）</p>
-<ul>
-<li>1)红色在2-3-4树模型中代表要跟父节点合并成一个节点 </li>
-<li>2)根节点没有父节点，没有办法合并，所以根节点不能是红色的</li>
-<li>3)由于根据特性1任何节点都有颜色，空节点也应该有颜色，被定义为 黑色在代码实现上比较方便(看TreeMap的实现就很明显)。</li>
-<li>第4和第5特性要结合一起来看，第5点规定从根到叶子节点的路径上只 算黑色节点数，而第4点规定红色节点不能连续，这两点保证了红黑树 的左右两个子树的高度差不会太大。这也是它性能不错的原因。</li>
-<li>附加特性:在代码实现红黑树的时候，插入的代码设为红色，红色的节 点不影响平衡(第5点特性)，这样可以减少对树的旋转操作</li>
-</ul>
-<p>如果你理解了上面的why，就不会再怕记不住它的5条规则了。</p>
-<h3>节点插入与删除涉及操作</h3>
-<p>为了保持红黑树的平衡(即符合红黑树的5个特性)，节点 插入或删除需要做一些操作:
-1. 变色 
-2. 左旋转或右旋转，或者将两种旋转组合
-3. 涉及到的节点:当前插入的节点，兄弟节点，当前节点的父节点，爷爷节点，叔叔节点</p>
-<p><strong>插入总结</strong></p>
-<p>先看父，再看叔叔，然后看爷爷。若爷孙三代不在直线， 先父转，再变色, 再爷转。
-这一句话概括了几乎所有情况。</p>
-<p><strong>删除总结</strong></p>
-<p>要想理解红黑树的删除，必须先理解二叉排序树的删除操作。</p>
-<p>二叉查找树的结点无非是有两个子结点，有一个子结点和叶子结 点三种，其中有两个子结点的 M 结点的删除逻辑是：
-<em> 首先寻找 M 结点左子树最大或右子树最小的结点 X
-</em> 然后把 X 结点的值复制到 M 结点
-* 最后删除 X 结点，而这个结点要么是叶子结点，要么就只有一个 孩子</p>
-<p>所以，删除任一结点的问题就简化成了: <strong>删除一个最多只有一个孩 子的结点的情况(要么没有孩子，要么只有一个孩子)</strong></p>
-<p>红黑树删除节点要领</p>
-<ul>
-<li>删除红色叶子节点不影响平衡</li>
-<li>删除黑色节点会影响树的平衡，所以想办法从孩子节点， 或者兄弟节点，或者父节点借一个红色节点过来，并把它 变黑，这样树就恢复平衡了。</li>
-<li>如果没办法借到红色节点，只能将平衡交给父节点处理，递归向上调整。</li>
-</ul>
-<h3>红黑树的实现</h3>
-<ul>
-<li>HashMap中的红黑树特性:代码复杂，成员变量多，包含 双向链表结构，空间冗余</li>
-<li>TreeMap: 按照2-3-4树模型实现，代码可读性强</li>
-<li>重复造轮子:手动实现一个红黑树</li>
-</ul>
-<p>TreeMap是学习红黑树的最佳源码，没有之一。HashMap里的红黑树相当复杂，在删除一个具有两个孩子节点的地方不太一样，它是直接交换两个节点的，这点开始看得我头疼。</p>
-<h3>对网上红黑树参考资料吐槽</h3>
-<ul>
-<li>没有把红黑树规则3说清楚(说叶子节点是黑色的很容易让 人误解)</li>
-<li>大部分没有讲红黑树怎么来的，有什么用</li>
-<li>没有讲解红黑树的删除操作(删除比插入更复杂)</li>
-<li>对代码的解读只是简单的代码注释，估计作者也是半懂不 懂的</li>
-</ul>
-<p>我写了个《HashMap、红黑树与B树》的PPT给我们团队做技术分享。该PPT已转为PDF传到了GitHub，感兴趣的可以看看。<a href="https://github.com/szuwest/share_ppt">地址在这</a></p>
-<h2>终极疑问</h2>
-<ul>
-<li>红黑树最差情况是怎样的?</li>
-<li>基于2-3树和基于2-3-4树模型实现的红黑树有什么区别?</li>
-<li>HashMap里的红黑树数据结构什么搞那么复杂?(包含双向链表， 空间冗余)</li>
-</ul>
-<hr />
-<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡^_^
-<img alt="打赏" src="https://raw.githubusercontent.com/szuwest/szuwest.github.io/master/images/2018-02-21%20133111.jpg" /></p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+<h2>红黑树 ...</h2><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
 
     Tagged: 
     <a href="https://szuwest.github.io/tag/hashmap-hong-hei-shu.html">HashMap 红黑树 </a>
@@ -175,11 +280,9 @@
 
 
 
-<p><a href="https://szuwest.github.io/hashmap-redblacktree.html#disqus_thread">comments</a></p>            </article>
-
-
+<p><a href="https://szuwest.github.io/hashmap-redblacktree.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/hashmap-redblacktree.html">Read More</a>
                 <hr  class="gradient"/>
-
+            </article>
 
         
 
@@ -439,34 +542,6 @@
 
 
 <p><a href="https://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html"><h3 class="article-title">iOS开发如何做外部测试</h3></a>
-<h6 class="subheader" title="2019-01-05T00:00:00">2019-01-05
-</h6>
-
-
-<h2>iOS开发如何做外部测试</h2>
-<p>我们做APP开发的，开发出来的APP还未上线，又要想给别人用一下，该怎么做？实际上这是我们每个做APP开发的人都会遇到的，但是并不是每个人都清楚怎么做，有哪些方式。今天我们就来讲一讲。</p>
-<p>在将iOS的APP如何给别人使用和测试前，先说一下安卓APP开发是怎么做的。安卓端是很简单的，你只要先生成一个证书文件keystone，然后用这个文件给apk签名，就可以将apk发给任意一个人安装使用了。这很简单，也很方便。可是iOS的就没那么容易了。我们还是从最简单的开发人员如何用真机测试开始说起。</p>
-<h3>真机调试</h3>
-<p>我们有了一个想法，并开始写代码，模拟器调试很方便，要在iPhone上看效果怎么办了。你直接将iPhone连上电脑是不行的。现在的情况至少你需要一个Apple ID，在Xcode上登录你的账号，在调试前Xcode会自动帮你初始化一些东西，然后就可以将APP安装到你的iPhone上了。在以前，你这个AppleID不能是普通的账号，必须是付了前的开发者账号才行。现在苹果放宽限制了。</p>
-<p>这种方式的做法是你的手机必须连上你的电脑，在Xcode上选择你的iPhone来调试，Xcode会自动帮你注册设备的UDID。如果你没办法把iPhone连接到电脑上呢？或者不方便把iPhone连接到电脑上，毕竟如果是老板的手机的话，不方便那种做的。那我们需要一种把安装包提供给别人安装，或者一个地址给别人安装的方式。</p>
-<h3>adhoc 方式</h3>
-<p>我们将项目archive后，在导出（现在Xcode叫distribution）的时候，有个选项是adhoc ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/ioskai-fa-betace-shi-testflight-gong-kai-lian-jie.html">iOS开发 beta测试 TestFlight 公开链接 </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
