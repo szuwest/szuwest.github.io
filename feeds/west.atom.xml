@@ -85,7 +85,7 @@
 &lt;li&gt;mixin本质是一个没有构造函数的类。不能直接实例化，专门用来代码复用，实现多继承的机制，但是没有c++多继承那么复杂。&lt;/li&gt;
 &lt;li&gt;dart run test_main.dart 可直接运行dart源码，这很方便写测试代码&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;把上面5点都理解了，就理解了mixin的本质。我为了理解BindingXXX的启动流程，自己写了个类似的测试代码：test_main.dart。这个代码我留在最后吧。&lt;/p&gt;
+&lt;p&gt;把上面5点都理解了，就理解了mixin的本质。我为了理解BindingXXX的启动流程，自己写了个类似的测试代码：&lt;a href="https://github.com/szuwest/code_lib/blob/main/test_mixin.dart"&gt;test_mixin&lt;/a&gt;&lt;/p&gt;
 &lt;h3&gt;initInstances方法调用链&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;initInstances方法调用链: WidgetsBinding—&amp;gt;RendererBinding—&amp;gt;SemanticsBinding—&amp;gt;PaintingBinding—&amp;gt;ServicesBinding—&amp;gt;SchedulerBinding—&amp;gt;GestureBinding—&amp;gt;BindingBase&lt;/strong&gt;&lt;/p&gt;
 &lt;table&gt;
