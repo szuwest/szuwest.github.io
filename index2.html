@@ -50,6 +50,33 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html"><h3 class="article-title">上传应用到苹果一直卡住验证中（authentication with the app store）问题解决</h3></a>
+<h6 class="subheader" title="2020-02-08T00:00:00">2020-02-08
+</h6>
+
+
+<h1>上传应用到苹果一直卡住验证中（authentication with the app store）问题解决</h1>
+<p>虽然最近因为新型冠状病毒导致的疫情一直在持续，我们都被迫在家办公。我们由于有一些紧急的改动需要发版，5号那天我们改好之后就准备上传APP审核。安卓APP上传到各个商店都还挺顺利，但是iOS的却遇到难题了，卡住了，卡在 <strong>正在验证APP - 正在通过App Store进行认证</strong>。</p>
+<p><img alt="验证中" src="./images/app_verifying.jpg" /></p>
+<p>自从升级了xcode11后，我一般都用<strong>transporter</strong>来上传IPA。因为xcode上传有时候也很慢，但是transporter却是很快。但是这次transporter卡住了，一直在<strong>正在验证APP - 正在通过App Store进行认证</strong>状态。过了很久都不动，平时几分钟就搞定了。后面我尝试了各种方法，试过xcode上传，命令行xcrun上传，搭梯子上传，通过手机热点上传，让同事他们上传，各种方法。搞了两三天，才最终搞定，真的是太悲催。感觉苹果在这块做得真是太傻逼了。</p>
+<ul>
+<li>方法一：transporter，xcode上传都是卡住，xcrun上传报错</li>
+<li>方法二：搭梯子上传，transporter报错 ...</li></ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/yan-zheng-zhong-yi-zhi-qia-zhu.html">验证中 一直卡住 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/2019nian-zong-jie-yu-2020nian-zhan-wang.html"><h3 class="article-title">2019年总结与2020年展望</h3></a>
 <h6 class="subheader" title="2020-01-21T00:00:00">2020-01-21
 </h6>
@@ -331,34 +358,6 @@
 
 
 <p><a href="https://szuwest.github.io/zhong-guo-hu-lian-wang-qun-ti-gen-ji-nian-qian-fa-sheng-liao-ju-da-bian-hua.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/zhong-guo-hu-lian-wang-qun-ti-gen-ji-nian-qian-fa-sheng-liao-ju-da-bian-hua.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html"><h3 class="article-title">多家公司的人证比对算法体验和开发感想</h3></a>
-<h6 class="subheader" title="2018-07-13T00:00:00">2018-07-13
-</h6>
-
-
-<h1>多家公司的人证比对算法体验和开发感想</h1>
-<p>最近在开发一个声纹采集一体机系统，这个系统里用到了人证比对功能，即刷身份证后拍照，然后将身份证里面的照片跟拍照比对，验证是否是同一个人。我们不是做人脸识别的公司，所以人脸识别功能当然是接入别人的SDK，这里我们找了好多家的人脸算法，对接过程中也遇到很多问题。经过这次的开发，我了解到这个行业的一些现状。</p>
-<p>我们的系统主要运行在Windows电脑上，而且需要无网络也能使用，所以人脸算法必须是用离线版的。人脸算法厂家一般对外提供两种方式：在线版和离线版。一般在线版都可以提供免费试用，离线版需要授权使用。</p>
-<h2>云端方案</h2>
-<p>在线版的人脸识别我试用过依图科技的和中科视拓的SDK。在我们的应用声临其境APP上有个声纹购物的场景，需要人脸验证。这两个厂家提供的API都差不多，依图的API安全性考虑更全面，错误码定义的比较详细。还有他们的API共同点是，图片传输都是将图片数据进行base64编码后传输的。至于准确率，感觉都差不多，没有特别明显的差距。</p>
-<h2>离线方案</h2>
-<p>离线版的人脸算法用得比对多。因为它是用在我们要卖的机器上，而在线版的我们只是做试验。离线版的集成和使用要比在线版麻烦很多。由于离线版要给出算法库，处于安全和容易被拷贝的原因，都是要先授权的。授权的方式一般有两种：在设备上接入加密狗USB key或者绑定设备机器码的方式。加密狗方式比较方便，我们一般采用这种方式。</p>
-<p>我们接入了很多厂家，有阅面科技，中控，杰锐达，商汤，我还把开源的dlib人脸识别也接入了 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/ren-lian-jian-ce-ren-zheng-bi-dui-dlib-electron.html">人脸检测 人证比对 dlib electron </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/duo-jia-gong-si-de-ren-zheng-bi-dui-suan-fa-ti-yan-he-kai-fa-gan-xiang.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>兄弟成长于天蓝时代</title><link>https://szuwest.github.io/</link><description>West's blog</description><atom:link href="https://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 19 Sep 2021 00:00:00 +0800</lastBuildDate><item><title>Flutter framework源码学习（一）</title><link>https://szuwest.github.io/flutter-frameworkyuan-ma-xue-xi-yi.html</link><description>&lt;h1&gt;Flutter framework源码学习（一）&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>兄弟成长于天蓝时代</title><link>https://szuwest.github.io/</link><description>West's blog</description><atom:link href="https://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Fri, 31 Dec 2021 00:00:00 +0800</lastBuildDate><item><title>2021年年度总结</title><link>https://szuwest.github.io/2021nian-nian-du-zong-jie.html</link><description>&lt;h1&gt;2021年年度总结&lt;/h1&gt;
+&lt;p&gt;今年马上要过去了，这一年发生了很多事，不过也可以说是过得很充实的一年。&lt;/p&gt;
+&lt;h2&gt;生活与家庭&lt;/h2&gt;
+&lt;p&gt;首先是我们家马上要迎来一个小天使，预产期在2月中。这小宝宝来之不易，从备孕开始，就做了很多工作，去了很多次医院，吃了很多药。后来怀上，孕早期我老婆每天都要去打针，几乎天天去医院。然后她还孕反很严重，很容易呕吐和累。总算挺过来了，现在就是好好休养，等待天使降临。名字已经准备好，我也做好了心理准备，希望一切顺利。&lt;/p&gt;
+&lt;h2&gt;工作&lt;/h2&gt;
+&lt;p&gt;今年没想到公司变动很大，大到几乎难以相信。&lt;/p&gt;
+&lt;p&gt;首先是6月份我的上司离职了，据说是因为家庭（孩子）的缘故。我听到这个消息的时候整个脸都黑了，这是同事说的。当时我们正在吃饭，老板突然组织饭局，在吃饭的时候说的。我确实怔住了，因为我没预想到会这个样子，我以为他至少会做到公司上市。我的上市是个比我还年轻的人，不过我们的工作年限应该差不多。他是复旦高材生，人很聪明。不过最重要我觉得还是他做事比较认真负责。我觉得我们有很多相似的地方，所以我觉得我们配合起来挺好的。有他在这个公司我觉得还是放心的。但是他的家庭确实是个问题，上海人来深圳工作本来就是个不稳定的因数。他小孩好像是3岁，正是需要父亲的时候，所以我也很理解。他做到了公司的技术合伙人位置，从职位角度上看也到头了，公司短期来也无法上市，离开也是一种选择。&lt;/p&gt;
+&lt;p&gt;公司并不会说没了谁就不行了。虽然他的离开我认为对公司来说是个损失。他的工作被拆分了几个人接手，不过即使过了好几个月，有很多东西都还未完全接手好，有些工作必须是他那个位置的人才好做，不过并不会有人接替他的位置。&lt;/p&gt;
+&lt;p&gt;可是更大的变动还在后面。12月初老板Z突然找我到阳台聊天，第一句话就说他要离开了。然后就讲了一些其他东西。我没想到老板也有“离开”自己公司的时候。不过由于之前经历过上司的离职，这次造成的瞬间冲击没那么大，但是它是慢而久的那种。然后回想起之前的种种事情，原来是这么回事，一切都跟这个有关。当然，这个老板离开，就有另外一个老板掌管全部了。公司有两个联合创始人，老板Z和老板C。离开的创始人老板Z股份更多一点，是董事长。后来另外一个创始人老板C，也就是现今的唯一老板，他告诉我老板Z离开的原因：投资方的要求。从这件事我认识到，资本其实是一个很残酷的东西，并没有什么人情味可讲，利益就是一切。&lt;/p&gt;
+&lt;p&gt;我想要是我要被迫离开自己创立的公司，我一定无法接受。从这一点来讲，离开的老板也是做了很大的牺牲，换了我，我想我可能无法做到他这样。以后我要是创业，我一定要避免这种事情发生。&lt;/p&gt;
+&lt;p&gt;老板Z的离开，可能也导致了现在我们的部分负责人X离开。自从之前的负责人，也就是我的前上司离开后，X就成了我们部分负责人。他是老员工，据说跟了老板Z很久，当负责人也无可争议。他的离开据说也是因为家里小孩的缘故。不过不管什么原因，他离开了那我就可能要担负起整个IT部分的管理工作。老板C也跟我沟通过，由于我是一直做移动开发，做部门负责人肯定得懂服务器和后端开发，所以我最近一直在学习服务器的相关知识，学习后端开发。工作这么多人，我当然也了解过后端开发的一些知识，也玩过一下云服务。不过我从来没在公司做过后端开发。&lt;/p&gt;
+&lt;p&gt;最近一个月来都在学习服务器部署的技能，已经熟悉了AWS和阿里云的一些架构和功能，部署了几个测试服务器。好在我已经看过不少架构的文章，知识都是相通的，我相信给予一定的时间，应该没太大问题。我近几年来一直想做一下后端开发，补一下自己的短板，这恰好是我的机会，我得好好把握。&lt;/p&gt;
+&lt;p&gt;有变化就有机会，所以你得待得时间够长。我相信我有机会可以做得比他们更好。&lt;/p&gt;
+&lt;h2&gt;其他&lt;/h2&gt;
+&lt;p&gt;这一年我大部分都不算太忙，我还看了一些书，例如刘慈欣的《三体》。三部我都买了，不过现在只看了第一部，还不错，但是没超出我的预期。&lt;/p&gt;
+&lt;p&gt;最近研究了Flutter framework的源码，收获还挺多。感觉自己代码理解能力提高了，可能是工作经历丰富了的缘故。&lt;/p&gt;
+&lt;p&gt;一直来我都想把我念念想的一个APP给做了。而下半年我终于下定决心要在宝宝出生前做出第一版。所以我利于闲暇时间写了很多代码，现在算地基搭好了，垒了一部分上层。最近因为学些服务器相关知识，没那么多时间来弄了。不过快要到春节了，春节可以写一波。争取孩子出生前上线第一版。&lt;/p&gt;
+&lt;h2&gt;2022年展望&lt;/h2&gt;
+&lt;p&gt;2021年整体还算可以，发生了太多事，有按照预想的，有完全计划外的。2022年我会有人生的一个新阶段：当爸爸。那会是怎么的感觉，现在还不知道。职业上应该也能有突破，希望能迈入新阶段。不管怎样，我相信我的后端技能肯定有很大提升。&lt;/p&gt;
+&lt;p&gt;希望2022年一切更好。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Fri, 31 Dec 2021 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2021-12-31:2021nian-nian-du-zong-jie.html</guid><category>总结</category></item><item><title>Flutter framework源码学习（一）</title><link>https://szuwest.github.io/flutter-frameworkyuan-ma-xue-xi-yi.html</link><description>&lt;h1&gt;Flutter framework源码学习（一）&lt;/h1&gt;
 &lt;p&gt;以下内容只是我在团队技术分享里的keynote的摘录，实际上在分享会上会补充很多细节，这里就略过了。&lt;/p&gt;
 &lt;h2&gt;Flutter架构&lt;/h2&gt;
 &lt;p&gt;Flutter主要分为engine层，framework层和embeder层，engine层主要用c++写的，framework层主要是Dart语言写的，embedder层主要是平台相关的native语言写的。这里framework的源码最容易获得，也最方便容易学习。当你安装好Flutter环境之后，在Android studio打开任意Flutter项目，就可以从你的项目代码跳转到framework代码进行研究，这边跟Android是差不都的。&lt;/p&gt;
