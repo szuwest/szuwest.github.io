@@ -50,6 +50,60 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/shen-du-xue-xi-ru-men-du-hou-gan.html"><h3 class="article-title">《深度学习入门》读后感</h3></a>
+<h6 class="subheader" title="2020-05-05T00:00:00">2020-05-05
+</h6>
+
+
+<h1>《深度学习入门：基于Python的理论与实现》读后感</h1>
+<p>最近因为做一个功能要用到深度学习相关知识和TensorFlowLite，我决定认真的学一下深度学习的知识。以前总觉得AI太高大上，怕自己看不懂。但是这次做这个功能让我意识到，如果自己再不学习，过几年可能就太晚了。我估计三五年之后，AI会渗透到各行各业，连APP开发也需要掌握一些深度学习的知识。</p>
+<p>先说一下我们APP做的这个功能：用相机扫描检验单（体检单），将检验单截图上传到服务器，服务器进行OCR识别，并将数据结构化，用于生成用户的基因报告。这里涉及到APP开发的部分是将相机中的检验单检测并裁剪出来，上传到服务器识别。这里识别和裁剪部分很重要。将检验单准确的裁剪出来，可以提升OCR准确率。如果随意拍了一张图片，除了检验单部分，可能还包含了其他杂乱的背景，甚至其他不相关的文字内容。所以只将检验单部分裁剪出来是很重要的。</p>
+<p>如果采用传统的OpenCV边缘检测方法来在图片中来找检验单，效果不尽人意。但是如果采用深度学习的方式来找检验单，那就可以得到很好的效果。当然这也是我们从fengjian大神博客学到的。我们采用他的方法，自己准备了一批数据训练，得到一个模型。而我们APP的任务就是在手机上采用TensorFlowLite运行我们的模型来推断得到相关结果。</p>
+<p>因为做这个功能，我了解了下TensorFlowlite，但是我们深度学习却是了解不多。所以我决定找本书来学习一下。网上查了下，《深度学习入门：基于Python的理论与实现》这本书挺受好评，问了下我同事，他也看过这书，说写得不错 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/shen-du-xue-xi-ren-gong-zhi-neng-du-hou-gan.html">深度学习 人工智能 读后感 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/shen-du-xue-xi-ru-men-du-hou-gan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/shen-du-xue-xi-ru-men-du-hou-gan.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
+                <a href="https://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html"><h3 class="article-title">探讨从H5页面拉起APP的技术方案和问题</h3></a>
+<h6 class="subheader" title="2020-03-07T00:00:00">2020-03-07
+</h6>
+
+
+<h1>探讨从H5页面拉起APP的技术方案和问题</h1>
+<p>从H5页面里拉起或叫唤起APP（APP需已经安装在手机上），有两种技术方案，一种通过HTTP链接（iOS叫 Universal Link，安卓叫APP Links技术）拉起技术，一种是通过自定义scheme拉起技术（也有叫深度链接deeplink的）。这两个技术适用不同的场景，也有不同的局限性。</p>
+<h2>一、通过HTTP链接拉起</h2>
+<p>要想通过HTTP(s)链接直接拉起APP，需要APP本身做一些配置和写一些代码实现，还需要在你网站服务器配置相关的json文件。例如配置服务器host，能打开页面的path等。有些了这些配置，苹果服务器或者谷歌的服务器验证了这些配置，就可以通过相关的HTTP链接来打开APP了</p>
+<p>这里不管是iOS叫 Universal Link，还是安卓的APP Links，他们的技术方案是基本一样的，只是不同的平台稍微有些不一样的而已。基本规则是：</p>
+<ul>
+<li>先按照要求生成一个配置文件，json格式的，里面包括了一些必要的信息，例如安卓的包名，apk签名等，iOS的appID,匹配URL的path</li>
+<li>将配置文件放到你的网站根目录下的.wellknown目录下，让苹果或谷歌的服务器能从这里下载这个配置文件。这个文件是关键，因为苹果或谷歌要从你网站里拉取到这个配置文件。由于你的网站只有你自己有权限上传配置文件，从而保证了安全性。</li>
+<li>在你的APP里配置相关网站host ...</li></ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/app.html">APP </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/tan-tao-cong-h5ye-mian-la-qi-appde-ji-zhu-fang-an-he-wen-ti.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/shang-chuan-ying-yong-dao-ping-guo-yi-zhi-qia-zhu-yan-zheng-zhong-authentication-with-the-app-storewen-ti-jie-jue.html"><h3 class="article-title">上传应用到苹果一直卡住验证中（authentication with the app store）问题解决</h3></a>
 <h6 class="subheader" title="2020-02-08T00:00:00">2020-02-08
 </h6>
@@ -303,67 +357,9 @@
                 <hr  class="gradient"/>
             </article>
 
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/tan-tan-gui-bing-pai-xu-suan-fa.html"><h3 class="article-title">谈谈归并排序算法</h3></a>
-<h6 class="subheader" title="2018-08-06T00:00:00">2018-08-06
-</h6>
-
-
-<h2>谈谈归并排序算法</h2>
-<p>归并排序算法是一个很重要的算法。在排序算法中，算是非常重要的一个算法。我们常说的数组归并排序，是指二路归并排序算法，时间复杂度是O(nlog(n)),空间负责度是O(n).核心的思想就是对两个有序数组合并成一个有序数组。对于一个未排序的数组怎么产生两个已排序的数组呢？其实就是对数组不断的分割，分割成多个只有一个元素的数组。只有一个元素的数组，当然这个数组就是有序的了。然后再将这些数组进行两两合并，合并后的数组还是有序数组，这样再次进行两两合并，最终可以合并成一个有序数组，这样排序就完成了。</p>
-<p>归并排序的算法看起来不是很复杂，但是实现起来我觉得不是那么简单。首先它需要额外的空间，这个额外的空间怎么分配跟算法实现方式有关。然后算法的实现方式有递归方式和迭代方式两种。网上流行的都是递归方式。</p>
-<h3>递归方式</h3>
-<p>递归方式采用典型算法：分治法来进行。</p>
-<ul>
-<li>1.将数组分为两半，前一半和后一半。</li>
-<li>2.将这两半进行有序数组合并</li>
-<li>3.继续进行第1步，直到数组不能在分为止</li>
-</ul>
-<p>这里明显采用了递归定义，递归定义其实不是那么好理解，也不是那么难理解。简单来说就是不断的将一个数组进行对半分，一直分到不能分为止，这样最终就会分得很多个元素个数为1的数组，然后再将这些数组进行两两合并。注意子数组可能是奇数个，但是这也没关系，没得合并的就暂时放在原位，下一次合并的时候总会用到 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/suan-fa.html">算法</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/suan-fa-gui-bing-pai-xu.html">算法 归并排序 </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/tan-tan-gui-bing-pai-xu-suan-fa.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/tan-tan-gui-bing-pai-xu-suan-fa.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/zhong-guo-hu-lian-wang-qun-ti-gen-ji-nian-qian-fa-sheng-liao-ju-da-bian-hua.html"><h3 class="article-title">中国互联网群体跟几年前发生了巨大变化</h3></a>
-<h6 class="subheader" title="2018-08-04T00:00:00">2018-08-04
-</h6>
-
-
-<h2>中国互联网群体跟几年前发生了巨大变化</h2>
-<h3>抖音和拼多多</h3>
-<p>今天晚上刷着刷着抖音的时候，我突然意识到现在的互联网跟几年前的互联网已经发生了巨大的变化。这个变化其实很在就开始，也很早有人提过了。但是我自己也是刚刚才深刻的意识到这一点。</p>
-<p>我在抖音上只关注了几个人，这些人都基本上是在农村或者小城市生活的。然后联想到最近吵得的很火的拼多多的用户群体，还有更早的快手，现在很火的应用的主要用户群体，都是以小城市和农村的用户为主。所以我突然意识到，现在已经不是以前那个以社会白领用户或者高端用户为主的互联网了。如果现在要做纯互联网的应用，就要考虑“低端”用户为主了，可以说得小城市或者农村的用户得天下了。</p>
-<p>你看拼多多，3年就上市了，市值超过200亿美金，号称有3亿用户。而抖音估值也不低于100亿美金。拼多多被很多都市白领吐槽质量差假货多，殊不知人家的主要用户就不是你们。而抖音上很多内容都是三四线城市的人或者农村人发的。我估计抖音后台应该很清楚，抖音的发布内容主要用户应该是三四线以外的用户群体。为什么会这样子，我想在我说我的想法之前先说说别的。</p>
-<p>我自己最常用的几个应用是微信，微博，雪球，还有知乎等一些跟自己专业相关的社区应用。微信是通信工具没的说，但是里面的公众号内容其实主要是给社会精英，白领消费的。微博，典型的社会精英和媒体社交平台。知乎，大部分也是社会白领在上。这就是我们以前开发互联网应用的主要目标用户群体。</p>
-<p>你看，我们一致性的忽略了“低端”用户。其实不是我们故意的，而且以前这些用户不存在或者没有消费能力 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/hu-lian-wang.html">互联网 </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/zhong-guo-hu-lian-wang-qun-ti-gen-ji-nian-qian-fa-sheng-liao-ju-da-bian-hua.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/zhong-guo-hu-lian-wang-qun-ti-gen-ji-nian-qian-fa-sheng-liao-ju-da-bian-hua.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
             <!-- /#posts-list -->
 <div class="pagination-centered">
-<h6 class="subheader">Page 2 of 7</h6>
+<h6 class="subheader">Page 2 of 8</h6>
 
 <p>
             <a href="https://szuwest.github.io/index.html">&laquo; Prev</a>
