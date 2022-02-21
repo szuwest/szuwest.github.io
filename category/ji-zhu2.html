@@ -50,6 +50,53 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html"><h3 class="article-title">AOP在移动开发中的应用</h3></a>
+<h6 class="subheader" title="2020-01-21T00:00:00">2020-01-21
+</h6>
+
+
+<h1>AOP在移动开发中的应用</h1>
+<p>下面是我在我们团队上的技术分享内容，从PPT里摘抄出来的，所有很多都是个提纲摘要</p>
+<h2>AOP简介</h2>
+<ul>
+<li><strong>AOP，Aspect Oriented Programming，面向切面编程</strong></li>
+<li>面向切面编程是一种通过横切关注点（Cross-cutting Concerns）分离来增强代码模块性的方法，它能够在不修改业务主体代码的情况下，对它添加额外的行为。</li>
+<li>是对OOP的一种补充,是一种解耦的重要手段</li>
+</ul>
+<h3>AOP常用概念</h3>
+<ul>
+<li>Join point：程序执行期间的一个点,表示方法的执行</li>
+<li>Pointcut: 切入点实际上也是从所有的连接点(Join point)挑选自己感兴趣的连接点的过程</li>
+<li>Aspect: 程序横向切割成若干的面，即Aspect.每个面被称为切面</li>
+<li>Advice: 某个特定连接点的某个方面采取的行动。不同类型的建议包括“周围(Around)”，“之前(Before)”和“之后(After)”建议</li>
+</ul>
+<h2>AOP实现原理</h2>
+<ul>
+<li>
+<p>编译期间的静态织入，又称为编译时增强</p>
+</li>
+<li>
+<p>运行期间的动态代理，又称为运行时增强</p>
+</li>
+</ul>
+<h3>运行时AOP</h3>
+<ul>
+<li>程序运行时 ...</li></ul><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/aop-yi-dong-kai-fa.html">AOP 移动开发 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/aopzai-yi-dong-kai-fa-zhong-de-ying-yong.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/ji-yi-ci-webviewtian-keng-guo-cheng-you-huan-xing-fu-yin-fa-de-xie-an.html"><h3 class="article-title">记一次WebView填坑过程--由换行符引发的血案</h3></a>
 <h6 class="subheader" title="2019-07-27T00:00:00">2019-07-27
 </h6>
@@ -315,38 +362,6 @@
 
 
 <p><a href="https://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/react-nativekuang-jia-yuan-ma-xue-xi-iosshang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html"><h3 class="article-title">浅谈ReactNative技术的优劣</h3></a>
-<h6 class="subheader" title="2018-02-06T00:00:00">2018-02-06
-</h6>
-
-
-<h1>浅谈ReactNative技术的优劣</h1>
-<p>去年大概10月份开始使用ReactNative技术来开发项目，现在也已经有几个月时间了。也上线了三个ReactNative开发的项目。一直想谈谈使用ReactNative的开发感受。</p>
-<ul>
-<li>使用react-native确实可以提高界面开发效率，因为两个平台，只需要编写一套代码。react-native在这方面做了很多工作，让界面开发跟web开发基本一致。web开发人员可以很方便的写react-native界面，不需要二次学习。而且在react-native里面的像素是逻辑像素，可以比较好的适配界面。</li>
-<li>react-native界面开发方式跟web开发是基本一致的，这跟native开发界面有很大不同。react-native界面开发是声明式开发，而且是继承于react框架，而纯native开发人员根本不了解这个框架，需要学习成本。它的View布局层次跟原生的布局层次不太一样。我自己也搞了挺久才搞清楚。</li>
-<li>react-native很适合那些纯http数据交互的应用。即那些数据和内容都是从服务器拉取，APP只是展示和消费的场景应用。这样不但界面可以react-native来写，HTTP请求也可以很方便的用ReactNative来写。</li>
-<li>react-native不适合用于那些需要复杂的通信方式的应用，也不适用于那些强多媒体资源的应用，例如要做相册，音视频播放的应用。因为react-native上不方便用socket的那些通信方法，需要自己封装。然后内存问题也不太好把控。对于相册，多媒体播放，ReactNative也没有封装。</li>
-<li>react-native对于web转native开发是很有用，对纯native开发转react-native开发不是很友好，主要是思维方式发生比较大的变化。</li>
-<li>react-native不能隔绝native开发的知识。要做APP开发，最终还是需懂得native开发的一些知识，react-native并不能完全屏蔽这些。一个纯web开发想要转react-native开发，还是需要懂native开发的人来帮助和指导，或者自己需要先学习native相关知识。</li>
-</ul>
-<h1>react-native开发会是未来的方向吗</h1>
-<p>这个我也不敢说。不过ReactNative开发未来会代替掉一些native发 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/react-native.html">react-native </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
