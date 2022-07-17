@@ -50,6 +50,40 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html"><h3 class="article-title">iOS后台下载和断点续传</h3></a>
+<h6 class="subheader" title="2016-12-08T00:00:00">2016-12-08
+</h6>
+
+
+<h2>iOS后台下载和断点续传</h2>
+<p>最近在重新整理我们项目里的iOS的后台下载，因为原来方法（ASIHTTPRequest方式）无法做到后台一直下载，这个问题被我老婆吐槽了好几次。所以我重新整理一下，用NSURLSession来下载，达到了比较好的效果。现在总结自己的一些经验。</p>
+<h3>背景</h3>
+<p>项目最开始我们是用了NSURLSession来做后台下载的。但是有两个严重的问题</p>
+<ul>
+<li>有时候偶现的不能下载，就是一启动下载就失败。一旦出现这种情况，无法恢复，怎么样都无法下载，所有任务都一样</li>
+<li>下载速度很慢，只有几十到几百KB/S，网络正常，Android端同一个文件下载速度飞快</li>
+<li>程序杀掉之后无法重新继续下载</li>
+</ul>
+<p>按道理这些问题都不应该出现，可是我们的应用就是出现了这些问题，而且难以调试，同事调试了很久都没有结果。最后我也没认真研究，但是我发现ASIHTTPRequest可以很好地解决上面的几个问题，然后我就在原来的基础上加了ASIHTTPRequest的下载方式。</p>
+<p>ASIHTTPRequest方式的下载不错，速度很快，也能很好的断点续传，但是跟Android的还是慢了一点，不过我觉得这可能是系统不同的原因。ASIHTTPRequest还有一个比较致命的弱点，就是不能后台下载，这对于下载大文件来说是必须的。在iOS平台要做后台下载，最好的方式还是使用NSURLSession。</p>
+<p>所以我决定好好研究一下NSURLSession，并且改用这种方式。</p>
+<h3>NSURLSession后台下载</h3>
+<p>实际上NSURLSession的后台下载真的很强大，苹果真做了件很好的事。当你创建一个后台下载任务的时候，实际上你就把这个下载交给系统来接管了。所以即使你把APP杀掉 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ios.html">iOS</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/nsurlsession-asihttprequest-hou-tai-xia-zai.html">NSURLSession ASIHTTPRequest 后台下载 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ioshou-tai-xia-zai-he-duan-dian-xu-chuan.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/shi-jian-xun-huan-ji-zhi-zhi-yu-androidde-looperhe-iosde-nsrunloop.html"><h3 class="article-title">事件循环机制之于Android的Looper和iOS的NSRunLoop</h3></a>
 <h6 class="subheader" title="2016-12-04T00:00:00">2016-12-04
 </h6>
@@ -305,31 +339,6 @@
 
 
 <p><a href="https://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/da-yin-yang-hui-san-jiao-bian-cheng-suan-fa-xi-lie-zhi-yi.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/qian-tan-vr.html"><h3 class="article-title">浅谈VR</h3></a>
-<h6 class="subheader" title="2016-06-11T00:00:00">2016-06-11
-</h6>
-
-
-<h2>浅谈VR</h2>
-<p>最近VR火得不行，就连央视财经也有报道说“4年后VR市场规模高达550亿元！人才缺口达80万”。然后刚刚结束的高考，某一个省份的语文作文题也是跟VR相关。所以说，VR是今后几年最热门的一个话题和技术之一，没有人会反对。</p>
-<p><strong>VR</strong>, 是Virtual Reality的缩写，即虚拟现实，它其实不是最近新的技术，它只是因为移动互联网的兴起而变得热门起来。我记得真正被全世界人认识和讨论的触发事件是Facebook发重金收购了Oculus VR公司。而除了VR，实际上还有另外一个相近技术<strong>AR</strong>. AR是Augmented Reality缩写，即增强现实。AR跟VR有挺大不同的，我现在研究得也不多，以后有机会我也想写一下AR相关的文字。</p>
-<h2>VR的应用</h2>
-<p>前几天我配老婆去海雅缤纷城逛街，然后发现那里有一个VR体验区，主要是VR电影和游戏结合的项目，还有一个是VR自行车。我体验了一下一个叫《地城游记》的游戏，感觉还可以。它主要是你坐在一个机器上，带上头盔，手可以握着一个杆，杆上有个按键，游戏中你可以按那个键来进行射击怪物。你坐在机器上，机器会根据游戏来进行晃动，例如我体验的是坐着过山车，它就会根据过山车来进行晃动，模拟你看到场景，就好像你真的在坐过山车一样。游戏中会有一些蝙蝠或者龙飞在你前面，然后有声音提示你射击它，你就会知道按那个键 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/vr-ar.html">VR AR </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/qian-tan-vr.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/qian-tan-vr.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

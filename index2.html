@@ -50,6 +50,36 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/apptui-song-he-apphuan-qi-ji-zhu-fang-an-tan-tao.html"><h3 class="article-title">APP推送和APP换起技术方案探讨</h3></a>
+<h6 class="subheader" title="2020-08-04T00:00:00">2020-08-04
+</h6>
+
+
+<h1>APP推送和APP换起技术方案探讨</h1>
+<h3>目标：</h3>
+<p>尽量将APP两端设计成统一的方案，减少服务器适配工作量，最好可扩展，能复用。</p>
+<h3>方案说明：</h3>
+<p>我们知道APP推送目的是将对用户有用的信息，主动推给APP，作为通知信息展示，用户通过点击通知进入APP相关页面。</p>
+<p>这里只要涉及服务器端和APP端两个技术点：服务器推送什么样的信息过来，APP这边如何解析接收到的信息，打开相应的界面和解析数据。</p>
+<p>服务器只有一个，所以尽量让服务器发送给两端的数据较为一致，这需要一开始就应该想好整个系统的设计方案。</p>
+<p>安卓和iOS是两个完全不同的平台，相关技术栈也不一样。不过基本都要依赖厂商的通讯通道来个APP发通知：苹果有自己的APN通道，Google也有自己的通道，当然在中国，各个厂商有自己的通道。有很多第三方SDK都整合多家厂商的通道。我们使用了信鸽（腾讯云移动推送）的SDK。之所以选他家，主要是他们集成了主流的厂商，文档也还可以（以前他们有免费版）。</p>
+<p>为了能拉起APP不同的界面，我们需要定义一套规则。iOS的方案比较固定，只能通过json参数，这是它系统框架决定的。而安卓就不太一样，不同的厂商支持不同的方式，APP存活状态和未启动状态也不太一样。不过有一个方案是所有情形都适用的：就是通过定义Activity的scheme方式。</p>
+<p>scheme方式是一种URI，我们经常用的URL地址也是一种URI。URI在iOS或者安卓都经常使用来拉起页面。例如我们的APP主页可以定义URI为: wegene://com.wegene ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/tui-song-huan-qi-la-qi.html">推送 唤起 拉起 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/apptui-song-he-apphuan-qi-ji-zhu-fang-an-tan-tao.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/apptui-song-he-apphuan-qi-ji-zhu-fang-an-tan-tao.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/wo-de-shi-nian.html"><h3 class="article-title">我的十年</h3></a>
 <h6 class="subheader" title="2020-05-25T00:00:00">2020-05-25
 </h6>
@@ -328,34 +358,6 @@
 
 
 <p><a href="https://szuwest.github.io/2018nian-zong-jie-he-2019nian-zhan-wang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/2018nian-zong-jie-he-2019nian-zhan-wang.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html"><h3 class="article-title">iOS开发如何做外部测试</h3></a>
-<h6 class="subheader" title="2019-01-05T00:00:00">2019-01-05
-</h6>
-
-
-<h2>iOS开发如何做外部测试</h2>
-<p>我们做APP开发的，开发出来的APP还未上线，又要想给别人用一下，该怎么做？实际上这是我们每个做APP开发的人都会遇到的，但是并不是每个人都清楚怎么做，有哪些方式。今天我们就来讲一讲。</p>
-<p>在将iOS的APP如何给别人使用和测试前，先说一下安卓APP开发是怎么做的。安卓端是很简单的，你只要先生成一个证书文件keystone，然后用这个文件给apk签名，就可以将apk发给任意一个人安装使用了。这很简单，也很方便。可是iOS的就没那么容易了。我们还是从最简单的开发人员如何用真机测试开始说起。</p>
-<h3>真机调试</h3>
-<p>我们有了一个想法，并开始写代码，模拟器调试很方便，要在iPhone上看效果怎么办了。你直接将iPhone连上电脑是不行的。现在的情况至少你需要一个Apple ID，在Xcode上登录你的账号，在调试前Xcode会自动帮你初始化一些东西，然后就可以将APP安装到你的iPhone上了。在以前，你这个AppleID不能是普通的账号，必须是付了前的开发者账号才行。现在苹果放宽限制了。</p>
-<p>这种方式的做法是你的手机必须连上你的电脑，在Xcode上选择你的iPhone来调试，Xcode会自动帮你注册设备的UDID。如果你没办法把iPhone连接到电脑上呢？或者不方便把iPhone连接到电脑上，毕竟如果是老板的手机的话，不方便那种做的。那我们需要一种把安装包提供给别人安装，或者一个地址给别人安装的方式。</p>
-<h3>adhoc 方式</h3>
-<p>我们将项目archive后，在导出（现在Xcode叫distribution）的时候，有个选项是adhoc ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/ioskai-fa-betace-shi-testflight-gong-kai-lian-jie.html">iOS开发 beta测试 TestFlight 公开链接 </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

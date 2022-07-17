@@ -50,6 +50,34 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html"><h3 class="article-title">iOS开发如何做外部测试</h3></a>
+<h6 class="subheader" title="2019-01-05T00:00:00">2019-01-05
+</h6>
+
+
+<h2>iOS开发如何做外部测试</h2>
+<p>我们做APP开发的，开发出来的APP还未上线，又要想给别人用一下，该怎么做？实际上这是我们每个做APP开发的人都会遇到的，但是并不是每个人都清楚怎么做，有哪些方式。今天我们就来讲一讲。</p>
+<p>在将iOS的APP如何给别人使用和测试前，先说一下安卓APP开发是怎么做的。安卓端是很简单的，你只要先生成一个证书文件keystone，然后用这个文件给apk签名，就可以将apk发给任意一个人安装使用了。这很简单，也很方便。可是iOS的就没那么容易了。我们还是从最简单的开发人员如何用真机测试开始说起。</p>
+<h3>真机调试</h3>
+<p>我们有了一个想法，并开始写代码，模拟器调试很方便，要在iPhone上看效果怎么办了。你直接将iPhone连上电脑是不行的。现在的情况至少你需要一个Apple ID，在Xcode上登录你的账号，在调试前Xcode会自动帮你初始化一些东西，然后就可以将APP安装到你的iPhone上了。在以前，你这个AppleID不能是普通的账号，必须是付了前的开发者账号才行。现在苹果放宽限制了。</p>
+<p>这种方式的做法是你的手机必须连上你的电脑，在Xcode上选择你的iPhone来调试，Xcode会自动帮你注册设备的UDID。如果你没办法把iPhone连接到电脑上呢？或者不方便把iPhone连接到电脑上，毕竟如果是老板的手机的话，不方便那种做的。那我们需要一种把安装包提供给别人安装，或者一个地址给别人安装的方式。</p>
+<h3>adhoc 方式</h3>
+<p>我们将项目archive后，在导出（现在Xcode叫distribution）的时候，有个选项是adhoc ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/ioskai-fa-betace-shi-testflight-gong-kai-lian-jie.html">iOS开发 beta测试 TestFlight 公开链接 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ioskai-fa-ru-he-zuo-wai-bu-ce-shi.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/svgtu-pian-zai-yi-dong-duan-de-ying-yong-jie-jue-fang-an.html"><h3 class="article-title">SVG图片在移动端的应用解决方案</h3></a>
 <h6 class="subheader" title="2018-11-03T00:00:00">2018-11-03
 </h6>
@@ -311,69 +339,6 @@
 
 
 <p><a href="https://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/qian-tan-reactnativeji-zhu-de-you-lie.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/code-reviewfang-an.html"><h3 class="article-title">Code Review方案</h3></a>
-<h6 class="subheader" title="2018-01-10T00:00:00">2018-01-10
-</h6>
-
-
-<h1>Code Review方案</h1>
-<h2>定义</h2>
-<p>Code Review代码评审是指在软件开发过程中，通过对源代码进行系统性检查的过程。通常的目的是查找各种缺陷，包括代码缺陷、功能实现问题、编码合理性、性能优化等；保证软件总体质量和提高开发者自身水平</p>
-<h2>code review 的好处</h2>
-<ul>
-<li>
-<ol>
-<li>提高代码质量。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>及早发现潜在缺陷，降低修改/弥补缺陷的成本。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>促进团队内部知识共享，提高团队整体水平。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>评审过程对于评审人员来说，也是一种思路重构的过程。帮助更多的人理解系统。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>是一个传递知识的手段，可以让其它并不熟悉代码的人知道作者的意图和想法，从而可以在以后轻松维护代码。</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>鼓励程序员们相互学习对方的长处和优点。 </li>
-</ol>
-</li>
-<li>
-<ol>
-<li>可以被用来确认自己的设计和实现是一个清楚和简单的。</li>
-</ol>
-</li>
-</ul>
-<h2>code review形式</h2>
-<p>一般code review有两种形式，一种是代码评审会议，我称之为Code Review Meeting，就是将团队成员都组织起来开会，让代码Owner上去讲自己代码的实现和思路，其它人发表意见和进行讨论，也有把这种叫做team review。另外一种是一对一评审，我称之为Single Review，就是项目owner提交代码之后，让reviewer在空闲的时候帮忙评审代码，并且写出批注，owner收到批注后，进行修改或者回复 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/codereview.html">codereview </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/code-reviewfang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/code-reviewfang-an.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 

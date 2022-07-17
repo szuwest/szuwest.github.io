@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>兄弟成长于天蓝时代</title><link>https://szuwest.github.io/</link><description>West's blog</description><atom:link href="https://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Mon, 21 Feb 2022 00:00:00 +0800</lastBuildDate><item><title>湾湾日记(OneDairy)介绍</title><link>https://szuwest.github.io/onediary.html</link><description>&lt;h1&gt;湾湾日记(OneDairy)介绍&lt;/h1&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>兄弟成长于天蓝时代</title><link>https://szuwest.github.io/</link><description>West's blog</description><atom:link href="https://szuwest.github.io/feeds/west.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 17 Jul 2022 00:00:00 +0800</lastBuildDate><item><title>Web3的未来</title><link>https://szuwest.github.io/web3de-wei-lai.html</link><description>&lt;h1&gt;Web3的未来&lt;/h1&gt;
+&lt;p&gt;一直想写点Web3的东西，最近我一直在研究Web3的相关技术。我感觉这是很有前途东西，必须得关注和尽早参与进来。&lt;/p&gt;
+&lt;p&gt;国内很多叫Web3.0，但是国外都叫Web3。国内叫X.0其实是一种语言上的强调语法。我不准备介绍Web1、Web2和Web3的区别和历史。我只想讲讲我感兴趣的技术点和应用。&lt;/p&gt;
+&lt;h2&gt;Web3必然是未来的一部分&lt;/h2&gt;
+&lt;p&gt;在Web2时代，所有数据都是中心化，不是在这个巨头这里，就是在那个巨头那里。巨头拥有你的数据的控制权。他禁你的号，甚至清掉你的数据。我自己的Twitter账号数据就被清理了。在Web3时代，解决就是中心化问题。这也是区块链的基础技术。所以Web3是基于区块链技术的。但是光有区块链技术远远不够，构建一个系统还需要很多其他东西。电子钱包解决账号问题，智能合约解决一些事务，业务问题，IPFS解决数据存储问题。IPFS是我最近才接触到的新技术。也是IPFS让我对Web3产生了极大的兴趣。我觉得未来IPFS真能大规模使用起来，将会提高存储效率，改变很多程序的实现方式，甚至产品形态。IPFS可以让Web3真是大规模运用起来。&lt;/p&gt;
+&lt;h2&gt;加入Web3的浪潮&lt;/h2&gt;
+&lt;p&gt;虽然Web3现在挺火（估计只在IT圈火），但是它我觉得远未到来，至少10年以上吧。国外现在Web3的投资很火，据说国内的很多Web3转移到新加坡去了。虽然国内受到监管，但是我相信Web3肯定能找到适合在中国发展的路径。我自己也想把湾湾日记改造成支持Web2和Web3的产品形态。&lt;/p&gt;
+&lt;p&gt;技术的发展浪潮是一波一波的。Web3肯定属于其中一波。它会对中心化世界进行改造，就像现在的传统化世界被互联网信息化改造一样。对于我们技术人员来说，应该要能看到这个技术趋势，提早学习，加入其中，说不定能享受技术红利。未来伟大的公司应该会从中诞生。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Sun, 17 Jul 2022 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2022-07-17:web3de-wei-lai.html</guid><category>Web3 IPFS</category></item><item><title>湾湾日记(OneDairy)介绍</title><link>https://szuwest.github.io/onediary.html</link><description>&lt;h1&gt;湾湾日记(OneDairy)介绍&lt;/h1&gt;
 &lt;h2&gt;念念不忘的缘由&lt;/h2&gt;
 &lt;p&gt;大约在5，6年前，是在2017年左右吧，我就一直有个想法，做一个适应自己需求的日记APP。当时我在网上找了很多个日记APP，都没有我自己想要的。我当时还在知乎的一个讨论日记的帖子上发表看法。说一个理想的日记APP应该是怎么样的。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;非常同意你说的最后重要的两点。我觉得日志首先是要本地存储的，即使没有网络一样照写不误。然后是可以自动保存到服务器的云端的，随时可以找回，永不丢失。后来看了一些评论，觉得还是要支持导出功能，这样即使开发者不维护或者公司倒闭，可以手动导出自己存储。
