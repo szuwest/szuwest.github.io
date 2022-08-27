@@ -101,6 +101,12 @@
 &lt;td&gt;https://static.bugly.qq.com/bugly-sdk-privacy-statement.pdf&lt;/td&gt;
 &lt;td&gt;设备信息，Crash信息及线程堆栈，网络/语言&lt;/td&gt;
 &lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;高德定位SDK&lt;/td&gt;
+&lt;td&gt;实现定位&lt;/td&gt;
+&lt;td&gt;https://lbs.amap.com/pages/privacy/&lt;/td&gt;
+&lt;td&gt;位置信息（经纬度、精确位置、粗略位置），设备标识信息&lt;/td&gt;
+&lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;有任何疑问请联系szhanfeng203@gmail.com&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">West</dc:creator><pubDate>Sun, 20 Feb 2022 00:00:00 +0800</pubDate><guid>tag:szuwest.github.io,2022-02-20:privacy.html</guid><category>湾湾日记 OneDairy</category></item><item><title>湾湾日记(OneDairy)的技术支持</title><link>https://szuwest.github.io/support.html</link><description>&lt;h1&gt;湾湾日记(OneDairy)&lt;/h1&gt;
