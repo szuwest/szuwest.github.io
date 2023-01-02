@@ -50,6 +50,42 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/yi-dong-duan-wen-dang-bian-yuan-jian-ce-aifang-an.html"><h3 class="article-title">移动端文档边缘检测AI方案</h3></a>
+<h6 class="subheader" title="2020-11-27T00:00:00">2020-11-27
+</h6>
+
+
+<h1>移动端文档边缘检测AI方案</h1>
+<h3>需求</h3>
+<p>先说一下我们的需求：
+我们需要用户拿手机扫描自己的体检单，然后我们识别体检单的内容，结构化数据后存起来用。
+这里面解决方案一般都是手机客户端拍一张照片上传到服务器识别。而这张照片的好处直接影响了服务器的识别准确率。如果照片里有掺杂这别的内容就更不好了，最好照片里只有文档内容。这里就使用到了边缘检测技术。</p>
+<h3>传统的边缘检测技术</h3>
+<p>在传统的边缘检测方案中，大部分都是采用OpenCV里的边缘检测算法。OpenCV库在图像处理和识别方面真是鼎鼎大名，运用十分广泛。OpenCV库里的用到的叫cany和findContours算法，而且cany还有好几个版本。但是这个算法也不完美，很容易识别错，因为现实的场景也很复杂。</p>
+<h3>HED算法方案</h3>
+<p>现在哪里都流行用AI算法来优化。我在网上找到了fengjian大神的文章。原来我很早的时候就看到他写的<a href="http://fengjian0106.github.io/2017/05/08/Document-Scanning-With-TensorFlow-And-OpenCV/">这篇</a>文章。然后就按照他的方案来开干。我运行了他的demo，大致能得到满意的效果。但是他的文章很旧了，用到的TensorFlow还是很老版本，而且只开源了iOS版本。</p>
+<p>经过我们的摸索，还有参考了别的一些demo，我终于把它移植到了TensorFlowLite，而且我还做了安卓的版本。这样两端的解决方案一致，可以运用到正式项目中。</p>
+<p>当然，我们自己也做了很多优化，还有自己重新收集了一些我们场景的照片来训练新的模型。最终达到了不错的效果。</p>
+<p>我把最初移植做的demo放到github上，给有需要的人参考。这里最大优势就是安卓和iOS的方案都有。</p>
+<p><a href="https://github.com/szuwest/doc_detect_android">安卓版本</a></p>
+<p><a href="https://github.com/szuwest/doc_detect_ios">iOS版本</a></p>
+<hr />
+<p>如果你觉得这篇文章有用，请打赏小钱喝杯咖啡 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/ji-zhu.html">技术</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/bian-yuan-jian-ce-hed-opencv-tensorflowlite.html">边缘检测 HED OpenCV TensorFlowLite </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/yi-dong-duan-wen-dang-bian-yuan-jian-ce-aifang-an.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/yi-dong-duan-wen-dang-bian-yuan-jian-ce-aifang-an.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/apptui-song-he-apphuan-qi-ji-zhu-fang-an-tan-tao.html"><h3 class="article-title">APP推送和APP换起技术方案探讨</h3></a>
 <h6 class="subheader" title="2020-08-04T00:00:00">2020-08-04
 </h6>
@@ -328,36 +364,6 @@
 
 
 <p><a href="https://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/ru-he-xie-chu-bu-tai-pi-de-dai-ma.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/2018nian-zong-jie-he-2019nian-zhan-wang.html"><h3 class="article-title">2018年总结和2019年展望</h3></a>
-<h6 class="subheader" title="2019-02-10T00:00:00">2019-02-10
-</h6>
-
-
-<h2>2018年总结和2019年展望</h2>
-<p>一直都没写，不愿意动手，明天就要新的一年上班了，所以还是简单写写吧。</p>
-<h3>2018年总结</h3>
-<p>1.上半年过得很不好，一直非常焦虑，公司发展不好，心里很慌，害怕倒闭了被动找工作。后面决定满一年后就换工作，但是一直没找到合适的。在年中的时候一度非常焦虑，很长一段时间没碰过香烟了，因为心情太过焦虑，又开始在公司偶尔抽了起来。直到后面我在那个公司满一年后，真正决定开始找新工作，找到了一个自己比较合适的公司，心才定下来。</p>
-<p>2.下班年去了新公司后很忙，每天都在马不停蹄的赶，提供工作效率，但是并不觉得很累。很久没有这种感觉了。终于找到跟自己比较匹配的工作，也能比较大的发挥自己才能的工作。老板的价值观，直接上级的价值观跟自己都比较契合，公司的文化也挺好。真心希望能在这家公司发挥自己的才能，也希望公司能做大做强。</p>
-<h3>2019年展望</h3>
-<p>2019年还是希望工作上能继续发挥能量，希望自己的技术能力和管理能力都能得到提升，还有希望自己的团队的每个人的能力都得到提升，当然也希望他们能得到相应的报酬。</p>
-<p>2019年有两件大事。</p>
-<p>1.新房装修。一是要找钱装修，二是要在年底前装修完，希望能在农历年前住进去。新房装修是个大工程，自己完全没有经验，所以要多花点心思。</p>
-<p>2 ...</p><p class="subheader">Category: <a href="https://szuwest.github.io/category/sheng-huo.html">生活</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/zong-jie.html">总结 </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/2018nian-zong-jie-he-2019nian-zhan-wang.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/2018nian-zong-jie-he-2019nian-zhan-wang.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
