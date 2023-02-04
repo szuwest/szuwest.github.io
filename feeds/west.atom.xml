@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>兄弟成长于天蓝时代</title><link href="https://szuwest.github.io/" rel="alternate"></link><link href="https://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>https://szuwest.github.io/</id><updated>2023-01-01T00:00:00+08:00</updated><entry><title>我的2022年终总结</title><link href="https://szuwest.github.io/wo-de-2022nian-zhong-zong-jie.html" rel="alternate"></link><updated>2023-01-01T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2023-01-01:wo-de-2022nian-zhong-zong-jie.html</id><summary type="html">&lt;h1&gt;我的2022年终总结&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>兄弟成长于天蓝时代</title><link href="https://szuwest.github.io/" rel="alternate"></link><link href="https://szuwest.github.io/feeds/west.atom.xml" rel="self"></link><id>https://szuwest.github.io/</id><updated>2023-02-04T00:00:00+08:00</updated><entry><title>国内移动应用商店对个人开发者的支持现状</title><link href="https://szuwest.github.io/guo-nei-yi-dong-ying-yong-shang-dian-dui-ge-ren-kai-fa-zhe-de-zhi-chi-xian-zhuang.html" rel="alternate"></link><updated>2023-02-04T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2023-02-04:guo-nei-yi-dong-ying-yong-shang-dian-dui-ge-ren-kai-fa-zhe-de-zhi-chi-xian-zhuang.html</id><summary type="html">&lt;h1&gt;国内移动应用商店对个人开发者的支持现状&lt;/h1&gt;
+&lt;h2&gt;结论&lt;/h2&gt;
+&lt;p&gt;最近我的湾湾日记上线三星中国应用市场后，已经距离我这个APP首次开发完上线苹果应用商店差不多一年了。所以我想总结一下我经历，谈谈国内移动应用商店对个人开发者的支持现状。可以帮助有需要的人少走弯路。&lt;/p&gt;
+&lt;p&gt;先说结论，截止目前2023年2月4日，支持个人开发者提交应用的国内安卓应用商店有：华为，三星和应用宝，另外还有小众应用商店酷安。像小米，OPPO，VIVO都不支持个人开发者提交应用。&lt;/p&gt;
+&lt;p&gt;要上上述三个应用商店也不是那么容易：必要条件有软件著作权证书，ICP备案。不同的商店可能还有别的要求。这里相对好上的是应用宝。&lt;/p&gt;
+&lt;h2&gt;上线经历&lt;/h2&gt;
+&lt;p&gt;当我开发好湾湾日记APP后，当然首先要上的是苹果应用商店和Google play。因为这两个商店都不需要软件著作权。所以上线国内商店第一个拦路虎就是&lt;strong&gt;软件著作权&lt;/strong&gt;。这玩意实质作用不大，起不了保护软件的作用，但是国家要求，商店就要求要有。这就是天朝特色。国内的小众应用商店酷安没有强制要求要有软著，所以我一开始就上了这个商店，在软著没申请下来之前。&lt;/p&gt;
+&lt;p&gt;软件著作权的申请我是通过阿里云来弄的，好像花了300块钱，自己准备材料自己填写，一个多月后申请下来。&lt;/p&gt;
+&lt;p&gt;申请下来后我上线的第一个商店是应用宝。当时应用宝要求我提供ICP备案，但是我没有。并且我APP目前是纯离线APP，不需要网络就能正常使用。所以我跟审核人员申述。我的APP没有服务器，不需要就正常使用，要求提供ICP备案有点不合理。让后他们就让我的APP上线了。&lt;/p&gt;
+&lt;p&gt;但是华为应用商店就没那么好说了，他们必须让我提供ICP备案，任凭我怎么申诉都没用。然后我去上三星应用商店，遇到了同样的问题。不过三星应用商店可以不上中国大陆区，上全球其他区域。不上中国区就不需要这些乱七八糟的材料。&lt;/p&gt;
+&lt;p&gt;所以上线国内应用商店第二个拦路虎就是&lt;strong&gt;ICP备案&lt;/strong&gt;。为此，我只能去申请一个域名，买一个服务器，来做我湾湾日记的“官网”，然后进行ICP备案。这个也是很扯淡的，因为国家这么规定，他们就死执行。应用宝比较讲理，这才是互联网公司，才是正常的公司。&lt;/p&gt;
+&lt;p&gt;ICP备案我也是在阿里云上进行的。备案过程也不太顺利。一开始我在godaddy上购买了onediary.cn这域名（购买cn域名过程也很曲折，耗了好长时间才买到），在阿里云上备案还不好备，要迁移到阿里云才行。但是刚买没多久的域名不能迁移，我就在阿里云上购买了onediary.net域名，然后在上面备案，提交材料。中间还被打回来几次。最终还是成功了。&lt;/p&gt;
+&lt;p&gt;有了ICP备案，华为就顺利的上了。三星上的过程中遇到点其他的麻烦，但是申诉后最终也上了。这已经是2023年1月份了。我第一次上线是2022年2月份，花了差不多一年才把国内能上的商店上了。。。&lt;/p&gt;
+&lt;h2&gt;吐槽&lt;/h2&gt;
+&lt;p&gt;说实话国内的政策和环境对个人开发者实在太不友好了。当然我也想过注册一个公司，以公司的名义来弄。不过因为我还在职，我不知道注册公司会不会对我的工作有影响。国内的很多政策出发点是好的，但是被执行起来太死板，直接不管三七二十一，一刀切。这会限制了很多东西，这很影响创新，甚至会扼杀创新。我觉得真的很不好。不知道什么时候执行者才会想到这些问题。&lt;/p&gt;</summary><category term="技术 总结"></category></entry><entry><title>我的2022年终总结</title><link href="https://szuwest.github.io/wo-de-2022nian-zhong-zong-jie.html" rel="alternate"></link><updated>2023-01-01T00:00:00+08:00</updated><author><name>West</name></author><id>tag:szuwest.github.io,2023-01-01:wo-de-2022nian-zhong-zong-jie.html</id><summary type="html">&lt;h1&gt;我的2022年终总结&lt;/h1&gt;
 &lt;p&gt;过去的2022年是繁忙的一年，发生了很多事，注定是不平凡的一年。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;家庭：宝宝出生，从年头忙到年尾，养娃真不容易&lt;/li&gt;

@@ -50,6 +50,30 @@
 
 
             <article>
+                <a href="https://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html"><h3 class="article-title">Android开发中何时使用多进程？</h3></a>
+<h6 class="subheader" title="2015-03-10T00:00:00">2015-03-10
+</h6>
+
+
+<h1>问答-Android开发中何时使用多进程？</h1>
+<p>我在github上回答了一个问题：
+<code>Android开发中何时使用多进程？</code></p>
+<div class="highlight"><pre><span class="mf">1.</span><span class="err">要想知道如何使用多进程，先要知道</span><span class="n">Android</span><span class="err">里的多进程概念。一般情况下，一个应用程序就是一个进程，这个进程名称就是应用程序包名。我们知道进程是系统分配资源和调度的基本单位，所以每个进程都有自己独立的资源和内存空间，别的进程是不能任意访问其他进程的内存和资源的。那如何让自己的应用拥有多个进程？很简单，我们的四大组件在</span><span class="n">AndroidManifest</span><span class="err">文件中注册的时候，有个属性是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">，这里可以指定组件的所处的进程。默认就是应用的主进程。指定为别的进程之后，系统在启动这个组件的时候，就先创建（如果还没创建的话）这个进程，然后再创建该组件。你可以重载</span><span class="n">Application</span><span class="err">类的</span><span class="n">onCreate</span><span class="err">方法，打印出它的进程名称，就可以清楚的看见了。再设置</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="err">属性时候，有个地方需要注意：如果是</span><span class="n">android</span><span class="o">:</span><span class="n">process</span><span class="o">=</span><span class="s">&quot;:deamon&quot;</span><span class="err">，以</span><span class="o">:</span><span class="err">开头的名字，则表示这是一个应用程序的私有进程，否则它是一个全局进程 ...</span></pre></div><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
+
+    Tagged: 
+    <a href="https://szuwest.github.io/tag/ji-zhu-wen-da-github-jin-cheng.html">技术问答 github 进程 </a>
+</p>
+
+
+
+<p><a href="https://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/androidkai-fa-zhong-he-shi-shi-yong-duo-jin-cheng.html">Read More</a>
+                <hr  class="gradient"/>
+            </article>
+
+        
+
+
+            <article>
                 <a href="https://szuwest.github.io/androidyuan-ma-xue-xi-zhi-viewgroup.html"><h3 class="article-title">Android源码学习之ViewGroup</h3></a>
 <h6 class="subheader" title="2015-02-02T00:00:00">2015-02-02
 </h6>
@@ -294,35 +318,6 @@
 
 
 <p><a href="https://szuwest.github.io/activitydong-hua-er.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/activitydong-hua-er.html">Read More</a>
-                <hr  class="gradient"/>
-            </article>
-
-        
-
-
-            <article>
-                <a href="https://szuwest.github.io/android-activitydong-hua.html"><h3 class="article-title">Android Activity动画</h3></a>
-<h6 class="subheader" title="2014-11-03T00:00:00">2014-11-03
-</h6>
-
-
-<h1>Android 动画(一)</h1>
-<h2>3.0之前的动画</h2>
-<p>Android动画一直是Android的痛点。Android的动画系统跟iOS系统的动画系统比起来真心差很多，特别是2.3之前。在2.3之前，Android的动画分两种，帧动画和逐渐动画（Tween）.Tween动画包括alpha动画，translate动画，scale动画，rotate动画。这几种动画可以随意组合，产生更复杂的动画。但是我们想要做iOS的frame那样简单的动画，却是没有直接的方法。</p>
-<hr />
-<h2>3.0之后的动画</h2>
-<p>在Android3.0版本，终于加入了更多的动画支持，API也更加友好。加入我property动画和value动画，大大增加了动画的灵活性和可定制性。可以通过ObjectAnimator很方便的写出动画代码。像iOS的frame动画，可以通过value动画来实现。还有因为property特性，可以实现一些特别的动画，并且不局限与view，理论上任何object都可以实现property动画。</p>
-<h4>nineOldAnimation</h4>
-<p>这个是向下兼容的Android动画库，使得在3.0之前的系统也可以实现property和value动画。不过这个库早已不维护了，我之前使用发现了一些bug，不过这影响不大。如果要兼容2.3和一下系统，这个是很不错的库。</p>
-<h4>Android4.4和5.0 ...</h4><p class="subheader">Category: <a href="https://szuwest.github.io/category/android.html">Android</a>
-
-    Tagged: 
-    <a href="https://szuwest.github.io/tag/dong-hua.html">动画 </a>
-</p>
-
-
-
-<p><a href="https://szuwest.github.io/android-activitydong-hua.html#disqus_thread">comments</a></p>                <a class="button radius secondary small right" href="https://szuwest.github.io/android-activitydong-hua.html">Read More</a>
                 <hr  class="gradient"/>
             </article>
 
